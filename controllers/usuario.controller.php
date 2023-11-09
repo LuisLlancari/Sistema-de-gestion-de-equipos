@@ -52,7 +52,7 @@ if(isset($_POST['operacion'])){
         }
 
       }
-      echo json_encode($registro);
+      echo json_encode($statusLogin);
       // $datosEnviar = ["email" => $_POST["email"]];
 
       // $registro = $usuario->login_usuario($datosEnviar);

@@ -75,7 +75,7 @@
         .then(datos => {
           console.log(datos);
 
-          if (datos.acceso){
+          if (datos.acceso == true){
             console.log("biennnnnnnnn");
             // window.location.href='./views/index.php';
           }else{
