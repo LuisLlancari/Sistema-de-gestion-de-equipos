@@ -1,16 +1,15 @@
 CREATE DATABASE SISCOMPU;
-
 USE SISCOMPU;
 
 DROP TABLE  IF EXISTS usuarios;
 CREATE TABLE usuarios(
 	idusuario 		INT PRIMARY KEY AUTO_INCREMENT,
-    rol				VARCHAR(20)		NOT NULL,
-    avatar			VARCHAR(200)	NULL,
-    apellidos		VARCHAR(45) 	NOT NULL,
     nombres			VARCHAR(40) 	NOT NULL,
-    email			VARCHAR(60)		NOT NULL,
-    claveacceso		VARCHAR(60) 	NOT NULL,
+    apellidos		VARCHAR(45) 	NOT NULL,
+    rol				VARCHAR(20)		NOT NULL,
+	claveacceso		VARCHAR(60) 	NOT NULL,
+	email			VARCHAR(60)		NOT NULL,
+    avatar			VARCHAR(200)	NULL,
     codigo			CHAR(6)			NULL,
     create_at		DATE			NOT NULL DEFAULT NOW(),
     update_at		DATE			NULL,
@@ -88,8 +87,8 @@ CREATE TABLE sectores
 	CONSTRAINT fk_idusuario_sect FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS cronograma;
-CREATE TABLE cronograma
+DROP TABLE IF EXISTS cronogramas;
+CREATE TABLE cronogramas
 (
 	idcronograma		INT PRIMARY KEY AUTO_INCREMENT,
     idequipo			INT 	NOT NULL,
@@ -106,8 +105,15 @@ DROP TABLE IF EXISTS matenimiento;
 CREATE TABLE matenimiento
 (
 	idmantenimiento 		INT PRIMARY KEY AUTO_INCREMENT,
-	idusuario			INT		NOT NULL,
-    
+	idusuario				INT		NOT NULL,
+    idcronograma	 	  	INT 	NOT NULL,
+    descripcion	 			VARCHAR(300) 	NOT NULL,
+	create_at			DATE			NOT NULL DEFAULT NOW(),
+	update_at			DATE			NULL,
+	inactive_at			DATE			NULL,
+	CONSTRAINT fk_idusuario_man FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario),
+	CONSTRAINT fk_idcronograma_man FOREIGN KEY(idcronograma) REFERENCES cronogramas(idcronograma),
+    CONSTRAINT uk_idcronogram_man UNIQUE(idusuario,idcronograma)
 )ENGINE = INNODB;
 
 
