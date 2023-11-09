@@ -46,7 +46,7 @@ CREATE TABLE equipos
         idmarca				INT 			NOT NULL,
         idusuario			INT 			NOT NULL,
         modelo_equipo		VARCHAR(45) 	NOT NULL,
-        numero_serie 		VARCHAR(200) 	NOT NULL,
+        numero_serie 		VARCHAR(45) 	NOT NULL,
         imagen				VARCHAR(200)	NULL,
 		create_at		DATE			NOT NULL DEFAULT NOW(),
 		update_at		DATE			NULL,

@@ -6,7 +6,7 @@
 
     var_dump($claveEncritada);
 
-    $contraseña = "123";
+    $contraseña = "SENATI123";
 
     if(password_verify($contraseña,$claveEncritada)){
         echo "bien";
