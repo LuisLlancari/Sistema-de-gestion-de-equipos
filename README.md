@@ -1,2 +1,2 @@
-# Sistema-de-gestion-y-registro-de-equipos
+# Sistema de gestion y registro de equipos
  
