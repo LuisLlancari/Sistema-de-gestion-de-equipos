@@ -1,4 +1,5 @@
 CREATE DATABASE SISCOMPU;
+-- DROP DATABASE SISCOMPU;
 USE SISCOMPU;
 
 DROP TABLE  IF EXISTS usuarios;
@@ -91,7 +92,7 @@ CREATE TABLE cronogramas
 (
 	idcronograma		INT PRIMARY KEY AUTO_INCREMENT,
     idequipo			INT 	NOT NULL,
-    tipo_matenimiento	VARCHAR(45) 	NOT NULL,
+    tipo_mantenimiento	VARCHAR(45) 	NOT NULL,
     estado				VARCHAR(10) 	NOT NULL,
     fecha_programada	DATETIME		NOT NULL,
 	create_at			DATE			NOT NULL DEFAULT NOW(),
@@ -100,8 +101,8 @@ CREATE TABLE cronogramas
     CONSTRAINT 	fk_idequipo_cro FOREIGN KEY(idequipo) REFERENCES equipos(idequipo)
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS matenimiento;
-CREATE TABLE matenimiento
+DROP TABLE IF EXISTS mantenimiento;
+CREATE TABLE mantenimiento
 (
 	idmantenimiento 		INT PRIMARY KEY AUTO_INCREMENT,
 	idusuario				INT		NOT NULL,
