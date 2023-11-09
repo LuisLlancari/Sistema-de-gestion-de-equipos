@@ -33,9 +33,42 @@ BEGIN
 	SELECT @@last_insert_id 'idusuario';
 END $$
 
-DELIMITER $$
+/*DELIMITER $$
 CREATE PROCEDURE spu_usuarios_listar()
 BEGIN
 	SELECT * FROM usuarios;
+END $$*/
+
+-- -------------------------------------------------------------------------------------
+-- ---------------- Procedimientos Alamacenados MANTENIMIENTO --------------------------
+-- -------------------------------------------------------------------------------------
+
+DROP PROCEDURE IF EXISTS spu_mantenimiento_listar;
+DELIMITER $$
+CREATE PROCEDURE spu_mantenimiento_listar()
+BEGIN
+	SELECT
+		man.idusuario,
+        usu.nombres,
+        cro.tipo_mantenimiento,
+        equ.numero_serie,
+        man.descripcion
+    FROM mantenimiento as man
+    INNER JOIN usuarios as usu on usu.idusuario = man.idusuario
+    INNER JOIN cronogramas as cro ON cro.idcronograma = man.idcronograma
+    INNER JOIN equipos as equ on equ.idequipo = cro.idequipo 
+    WHERE
+		man.inactive_at IS NULL;
 END $$
+DELIMITER ;
+
+CALL spu_mantenimiento_listar();
+/*
+DROP PROCEDURE IF EXISTS;
+DELIMITER $$
+CREATE PROCEDURE()
+BEGIN
+END $$
+DELIMITER ;
+*/
 
