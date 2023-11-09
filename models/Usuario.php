@@ -1,5 +1,5 @@
 <?php 
-require_once './Conexion.php'
+require_once 'Conexion.php';
 
 
 class Usuario extends Conexion {
@@ -12,11 +12,11 @@ class Usuario extends Conexion {
 
   public function login_usuario($datos = []){
     try {
-      $consulta = $this->conexion->prepare()
+      $consulta = $this->conexion->prepare("CALL spu_usuarios_login(?)");
       $consulta->execute(
-        array($datos[""])
+        array($datos["email"])
       );
-        return $consulta->fetchAll(PDO::FETCH_ASSOC);
+      return $consulta->fetchAll(PDO::FETCH_ASSOC);
     } catch (Exeption $e) {
         die($e->getMessage());
     }
