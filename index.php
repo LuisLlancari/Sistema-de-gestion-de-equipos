@@ -76,8 +76,8 @@
           console.log(datos);
 
           if (datos.acceso == true){
-            console.log("Lograste ingresar");
-            // window.location.href='./views/index.php';
+            
+            window.location.href='./views/index.php';
           }else{
             alert(datos.mensaje);
           }

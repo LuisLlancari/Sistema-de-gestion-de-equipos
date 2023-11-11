@@ -17,7 +17,7 @@ class Usuario extends Conexion {
         array($datos["email"])
       );
       return $consulta->fetch(PDO::FETCH_ASSOC);
-    } catch (Exeption $e) {
+    } catch (Exception $e){
         die($e->getMessage());
     }
   }
