@@ -3,6 +3,8 @@
 require_once 'Conexion.php';
 
 class Categoria extends Conexion{
+    
+    private $conexion;
 
     public function __CONSTRUCT(){
         $this->conexion = parent::getConexion();
