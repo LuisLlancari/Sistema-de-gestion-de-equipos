@@ -6,6 +6,10 @@ require_once "../models/Equipo.php";
 
 if(isset($_POST['operacion'])){
 
+    /**
+     * CREAMOS UN OBJETO
+     * $equipo => Objeto que almacena la clase Equipo en la variable $equipo 
+     */
     $equipo = new Equipo();
 
     switch ($_POST['operacion']){
@@ -63,6 +67,13 @@ if(isset($_POST['operacion'])){
             } */
 
             echo json_encode($equipo->modificar($datosEnviar));
+            break;
+
+        case 'getEquipo' :
+
+            $datosEnviar = ["idequipo" => $_POST['idequipo']];
+
+            echo json_encode($equipo->getEquipo($datosEnviar));
             break;
         
         case 'eliminar':
