@@ -27,7 +27,7 @@ class Conexion{
       die($e->getMessage());  
     }
   }
-  //hola
+  //holasdasdasd
 
 }
 ?>
