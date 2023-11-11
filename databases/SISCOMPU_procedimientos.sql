@@ -1,5 +1,5 @@
 
-
+USE SISCOMPU;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados USUARIOS -------------------------------
 -- -------------------------------------------------------------------------------------
@@ -387,13 +387,13 @@ CREATE PROCEDURE spu_mantenimiento_modificar
     in _idcronograma        INT,
     in _descripcion			VARCHAR(300)
 )
+BEGIN
 	UPDATE mantenimiento SET
 		idusuario	 = _idusuario,
 		idcronograma =_idcronograma,
 		descripcion  =_descripcion		
 	WHERE
 		idmantenimiento = _idmantenmimiento	;
-BEGIN
 END $$
 DELIMITER ;
 
