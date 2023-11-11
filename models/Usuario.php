@@ -5,7 +5,7 @@ require_once 'Conexion.php';
 class Usuario extends Conexion {
 
   private $conexion;
-
+  //AGREGANDO UN VALOR RANDOM 
   public function __CONSTRUCT(){
     $this->conexion = parent ::getConexion();
   }
