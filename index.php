@@ -55,38 +55,7 @@
   function $(id){return document.querySelector(id);}
 
 
-  // function verificar_contraseña(){
 
-  // }
-
-    $("#form-login").addEventListener("submit",(event) =>{
-      event.preventDefault();
-
-      const parametros = new FormData();
-      parametros.append("operacion"   ,"login_usuario");
-      parametros.append("email"       ,$("#email").value);
-      parametros.append("claveacceso" ,$("#claveacceso").value);
-
-      fetch(`./controllers/usuario.controller.php`,{
-        method: "POST",
-        body: parametros
-      })
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-          console.log(datos);
-
-          if (datos.acceso == true){
-            
-            window.location.href='./views/index.php';
-          }else{
-            alert(datos.mensaje);
-          }
-        })
-        .catch(e =>{
-          console.error(e)
-        });
-
-    });
 
 </script>
 
