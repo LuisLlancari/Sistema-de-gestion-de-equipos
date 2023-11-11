@@ -1,5 +1,5 @@
 
-
+USE SISCOMPU;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados USUARIOS -------------------------------
 -- -------------------------------------------------------------------------------------
@@ -66,13 +66,14 @@ CREATE PROCEDURE spu_usuario_modificar
     IN _email			VARCHAR(60),
 	IN _avatar       	VARCHAR(200)
 )
+BEGIN
 	UPDATE mantenimiento SET
 		idusuario	 = _idusuario,
 		idcronograma =_idcronograma,
 		descripcion  =_descripcion		
 	WHERE
 		idmantenimiento = _idmantenmimiento	;
-BEGIN
+
 END $$
 DELIMITER ;
 
@@ -378,13 +379,13 @@ CREATE PROCEDURE spu_mantenimiento_modificar
     in _idcronograma        INT,
     in _descripcion			VARCHAR(300)
 )
+BEGIN
 	UPDATE mantenimiento SET
 		idusuario	 = _idusuario,
 		idcronograma =_idcronograma,
 		descripcion  =_descripcion		
 	WHERE
 		idmantenimiento = _idmantenmimiento	;
-BEGIN
 END $$
 DELIMITER ;
 
