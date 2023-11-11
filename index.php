@@ -56,7 +56,7 @@
 
 
   // function verificar_contraseña(){
-
+    
   // }
 
     $("#form-login").addEventListener("submit",(event) =>{

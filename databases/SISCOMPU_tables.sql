@@ -12,7 +12,7 @@ CREATE TABLE usuarios(
 	email			VARCHAR(60)		NOT NULL,
     avatar			VARCHAR(200)	NULL,
     codigo			CHAR(6)			NULL,
-    create_at		DATE			NOT NULL DEFAULT (NOW()),
+    create_at		DATE			NOT NULL DEFAULT NOW(),
     update_at		DATE			NULL,
     inactive_at		DATE			NULL,
     CONSTRAINT uk_email_usu UNIQUE(email)
