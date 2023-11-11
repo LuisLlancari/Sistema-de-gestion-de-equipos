@@ -56,7 +56,7 @@
 
 
   // function verificar_contraseña(){
-
+    
   // }
 
     $("#form-login").addEventListener("submit",(event) =>{
@@ -76,7 +76,7 @@
           console.log(datos);
 
           if (datos.acceso == true){
-            
+
             window.location.href='./views/index.php';
           }else{
             alert(datos.mensaje);

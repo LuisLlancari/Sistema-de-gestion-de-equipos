@@ -14,71 +14,85 @@ if(isset($_POST['operacion'])){
     case 'login_usuario':
       $datosEnviar = [
         "email" => $_POST['email']
-    ];
+      ];
 
-    $statusLogin = [
-        "acceso"    => false,
-        "mensaje"   => ""
-    ];
+      $statusLogin = [
+          "acceso"    => false,
+          "mensaje"   => ""
+      ];
 
-    $registro = $usuario->login_usuario($datosEnviar);
+      $registro = $usuario->login_usuario($datosEnviar);
 
-    if($registro == false){
+      if($registro == false){
 
-        $_SESSION["status"] = false;
-        $statusLogin["mensaje"] = "El correo no existe";
-    }else{
+          $_SESSION["status"] = false;
+          $statusLogin["mensaje"] = "El correo no existe";
+      }else{
 
-        $ClaveEncriptada = $registro['claveacceso'];
-        /* $_SESSION["idusuario"] = $registro["idusuario"];
-        $_SESSION["rol"] = $registro["rol"];
-        $_SESSION["apellidos"] = $registro["apellidos"];
-        $_SESSION["nombres"] = $registro["nombres"]; */
+          $ClaveEncriptada = $registro['claveacceso'];
+          /* $_SESSION["idusuario"] = $registro["idusuario"];
+          $_SESSION["rol"] = $registro["rol"];
+          $_SESSION["apellidos"] = $registro["apellidos"];
+          $_SESSION["nombres"] = $registro["nombres"]; */
 
-        if(password_verify($_POST['claveacceso'],$ClaveEncriptada)){
+          if(password_verify($_POST['claveacceso'],$ClaveEncriptada)){
 
-            $_SESSION["status"] = true;
-            $statusLogin["acceso"] = true;
-            $statusLogin["mensaje"] = "Acceso correcto";
-        }else{
-            $_SESSION["status"] = false;
-            $statusLogin["mensaje"]  = "La contraseña es incorrecta";
+              $_SESSION["status"] = true;
+              $statusLogin["acceso"] = true;
+              $statusLogin["mensaje"] = "Acceso correcto";
+          }else{
+              $_SESSION["status"] = false;
+              $statusLogin["mensaje"]  = "La contraseña es incorrecta";
+          }
         }
-      }
-      echo json_encode($statusLogin);
+        echo json_encode($statusLogin);
 
-      /* echo json_encode($registro); */
-      // $datosEnviar = ["email" => $_POST["email"]];
+    break;
 
-      // $registro = $usuario->login_usuario($datosEnviar);
+    case 'listar_usuario':
+      echo json_encode($usuario->listar_usuario());
+    break;
 
-      // $statusLogin = [
-      //   "acceso" => false,
-      //   "mensaje"=> ""
-      // ];
+    case 'registrar_usuario':
+      $datosEnviar = [
+        "nombres"      => $_POST['nombres'],
+        "apellidos"    => $_POST['apellidos'],
+        "rol"          => $_POST['rol'],
+        "claveacceso"  => $_POST['claveacceso'],
+        "email"        => $_POST['email'],
+        "avatar"       => $_POST['avatar']
+      ];
 
-      // if($registro == false){
-      //   $_SESSION["status"] = false;
+      echo json_encode($usuario->registrar_usuario($datosEnviar));
 
-      //   $statusLogin["mensaje"] = "El correo no existe";
-      // }else{
+    break;
 
-      //   $claveEncriptada = $registro['claveacceso'];
-      
+    case 'eliminar_usuario';
+      $datosEnviar = [
+        "idusuario"     => $_POST['idusuario']
+      ];
 
-      //   if(password_verify($_POST["claveacceso"],$claveEncriptada)){
-      //     $_SESSION["status"] = true;
-      //     $statusLogin["acceso"] = true;
-      //     $statusLogin["mensaje"] = "Acceso correcto";
-      //   }else{
-      //     $_SESSION["status"] = FALSE;
-      //     $statusLogin["mensaje"] = "Error en la contraseña";
-      //   }
+      $usuario->eliminar_usuario($datosEnviar);
 
-      // }
-      // var_dump($registro);
-      // var_dump(gettype($registro));
-      break;
+    break;
+
+    case 'modificar_usuario';
+      $datosEnviar = [
+        "idusuario"    => $_POST['idusuario'],
+        "nombres"      => $_POST['nombres'],
+        "apellidos"    => $_POST['apellidos'],
+        "rol"          => $_POST['rol'],
+        "claveacceso"  => $_POST['claveacceso'],
+        "email"        => $_POST['email'],
+        "avatar"       => $_POST['avatar']
+      ];
+
+      echo json_encode($usuario->modificar_usuario($datosEnviar));
+
+    break;
+
+    case '';
+    break;
     
    
     
