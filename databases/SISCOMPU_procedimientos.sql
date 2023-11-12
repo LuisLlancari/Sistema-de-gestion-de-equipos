@@ -219,13 +219,43 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE spu_equipos_eliminar(IN id_equipo INT)
+CREATE PROCEDURE spu_equipos_eliminar(IN _idequipo INT)
 BEGIN 
 	UPDATE equipos
     SET inactive_at = NOW()
 		WHERE idequipo = _idequipo;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS spu_equipos_modificar;
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_modificar
+(
+	IN _idequipo		INT,
+    IN _idcategoria		INT,
+    IN _idmarca			INT,
+    IN _idusuario 		INT,
+    IN _modelo_equipo 	VARCHAR(45),
+    IN _numero_serie	VARCHAR(45),
+    IN _imagen			VARCHAR(200)
+)
+BEGIN
+
+	UPDATE equipos SET
+		idcategoria 	= _idcategoria,
+		idmarca			= _idmarca,
+		idusuario		= _idusuario,
+		modelo_equipo	= _modelo_equipo,
+		numero_serie	= _numero_serie,
+		imagen			= _imagen,
+        update_at       = now()
+
+	WHERE 
+		idequipo = _idequipo;
+END $$
+DELIMTTER ;
+
 
 
 -- -------------------------------------------------------------------------------------
