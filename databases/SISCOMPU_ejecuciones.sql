@@ -39,4 +39,8 @@ USE SISCOMPU;
     CALL spu_equipos_modificar(1,1,1,1,'model nuevo','asd12456','');
 	CALL spu_equipos_eliminar(2);
     CALL spu_equipos_obtener(2);
-	update equipos set inactive_at = null
+	update equipos set inactive_at = null;
+
+-- DATASHEET
+    CALL spu_datasheet_listar(1);
+    CALL spu_datasheet_registrar(2,'DESCRPCION','SILLA GAMER');

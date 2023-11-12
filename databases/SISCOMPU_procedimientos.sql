@@ -215,6 +215,7 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 select * from equipos;
 
+-- VISTA EQUIPOS
 DROP VIEW IF EXISTS vws_equipos;
 CREATE VIEW vws_equipos
 AS
@@ -231,6 +232,7 @@ AS
     INNER JOIN usuarios USU ON USU.idusuario = EQUI.idusuario
 	WHERE EQUI.inactive_at IS NULL;
 
+--
 
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_registrar
@@ -309,16 +311,28 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 select * from datasheet;
 
-DELIMITER $$
-CREATE PROCEDURE spu_datasheet_listar()
-BEGIN
-	SELECT DSH.iddatasheet,
+-- VISTA DATASHEET
+DROP VIEW IF EXISTS vw_datasheet;
+CREATE VIEW vw_datasheet
+AS
+	SELECT 
+    DSH.iddatasheet,
+    DSH.idequipo,
     EQUI.numero_serie,
     DSH.clave,
     DSH.valor
     FROM datasheet DSH
     INNER JOIN equipos EQUI ON EQUI.idequipo = DSH.idequipo
-    WHERE DSH.inactive_at IS NULL;
+	WHERE DSH.inactive_at IS NULL;
+--
+
+DROP PROCEDURE IF EXISTS spu_datasheet_listar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_listar(IN _idequipo INT)
+BEGIN
+	SELECT * FROM vw_datasheet
+    WHERE idequipo = _idequipo
+    ORDER BY clave;
 END$$
 DELIMITER ;
 
