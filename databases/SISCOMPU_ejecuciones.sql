@@ -44,3 +44,7 @@ USE SISCOMPU;
 -- DATASHEET
     CALL spu_datasheet_listar(1);
     CALL spu_datasheet_registrar(2,'DESCRPCION','SILLA GAMER');
+    CALL spu_datasheet_modificar(4,1,'COLOR','MARRÓN');
+    CALL spu_datasheet_eliminar(4);
+    
+    SELECT * FROM datasheet;

@@ -43,4 +43,35 @@ class Datasheet extends Conexion{
         }
     }
 
+    public function modificar($datos = []){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_datasheet_modificar(?,?,?,?)");
+            $consulta->execute(
+                array(
+                    $datos['iddatasheet'],
+                    $datos['idequipo'],
+                    $datos['clave'],
+                    $datos['valor']
+                )
+            );
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    public function eliminar($datos = []){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_datasheet_eliminar(?)");
+            $consulta->execute(
+                array(
+                    $datos['iddatasheet']
+                )
+            );
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
 }

@@ -24,5 +24,23 @@ if(isset($_POST['operacion'])){
 
             echo json_encode($datasheet->registrar($datosEnviar));
             break;
+        
+        case 'modificar':
+
+            $datosEnviar = [
+                "iddatasheet"   => $_POST['iddatasheet'],
+                "idequipo"      => $_POST['idequipo'],
+                "clave"         => $_POST['clave'],
+                "valor"         => $_POST['valor']
+            ];
+
+            echo json_encode($datasheet->modificar($datosEnviar));
+            break;
+        
+        case 'eliminar':
+
+            $datosEnviar = [ "iddatasheet" => $_POST['iddatasheet']];
+        
+        echo json_encode($datasheet->eliminar($datosEnviar));
     }
 }

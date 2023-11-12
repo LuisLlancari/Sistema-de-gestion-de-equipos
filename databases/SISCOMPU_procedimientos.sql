@@ -352,6 +352,36 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_datasheet_modificar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_modificar
+(
+	IN _iddatasheet INT,
+    IN _idequipo INT,
+    IN _clave VARCHAR(45),
+    IN _valor VARCHAR(300)
+)
+BEGIN
+	UPDATE datasheet SET
+		idequipo 	= _idequipo,
+		clave 		= _clave,
+		valor		= _valor,
+        update_at 	= now()
+	WHERE
+		iddatasheet = _iddatasheet;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_datasheet_eliminar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_eliminar(IN _iddatasheet INT)
+BEGIN
+	UPDATE datasheet SET
+		inactive_at = now()
+	WHERE
+		iddatasheet = _iddatasheet;
+END $$
+DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados CRONOGRAMAS --------------------------
 -- -------------------------------------------------------------------------------------
