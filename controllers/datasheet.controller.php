@@ -19,7 +19,7 @@ if(isset($_POST['operacion'])){
             $datosEnviar = [
                 "idequipo"  => $_POST['idequipo'],
                 "clave"     => $_POST['clave'],
-                "valor"     => $_POST['valor'],
+                "valor"     => $_POST['valor']
             ];
 
             echo json_encode($datasheet->registrar($datosEnviar));

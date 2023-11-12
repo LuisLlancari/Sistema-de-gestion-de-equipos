@@ -32,7 +32,7 @@ class Datasheet extends Conexion{
                 array(
                     $datos['idequipo'],
                     $datos['clave'],
-                    $datos['valor'],
+                    $datos['valor']
                 )
             );
 
