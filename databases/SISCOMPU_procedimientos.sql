@@ -1,5 +1,5 @@
-
 USE SISCOMPU;
+
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados USUARIOS -------------------------------
 -- -------------------------------------------------------------------------------------
@@ -39,10 +39,13 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_usuarios_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_listar()
 BEGIN
-	SELECT * FROM usuarios;
+	SELECT * FROM usuarios
+    WHERE
+		inactive_at IS NULL;
 END $$
 DELIMITER ;
 
@@ -51,14 +54,15 @@ CREATE PROCEDURE spu_usuarios_eliminar(IN id_usuario INT)
 BEGIN 
 	UPDATE usuarios
     SET inactive_at = NOW()
-		WHERE idusurio = _idusuario;
+		WHERE idusuario = _idusuario;
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_usuario_modificar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuario_modificar
 (
-	IN idusuario		INT,
+	IN _idusuario		INT,
 	IN _nombres			VARCHAR(40),
     IN _apellidos		VARCHAR(45),
     IN _rol        		VARCHAR(20),
@@ -67,16 +71,40 @@ CREATE PROCEDURE spu_usuario_modificar
 	IN _avatar       	VARCHAR(200)
 )
 BEGIN
-	UPDATE mantenimiento SET
-		idusuario	 = _idusuario,
-		idcronograma =_idcronograma,
-		descripcion  =_descripcion		
+	UPDATE usuarios SET
+		idusuario	= _idusuario,
+		nombres  	= _nombres,
+        apellidos 	= _apellidos,
+        rol 		= _rol,
+        claveacceso = _claveacceso,
+        email		= _email,
+        avatar 		= _avatar,
+        update_at   = now()
 	WHERE
-		idmantenimiento = _idmantenmimiento	;
-
+		idusuario 	= _idusuario;
+	
+    SELECT idusuario FROM usuarios 
+        WHERE idusuario = _idusuario;
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_usuarios_obtener;
+DELIMITER $$
+CREATE PROCEDURE  spu_usuarios_obtener(in _idusuario INT)
+BEGIN
+	SELECT * FROM usuarios
+	WHERE 
+		idusuario = _idusuario;
+END $$
+DELIMITER ;
+/*
+DROP PROCEDURE IF EXISTS 
+DELIMITER $$
+CREATE PROCEDURE  
+BEGIN
+END $$
+DELIMITER ;
+*/
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados CATEGORIAS ----------------------------
 -- -------------------------------------------------------------------------------------
@@ -172,6 +200,23 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 select * from equipos;
 
+DROP VIEW IF EXISTS vws_equipos;
+CREATE VIEW vws_equipos
+AS
+	SELECT EQUI.idequipo,
+    CAT.categoria,
+    MAR.marca,
+    USU.nombres,
+    EQUI.modelo_equipo,
+    EQUI.numero_serie,
+    EQUI.imagen
+    FROM equipos EQUI
+    INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
+    INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
+    INNER JOIN usuarios USU ON USU.idusuario = EQUI.idusuario
+	WHERE EQUI.inactive_at IS NULL;
+
+
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_registrar
 (
@@ -191,27 +236,42 @@ BEGIN
 END $$
 DELIMITER ;
 
-
+DROP PROCEDURE IF EXISTS spu_equipos_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_listar()
 BEGIN
-	SELECT EQUI.idequipo,
-    CAT.categoria,
-    MAR.marca,
-    USU.nombres,
-    EQUI.modelo_equipo,
-    EQUI.numero_serie,
-    EQUI.imagen
-    FROM equipos EQUI
-    INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
-    INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
-    INNER JOIN usuarios USU ON USU.idusuario = EQUI.idusuario
-    WHERE EQUI.inactive_at IS NULL;
+	SELECT * FROM vws_equipos;
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_equipos_modificar;
 DELIMITER $$
-CREATE PROCEDURE spu_equipos_eliminar(IN id_equipo INT)
+CREATE PROCEDURE spu_equipos_modificar
+(
+	IN _idequipo		INT,
+    IN _idcategoria		INT,
+    IN _idmarca			INT,
+    IN _idusuario 		INT,
+    IN _modelo_equipo 	VARCHAR(45),
+    IN _numero_serie	VARCHAR(45),
+    IN _imagen			VARCHAR(200)
+)
+BEGIN
+	UPDATE equipos SET
+		idcategoria 	= _idcategoria,
+		idmarca			= _idmarca,
+		idusuario		= _idusuario,
+		modelo_equipo	= _modelo_equipo,
+		numero_serie	= _numero_serie,
+		imagen			= _imagen,
+        update_at		= now()
+	WHERE 
+		idequipo = _idequipo;
+END $$
+DELIMTTER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_eliminar(IN _idequipo INT)
 BEGIN 
 	UPDATE equipos
     SET inactive_at = NOW()
@@ -219,6 +279,15 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_equipos_obtener;
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_obtener(in _idequipo INT)
+BEGIN
+	SELECT * FROM vws_equipos
+	WHERE
+		idequipo = _idequipo;
+END $$
+DELIMITER ;
 
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados DATASHEET -----------------------------
