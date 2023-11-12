@@ -24,7 +24,7 @@ DELIMITER $$
 CREATE PROCEDURE spu_usuarios_registrar
 (
 	IN _nombres	VARCHAR(40),
-    IN _apellidos	VARCHAR(45),
+    IN _apellidos VARCHAR(45),
     IN _rol VARCHAR(20),
     IN _claveacceso VARCHAR(60),
     IN _email	VARCHAR(60),
@@ -50,10 +50,11 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE spu_usuarios_eliminar(IN id_usuario INT)
+CREATE PROCEDURE spu_usuarios_eliminar(IN _idusuario INT)
 BEGIN 
 	UPDATE usuarios
     SET inactive_at = NOW()
+		WHERE idusuario = _idusuario;
 		WHERE idusuario = _idusuario;
 END $$
 DELIMITER ;
@@ -62,6 +63,7 @@ DROP PROCEDURE IF EXISTS spu_usuario_modificar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuario_modificar
 (
+	IN _idusuario		INT,
 	IN _idusuario		INT,
 	IN _nombres			VARCHAR(40),
     IN _apellidos		VARCHAR(45),
@@ -80,7 +82,20 @@ BEGIN
         email		= _email,
         avatar 		= _avatar,
         update_at   = now()
+	UPDATE usuarios SET
+		idusuario	= _idusuario,
+		nombres  	= _nombres,
+        apellidos 	= _apellidos,
+        rol 		= _rol,
+        claveacceso = _claveacceso,
+        email		= _email,
+        avatar 		= _avatar,
+        update_at   = now()
 	WHERE
+		idusuario 	= _idusuario;
+	
+    SELECT idusuario FROM usuarios 
+        WHERE idusuario = _idusuario;
 		idusuario 	= _idusuario;
 	
     SELECT idusuario FROM usuarios 
