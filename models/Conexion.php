@@ -17,7 +17,8 @@ class Conexion{
         port={$this->puerto};
         dbname={$this->baseDatos};
         charset=UTF8",
-        $this->usuario
+        $this->usuario,
+        $this->clave
       );
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       return $pdo;

@@ -3,6 +3,7 @@
 require_once 'Conexion.php';
 
 class Marca extends Conexion{
+    
     private $conexion;
 
     public function __CONSTRUCT(){
