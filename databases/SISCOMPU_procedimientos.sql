@@ -222,10 +222,10 @@ AS
 	SELECT EQUI.idequipo,
     CAT.categoria,
     MAR.marca,
-    USU.nombres,
     EQUI.modelo_equipo,
     EQUI.numero_serie,
-    EQUI.imagen
+    EQUI.imagen,
+	USU.nombres
     FROM equipos EQUI
     INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
     INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
@@ -320,7 +320,8 @@ AS
     DSH.idequipo,
     EQUI.numero_serie,
     DSH.clave,
-    DSH.valor
+    DSH.valor,
+    DSH.inactive_at
     FROM datasheet DSH
     INNER JOIN equipos EQUI ON EQUI.idequipo = DSH.idequipo
 	WHERE DSH.inactive_at IS NULL;

@@ -48,3 +48,4 @@ USE SISCOMPU;
     CALL spu_datasheet_eliminar(4);
     
     SELECT * FROM datasheet;
+    UPDATE datasheet SET inactive_at = null;

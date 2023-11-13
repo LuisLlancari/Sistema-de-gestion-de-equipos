@@ -143,6 +143,33 @@ a{
 }
 
 @media screen and (min-width: 768px){
+  
+  .btn-sidebar{
+    z-index: 2;
+      top: 10px;
+      left: calc(var(--nav-width) + 10rem);
+      height: 37px;
+      width: 37px;
+      text-align: center;
+      background: #062280;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: left 0.4s ease;
+  }
+
+  .btn-sidebar.click{
+    left: 260px;
+  }
+  .btn-sidebar span{
+      color: white;
+      font-size: 15px;
+      line-height: 36px;
+  }
+  .btn-sidebar.click span:before{
+    content: '\f00d';
+  }
+  
+
   body{
     margin: calc(var(--header-height) + 1rem) 0 0 0;
     padding-left: calc(var(--nav-width) + 2rem)
@@ -168,21 +195,19 @@ a{
   }
   
   .show{
-    width: calc(var(--nav-width) + 156px)
+    width: calc(var(--nav-width) + 100%)
   }
   
   .body-pd{
     padding-left: calc(var(--nav-width) + 188px)
   }
-}
-body {
-  letter-spacing: 0.0625em;
-}
+} 
+
 .btn-sidebar{
     position: absolute;
     z-index: 2;
       top: 10px;
-      left: 45px;
+      left: calc(var(--nav-width) - 10rem);
       height: 37px;
       width: 37px;
       text-align: center;
@@ -190,7 +215,7 @@ body {
       border-radius: 3px;
       cursor: pointer;
       transition: left 0.4s ease;
-  }
+  } 
   .btn-sidebar.click{
     left: 260px;
   }
@@ -202,134 +227,4 @@ body {
   .btn-sidebar.click span:before{
     content: '\f00d';
   }
-  .sidebar{
-    position: fixed;
-    width: 250px;
-    height: 100%;
-    left: -250px;
-    background: #1b1b1b;
-    transition: left 0.4s ease;
-    overflow-y: auto;
-  }
   
-  .sidebar.show{
-    left: 0px;
-  }
-  .sidebar .text{
-    color: white;
-    font-size: 19px;
-    font-weight: 600;
-    line-height: 65px;
-    text-align: center;
-    background: #1e1e1e;
-    letter-spacing: 1px;
-  }
-
-  nav ul{
-    background: #1b1b1b;
-    height: 100%;
-    width: 100%;
-    list-style: none;
-        padding-left: 10px;
-  }
-  nav ul li{
-    line-height: 50px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-  }
-  nav ul li:last-child{
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
-  nav ul li a{
-    position: relative;
-    color: white;
-    text-decoration: none;
-    font-size: 13px;
-    padding-left: 14px;
-    font-weight: 500;
-    display: block;
-    width: 100%;
-    border-left: 3px solid transparent;
-  }
-  nav ul li.active a{
-    color: #fff;
-      background: #1e1e1e;
-      border-left-color: #023ab4;
-  }
-  nav ul li a:hover{
-    background: #1e1e1e;
-  }
-  
-  .feat-show{
-    transition: all 0.5s;
-  }
-  
-  nav ul li.active ul{
-   transition: all 0.5s;
-  }
-  nav ul ul{
-    position: static;
-    display: none; 
-  }
-  
-  nav ul.show{
-    display: block;
-    transition: all 0.5s;
-  }
-  
-  nav ul ul li{
-    line-height: 42px;
-    border-top: none;
-  }
-  nav ul ul li a{
-    font-size: 12px;
-    color: #e6e6e6;
-    
-  }
-  nav ul li.active ul li a{
-    color: #e6e6e6;
-    background: #1b1b1b;
-    border-left-color: transparent;
-  }
-  
-  a:hover{
-    color: #d4d2d2 !important;
-  }
-  nav ul ul li a:hover{
-    color: #d4d2d2 !important;
-    background: #1e1e1e !important;
-  }
-  nav ul li a span{
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-    font-size: 15px;
-    transition: transform 0.4s;
-  }
-  nav ul li a span.rotate{
-    transform: translateY(-50%) rotate(-180deg);
-  }
-
-  .sidebar-image{
-    text-align: center;
-    margin: 20px;
-  }
-
-  .sidebar-image img{
-    max-width: 100%;
-    height: auto;
-  }
-  .main-content{
-    position: relative;
-    z-index: 1;
-    transition-duration: 0.4s;
-    margin-left: 0;
-    height: auto;
-    min-height: 35rem;
-    padding: 5rem 0;
-    background: linear-gradient(to bottom, rgba(210, 209, 209, 1) 0%, rgba(0, 0, 0, 0.7) 75%, #000 100%), url("../views/img/zyro-image.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: scroll;
-    background-size: cover;
-  }
