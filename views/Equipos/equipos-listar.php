@@ -406,6 +406,27 @@ require_once "../sidebar/sidebar.php";
                 }
               });
             }
+            function eliminarEquipo(idEquipo){
+
+              const parametros = new FormData();
+
+              parametros.append("operacion","eliminar");
+              parametros.append("idequipo",idEquipo);
+
+            fetch(`../../controllers/equipo.controller.php`,{
+              method: "POST",
+              body: parametros
+            })
+              .then(result => result.json())
+              .then(data => {
+                toast("El registro se eliminó con exito");
+                getEquipos();
+              })
+              .catch(e => {
+                console.error(e);
+                alertError("No se logró eliminar el registro","Ocurrió un error","Intentelo después");
+              });
+            }
 
 
             $("#categoria").addEventListener("change", getEquipos);
@@ -429,6 +450,8 @@ require_once "../sidebar/sidebar.php";
 
               }else if(event.target.classList.contains("eliminar")){
                 console.log(equipoId);
+                mostrarPregunta("Por favor confirme","¿Desea eliminar este registro?")
+                    .then((result) =>{eliminarEquipo(equipoId)});
               }
             });
 
