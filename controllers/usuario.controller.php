@@ -91,11 +91,39 @@ if(isset($_POST['operacion'])){
 
     break;
 
-    case '';
+    case 'recuperar_usuario';
+      $datosEnviar =[
+        "email" => $_POST['email']
+      ];
+      echo json_encode($usuario->recuperar_usuario($datosEnviar));
     break;
     
-   
+    case 'generar_codigo';
+      $datosEnviar = [
+        "idusuario" => $_POST['idusuario'],
+        "codigo"    => $_POST['codigo']
+      ];
+      $usuario->generar_codigo($datosEnviar);
+    break;
+
+    case 'verificar_codigo';
+      $datosEnviar = [
+        "idusuario" => $_POST['idusuario'],
+      ];
+
+      echo json_encode($usuario->verificar_codigo($datosEnviar));
+    break;
     
+    case 'cambiar_contraseña';
+      $datosEnviar = [
+        "idusuario"   => $_POST['idusuario'],
+        "claveacceso" => $_POST['claveacceso']
+      ];
+      echo json_encode($usuario->cambiar_contraseña($datosEnviar));
+    break;
+    
+    case '';
+    break;
   }
 
 }

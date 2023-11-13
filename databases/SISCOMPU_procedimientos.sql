@@ -6,6 +6,46 @@ USE SISCOMPU;
 select * from usuarios;
 
 DELIMITER $$
+CREATE PROCEDURE spu_usuarios_recuperar(IN _email VARCHAR(60))
+BEGIN
+	SELECT idusuario, email
+		FROM usuarios WHERE email = _email AND inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_generar_clave(IN _idusuario INT, IN _codigo CHAR(6))
+BEGIN
+	UPDATE usuarios
+		SET codigo = _codigo
+			WHERE idusuario = _idusuario;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_verificar(IN _idusuario INT)
+BEGIN
+	SELECT codigo FROM usuarios
+		WHERE idusuario = _idusuario;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE spu_canbiar_contraseña(IN _idusuario INT,IN _claveacceso VARCHAR(60))
+BEGIN
+	UPDATE usuarios
+		SET claveacceso = _claveacceso,
+			codigo 		= null
+			WHERE idusuario = _idusuario;
+		SELECT idusuario FROm usuarios
+			WHERE idusuario = _idusuario;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
 CREATE PROCEDURE spu_usuarios_login(IN _email VARCHAR(60))
 BEGIN
     SELECT
