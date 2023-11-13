@@ -2,6 +2,7 @@
 session_start();
 
 require_once '../models/Usuario.php';
+require_once '../test/email.php';
 
 if(isset($_POST['operacion'])){
 
@@ -54,11 +55,15 @@ if(isset($_POST['operacion'])){
     break;
 
     case 'registrar_usuario':
+
+      $claveEncritada = password_hash($_POST['claveacceso'],PASSWORD_BCRYPT);
+
+
       $datosEnviar = [
         "nombres"      => $_POST['nombres'],
         "apellidos"    => $_POST['apellidos'],
         "rol"          => $_POST['rol'],
-        "claveacceso"  => $_POST['claveacceso'],
+        "claveacceso"  => $claveEncritada,
         "email"        => $_POST['email'],
         "avatar"       => $_POST['avatar']
       ];
@@ -104,13 +109,15 @@ if(isset($_POST['operacion'])){
   
       $datosEnviar = [
         "idusuario" => $_POST['idusuario'],
-        "codigo"    => $codigo
+        "codigo"    => $codigo,
+        $metodo    =   $_POST['metodo'],
+        $direccion =   $_POST['direccion']
       ];
       echo json_encode($usuario->generar_codigo($datosEnviar));
 
-      // if(strval($metodo) ==  "2"){
-      //   enviarMail(strval($direccion),strval($codigo));
-      // }
+      if(strval($metodo) ==  "2"){
+        enviarMail(strval($direccion),strval($codigo));
+      }
     break;
 
     case 'verificar_codigo';
@@ -122,9 +129,13 @@ if(isset($_POST['operacion'])){
     break;
     
     case 'cambiar_contraseña';
+
+      $claveCambiada = password_hash($_POST['claveacceso'],PASSWORD_BCRYPT);
+
+
       $datosEnviar = [
         "idusuario"   => $_POST['idusuario'],
-        "claveacceso" => $_POST['claveacceso']
+        "claveacceso" => $claveCambiada
       ];
       echo json_encode($usuario->cambiar_contraseña($datosEnviar));
     break;
