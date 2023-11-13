@@ -127,11 +127,13 @@ require_once "../sidebar/sidebar.php";
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
     integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
   </script>
+  
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
   <script src="../../js/sidebar.js"></script>
+  <script src="../../js/sweeAlert.js"></script>
   <script>
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -157,64 +159,6 @@ require_once "../sidebar/sidebar.php";
 
         let varBandera = true; 
 
-        /* SWEET ALERT */
-        /**
-         * Mensaje de exito
-         */
-        function toast(mensaje) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                })
-
-                Toast.fire({
-                icon: 'success',
-                title: mensaje
-            })
-        }
-
-        /**
-         * Alerta de error
-         */
-        function alertError(mensaje = "",razon = "",sugerencia = ""){
-            Swal.fire({
-                icon: 'error',
-                title: mensaje,
-                text: razon,
-                confirmButtonColor: '#2E86C1',
-                confirmButtonText: 'Aceptar',
-                footer: sugerencia,
-                timerProgressBar: true,
-                timer: 1000
-              });
-        }
-
-        /**
-         * Pregintar
-         */
-        function mostrarPregunta(titulo, mensaje) {
-            return Swal.fire({
-                title: titulo,
-                text: mensaje,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Aceptar',
-                cancelButtonText: 'Cancelar',
-                confirmButtonColor: '#2E86C1',
-                cancelButtonColor: '#797D7F',
-                footer: 'SISCOMPU'
-            }).then((result) => {
-                return result;
-            });
-        }
-
         function getdatasheet(idequipo){
 
             const parametros = new FormData();
@@ -231,7 +175,7 @@ require_once "../sidebar/sidebar.php";
                     console.log(data);
 
                     datosDatasheet = data;
-                    if(datosDatasheet){
+                    if(datosDatasheet.length > 0){
 
                         datoslabel.innerHTML = "";
 
@@ -248,6 +192,13 @@ require_once "../sidebar/sidebar.php";
 
                             datoslabel.innerHTML += datosNuevos;
                         });
+                    }else{
+                        let h6Error = ``;
+
+                        h6Error = `
+                        <h6 class="bg-danger">No encontramos datos</h6>
+                        `;
+                        datoslabel.innerHTML = h6Error;
                     }
                 })
                 .catch(e => {

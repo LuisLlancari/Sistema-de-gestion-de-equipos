@@ -95,6 +95,21 @@ class Equipo extends Conexion{
     }
 
     /**
+     * método para obtener el equipo por idcategoria
+     */
+    public function getEquipoCat($datos = []){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_equipos_listar_categoria(?)");
+            $consulta->execute(array($datos['idcategoria']));
+
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * MÉTODO QUE NOS PERMITIRÁ ELIMINAR UN REGISTRO EN LA TABLA EQUIPOS DE LA BASE DE DATOS (INECTIVE_AT => NOW())
      */
     public function eliminar($datos = []){

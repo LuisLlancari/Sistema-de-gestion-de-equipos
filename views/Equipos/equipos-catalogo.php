@@ -72,7 +72,13 @@ require_once "../sidebar/sidebar.php";
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
     integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
   </script>
+  
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+
   <script src="../../js/sidebar.js"></script>
+  <script src="../../js/sweeAlert.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
 
@@ -130,7 +136,9 @@ require_once "../sidebar/sidebar.php";
               });
 
             }else{
-              cardEquipo = `
+              let cardError= ``;
+              
+              cardError = `
                 <div class="alert alert-primary" role="alert">
                   <h4 class="alert-heading">Tenemos problemas</h4>
                     <p>Intentalo más tarde</p>
@@ -138,6 +146,7 @@ require_once "../sidebar/sidebar.php";
                 <p class="mb-0">Ocurrió un error al cargar los datos</p>
               </div>
               `;
+              cardEquipo.innerHTML =cardError;
             }
           })
           .catch(e =>{

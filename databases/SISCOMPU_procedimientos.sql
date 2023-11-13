@@ -205,7 +205,9 @@ DROP VIEW IF EXISTS vws_equipos;
 CREATE VIEW vws_equipos
 AS
 	SELECT EQUI.idequipo,
+    CAT.idcategoria,
     CAT.categoria,
+    MAR.idmarca,
     MAR.marca,
     EQUI.modelo_equipo,
     EQUI.numero_serie,
@@ -243,6 +245,20 @@ DELIMITER $$
 CREATE PROCEDURE spu_equipos_listar()
 BEGIN
 	SELECT * FROM vws_equipos;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_equipos_listar_categoria;
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_listar_categoria(IN _idcategoria INT)
+BEGIN
+	IF _idcategoria = 0 THEN
+		SELECT * FROM vws_equipos;
+	ELSE 
+		SELECT * FROM vws_equipos
+		WHERE
+			idcategoria = _idcategoria;
+	END IF;
 END $$
 DELIMITER ;
 
