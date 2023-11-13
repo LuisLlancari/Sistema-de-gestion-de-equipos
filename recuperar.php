@@ -101,6 +101,7 @@
     document.addEventListener("DOMContentLoaded",() => {
     function $(id){return document.querySelector(id)}
         var modalSeleccion = new bootstrap.Modal($('#modal-seleccion'));
+        var modalVerificar = new bootstrap.Modal($('#modal-verificar'));
 
 
         function traer_usuario(){
@@ -133,11 +134,97 @@
             });
         }
         
+        function enviar_codigo( usuario, metodo, direccion ){
+
+          const parametros= new FormData();
+          parametros.append("operacion" ,"generar_codigo");          
+          parametros.append("idusuario"     ,usuario);            
+          parametros.append("metodo"        ,metodo);            
+          parametros.append("direccion"     ,direccion);          
+
+          fetch(`./controllers/usuario.controller.php`,{
+          method: "POST",
+          body: parametros
+          })
+          .then(respuesta => respuesta.json())
+          .then(datos =>{
+            console.log(datos);
+            if(datos){
+
+              $('#reenvio').setAttribute('data-userid',datos.idusuario)
+              $('#validar').setAttribute('data-userid',datos.idusuario)
+              $('#reenvio').setAttribute('data-direccion',direccion)
+              $('#reenvio').setAttribute('data-metodo',metodo)
+              modalVerificar.show();
+              
+            }else{
+              console.log("hubo un error")
+            }
+          })
+          .catch(e => {
+          console.error(e);
+          });
+        }
+
+        function verificar_codigo( usuario){
+
+          const parametros= new FormData();
+          parametros.append("operacion"     ,"verificar_codigo");          
+          parametros.append("idusuario"     ,usuario);                    
+
+
+          fetch(`./controllers/usuario.controller.php`,{
+          method: "POST",
+          body: parametros
+          })
+          .then(respuesta => respuesta.json())
+          .then(datos =>{ 
+
+            console.log(datos);
+            let codigo =  datos.codigo;
+            let idusuario =  datos.idusuario;
+            // console.log(typeof algo);
+            // console.log(typeof $("#in_codigo").value);
+
+            if(codigo == $("#in_codigo").value){
+              window.location.href = `./modificar.php?idusuario=${idusuario}`;
+            }else{
+              console.log("datos incorrectos");
+              
+            }
+            
+
+          })
+          .catch(e => {
+          console.error(e);
+          });
+        }
 
 
         $('#recuperar').addEventListener('click', function() {
         traer_usuario();
         });
+
+        $('#Correo').addEventListener('click', function(){
+          usuario   = $('#Correo').getAttribute('data-userid');
+          metodo    = $('#Correo').getAttribute('data-metodo');
+          direccion = $('#Correo').getAttribute('data-direccion');
+          enviar_codigo(usuario, metodo, direccion);
+       });
+
+       $('#validar').addEventListener('click', function() {
+          usuario = $('#reenvio').getAttribute('data-userid');
+          verificar_codigo(usuario);
+        // var confirmacion = confirm("¿Estás seguro de que deseas continuar?");
+        // if (confirmacion) {
+
+        //   usuario = $('#reenvio').getAttribute('data-userid');
+        //   verificar_codigo(usuario);
+
+        // } else {
+        //   alert("cancelado.");
+        // }
+      });
 
 
     });

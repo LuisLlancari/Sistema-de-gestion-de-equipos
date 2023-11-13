@@ -99,11 +99,18 @@ if(isset($_POST['operacion'])){
     break;
     
     case 'generar_codigo';
+
+      $codigo = random_int(100000 ,999999 );
+  
       $datosEnviar = [
         "idusuario" => $_POST['idusuario'],
-        "codigo"    => $_POST['codigo']
+        "codigo"    => $codigo
       ];
-      $usuario->generar_codigo($datosEnviar);
+      echo json_encode($usuario->generar_codigo($datosEnviar));
+
+      // if(strval($metodo) ==  "2"){
+      //   enviarMail(strval($direccion),strval($codigo));
+      // }
     break;
 
     case 'verificar_codigo';

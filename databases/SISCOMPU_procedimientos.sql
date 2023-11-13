@@ -20,13 +20,15 @@ BEGIN
 	UPDATE usuarios
 		SET codigo = _codigo
 			WHERE idusuario = _idusuario;
+            SELECT idusuario FROm usuarios
+			WHERE idusuario = _idusuario;
 END $$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_verificar(IN _idusuario INT)
 BEGIN
-	SELECT codigo FROM usuarios
+	SELECT idusuario, codigo FROM usuarios
 		WHERE idusuario = _idusuario;
 END $$
 DELIMITER ;
