@@ -50,7 +50,7 @@ require_once "../sidebar/sidebar.php";
           </div>
   
           <!-- LATERAL DERECHO -->
-          <div class="col-md-9" style="background-color: #DEE3E3; opacity: 0.5;">
+          <div class="col-md-9" style="background-color: #DEE3E3;">
 
           <!-- RENDER CARD -->
             <div class="row" id="card">

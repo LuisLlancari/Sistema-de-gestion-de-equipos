@@ -11,14 +11,14 @@ require_once "../sidebar/sidebar.php";
                     <div class="col-md-4">
                         <div class="card mb-3" style="max-width: 540px;">
                             <div class="row g-0">
-                              <div class="col-md-4">
-                                <img src="Image Source" class="img-fluid rounded-start" alt="Card title">
+                              <div class="col-md-4" style="background-color:#E5CF01;">
+                                <!-- <img src="Image Source" class="img-fluid rounded-start" alt="Card title"> -->
                               </div>
                               <div class="col-md-8">
                                 <div class="card-body">
-                                  <h5 class="card-title">Cateogorias</h5>
-                                  <p class="card-text"> --</p>
-                                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                  <h5 class="card-title">Categorias</h5>
+                                  <p class="card-text" id="cantidadCategorias">--</p>
+                                  <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
                                 </div>
                               </div>
                             </div>
@@ -28,14 +28,14 @@ require_once "../sidebar/sidebar.php";
                     <div class="col-md-4">
                         <div class="card mb-3" style="max-width: 540px;">
                             <div class="row g-0">
-                              <div class="col-md-4">
-                                <img src="Image Source" class="img-fluid rounded-start" alt="Card title">
+                              <div class="col-md-4" style="background-color:#2422E5;" >
+                                <!-- <img src="" class="img-fluid rounded-start" alt="Card title"> -->
                               </div>
                               <div class="col-md-8">
                                 <div class="card-body">
                                   <h5 class="card-title">Marcas</h5>
-                                  <p class="card-text">--</p>
-                                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                  <p class="card-text" id="cantidadMarcas">--</p>
+                                  <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
                                 </div>
                               </div>
                             </div>
@@ -45,14 +45,14 @@ require_once "../sidebar/sidebar.php";
                     <div class="col-md-4">
                         <div class="card mb-3" style="max-width: 540px;">
                             <div class="row g-0">
-                              <div class="col-md-4">
-                                <img src="Image Source" class="img-fluid rounded-start" alt="Card title">
+                              <div class="col-md-4" style="background-color:#0FE606;" >
+                                <!-- <img src="Image Source" class="img-fluid rounded-start" alt="Card title"> -->
                               </div>
                               <div class="col-md-8">
                                 <div class="card-body">
                                   <h5 class="card-title">Modelos</h5>
-                                  <p class="card-text">--</p>
-                                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                  <p class="card-text" id="cantidadModelos">--</p>
+                                  <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
                                 </div>
                               </div>
                             </div>
@@ -118,7 +118,7 @@ require_once "../sidebar/sidebar.php";
                       <button type="button" id="cerrar-modal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
           <div class="modal-body">
-            <form action="" id="#formulario-equipo">
+            <form action="" id="formulario-equipo">
               <div class="container-fluid">
                 <div class="mb-2">
                   <label for="categoria" class="form-label">Categoria</label>
@@ -193,7 +193,39 @@ require_once "../sidebar/sidebar.php";
 
             let equipoId = null;
 
-            let varBandera = true;
+            let varBandera = false;
+
+
+            function getInfo(equiposARR){
+
+              const Categorias  = new Set(equiposARR.map(contador => contador.categoria));
+              const Modelos     = new Set(equiposARR.map(contador => contador.modelo_equipo));
+              const Marcas      = new Set(equiposARR.map(contador => contador.marca));
+
+              const cantidadModelo      = Modelos.size;
+              const cantidadCategorias  = Categorias.size;
+              const cantidadMarcas      = Marcas.size;
+
+              console.log("la cantidad de modelos son :", cantidadModelo);
+              console.log("y estos son los modelos :", Modelos);
+
+              console.log("la cantidad de categorias son :", cantidadCategorias);
+              console.log("y estos son las categorias :", Categorias);
+
+              console.log("la cantidad de marcas son :", cantidadMarcas);
+              console.log("y estos son las marcas :", Marcas);
+
+              $("#cantidadModelos").innerHTML     = cantidadModelo;
+              $("#cantidadMarcas").innerHTML      = cantidadMarcas;
+              $("#cantidadCategorias").innerHTML  = cantidadCategorias;
+            }
+
+            function cardInfoLimpiar(){
+              $("#cantidadCategorias").innerHTML ="";
+              $("#cantidadMarcas").innerHTML ="";
+              $("#cantidadModelos").innerHTML ="";
+            }
+
 
             function getCategorias(){
 
@@ -306,6 +338,9 @@ require_once "../sidebar/sidebar.php";
 
                         equipos = data;
 
+                        cardInfoLimpiar();
+                        getInfo(equipos);
+
                         if(equipos){
 
                             const tabla = $("#tabla-equipos tbody");
@@ -343,6 +378,9 @@ require_once "../sidebar/sidebar.php";
             }
 
             function reinciciarModal(){
+
+              varBandera = false;
+
               $("#categoriaEdit").value = "";
               $("#marcaEdit").value     = "";
               $("#usuarioEdit").value   = "";
@@ -350,6 +388,8 @@ require_once "../sidebar/sidebar.php";
               $("#serieEdit").value     = "";
               $("#imagenEdit").value    = "";
               $("#cerrar-modal").click();
+
+              console.log(varBandera);
             }
 
             function iniciarModal(){
@@ -358,8 +398,6 @@ require_once "../sidebar/sidebar.php";
             }
 
             function actualizarDatos(idEquipo){
-
-              varBandera = idEquipo ? true : false;
 
               const parametros = new FormData();
 
@@ -439,8 +477,11 @@ require_once "../sidebar/sidebar.php";
 
             $("#tabla-equipos tbody").addEventListener("click",(event) => {
 
-              equipoId= event.target.dataset.id;
+              equipoId = event.target.dataset.id;
 
+              varBandera = true;
+
+              console.log(varBandera);
               if(event.target.classList.contains("editar")){
 
 
@@ -455,7 +496,7 @@ require_once "../sidebar/sidebar.php";
               }
             });
 
-            $("#guardar-datos").addEventListener("click", () =>{
+            $("#formulario-equipo").addEventListener("submit", () =>{
               event.preventDefault();
               actualizarDatos(equipoId);
             });

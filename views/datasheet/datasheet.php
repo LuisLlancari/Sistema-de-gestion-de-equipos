@@ -157,7 +157,7 @@ require_once "../sidebar/sidebar.php";
 
         /* VARIABLE BANDERA */
 
-        let varBandera = true; 
+        let varBandera = false; 
 
         function getdatasheet(idequipo){
 
@@ -242,13 +242,21 @@ require_once "../sidebar/sidebar.php";
 
         }
 
-        function actualizarDatasheet(idequipo,iddatasheet){
-            
-            varBandera = iddatasheet ? true : false;
+        
+        function reiniciarModal(){
+            varBandera = false;
+            $("#clave").value = "";
+            $("#valor").value = "";
+            $("#cerrar-modal").click();
+
+            console.log(varBandera);
+        }
+
+        function actualizarDatasheet(iddatasheet){
             
             const parametros = new FormData();
 
-            parametros.append("idequipo",idequipo);
+            parametros.append("idequipo",idEquipoObt);
             parametros.append("clave",$("#clave").value);
             parametros.append("valor",$("#valor").value);
 
@@ -269,10 +277,8 @@ require_once "../sidebar/sidebar.php";
                 .then(result => result.json())
                 .then(data => {
                     toast("Se actualizó con exito");
-                    $("#cerrar-modal").click();
-                    $("#clave").value = "";
-                    $("#valor").value = "";
                     getdatasheet(idEquipoObt);
+                    reiniciarModal();
 
                 })
                 .catch(e => {
@@ -283,29 +289,34 @@ require_once "../sidebar/sidebar.php";
 
         $("#datasheet").addEventListener("click",(event) =>{
 
-            if(event.target.classList.contains("editar")){
-                iddata = event.target.dataset.id;
+            dataid = event.target.dataset.id;
+            
+            varBandera = true;
 
-                console.log(iddata);
+            console.log(varBandera);
+            if(event.target.classList.contains("editar")){
+
+                console.log(dataid);
 
                 $("#modalTitleId").innertext = "Actualizar datos";
-                filtrarData(iddata);
+                filtrarData(dataid);
 
             }else if(event.target.classList.contains("eliminar")){
-                iddatadelete = event.target.dataset.id;
+                console.log(dataid)
 
                 mostrarPregunta("Por favor confirme","¿Desea eliminar este registro?")
-                    .then((result) =>{eliminarDatasheet(iddatadelete)});
+                    .then((result) =>{eliminarDatasheet(dataid)});
             }
         });
 
         $("#datasheet-form").addEventListener("submit",(event) => {
             event.preventDefault();
-            actualizarDatasheet(idEquipoObt,iddata);
+            actualizarDatasheet(dataid);
         });
 
         $("#registrarData").addEventListener("click", () =>{
             $("#modalTitleId").innerText = "Registrar datos";
+            reiniciarModal();
         });
 
         getdatasheet(idEquipoObt);
