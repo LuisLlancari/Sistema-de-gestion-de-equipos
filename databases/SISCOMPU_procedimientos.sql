@@ -84,8 +84,16 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_listar()
 BEGIN
-	SELECT nombres, apellidos, rol, email, avatar FROM usuarios
+	SELECT idusuario, apellidos, rol, email, avatar FROM usuarios
 		WHERE inactive_at IS NULL;
+END $$
+DELIMITER ;
+	
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_obtener_id(IN _idusuario INT)
+BEGIN
+	SELECT idusuario, apellidos, rol, email, avatar FROM usuarios
+		WHERE idusuario = _idusuario AND inactive_at IS NULL;
 END $$
 DELIMITER ;
 

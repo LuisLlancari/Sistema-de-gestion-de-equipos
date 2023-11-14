@@ -22,6 +22,7 @@
         <div class="mb-3">
          <h1>Lista de trabajdores</h1>
          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-registrar">Agregar usuario</button>
+         <button type="button" class="btn btn-danger" id="prueba">boton Prueba </button>
         </div>
       </div>
       <div class="col-md-4"></div>
@@ -83,8 +84,8 @@
                   <label for="rol" class="form-label">Seleccione su rol</label>
                   <select name="" id="rol" class="form-select" required>
                   <option value="">Seleccion:</option>
-                  <option value="Administrador">Administrador:</option>
-                  <option value="Invitado">Invitado:</option>
+                  <option value="Administrador">Administrador</option>
+                  <option value="Invitado">Invitado</option>
                 </select>
                 </div>
               
@@ -127,6 +128,7 @@
   <script>
     document.addEventListener("DOMContentLoaded",() => {
       const cuerpo = document.querySelector("#contenerdor-cards");
+      var modalregistro = new bootstrap.Modal($('#modal-registrar'));
       function $(id){return document.querySelector(id)};  
 
 
@@ -144,13 +146,14 @@
               cuerpo.innerHTML ='';
 
               datos.forEach(element =>{
+                const rutaImagen = (element.avatar == null)  ? "noimagen.png": element.avatar;
                 let nuevacard = ``;
                 // Enviar los valores obtenidos en celdas <td></td>
                 nuevacard = `
-                <div class="card mb-3" style="max-width: 540px;">
+                <div class="card mb-3" style="max-width: 540px;" id="cuepo-card">
                   <div class="row g-0">
                       <div class="col-md-4">
-                      <img src="..." class="img-fluid rounded-start" alt="...">
+                      <img src="../../images/${rutaImagen}" class="img-fluid rounded-start" alt="...">
                       </div>
                       <div class="col-md-8">
                       <div class="card-body">
@@ -158,8 +161,8 @@
                           <p class="card-text">correo: ${element.email}</p>
                           <p class="card-text">cargo: ${element.rol}</p>
                           <div class="container">
-                          <button type="button" data-userid="${element.idusuario}" id="editar"  class="btn btn-sm btn-warning">Editar</button>
-                          <button type="button" data-userid="${element.idusuario}" id="eliminar" class="btn btn-sm btn-danger">Eliminar</button>
+                          <button type="button" data-id="${element.idusuario}"  class="btn btn-sm btn-warning editar">Editar</button>
+                          <button type="button" data-id="${element.idusuario}"  class="eliminar btn btn-sm btn-danger ">Eliminar</button>
                           </div>
                       </div>
                       </div>
@@ -183,7 +186,7 @@
           parametros.append("rol"           ,$("#rol").value);
           parametros.append("claveacceso"   ,$("#contraseña").value);
           parametros.append("email"         ,$("#email").value);
-          parametros.append("avatar"        ,$("#avatar").value);
+          parametros.append("avatar"        ,$("#avatar").files[0]);
 
           fetch(`../../controllers/usuario.controller.php`,{
             method: "POST",
@@ -204,48 +207,85 @@
             });               
         }
 
-        // function eliminar_usuarios(){
-        //   const parametros = new FormData();
-        //   parametros.append("operacion"     ,"registrar_usuario");
-        //   parametros.append("idusaurio"       ,$("#nombres").value);
+        function eliminar_usuarios(idusuario){
+          const parametros = new FormData();
+          parametros.append("operacion"     ,"eliminar_usuario");
+          parametros.append("idusuario"     ,idusuario);
 
-        //   fetch(`../../controllers/usuario.controller.php`,{
-        //     method: "POST",
-        //     body : parametros
-        //   })
-        //     .then(respuesta => respuesta.json())
-        //     .then(datos => {
-        //       console.log(datos);
-        //     if (datos.idusuario > 0){
-        //     alert(`Usuario registrado con ID: ${datos.idusuario}`)
-        //     $("#form-usuario").reset();  
+          fetch(`../../controllers/usuario.controller.php`,{
+            method: "POST",
+            body : parametros
+          })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+              
+            })
+            .catch(e =>  {
+              console.error(e);
+            });               
+        }
 
-        //     }
+        function recupear_usuarios_id (){
+          const parametros = new FormData();
+          parametros.append("operacion"     ,"listar_usuario_por_id");
+          parametros.append("idusuario"     ,1);
 
-        //     })
-        //     .catch(e =>  {
-        //       console.error(e);
-        //     });               
-        // }
+          fetch(`../../controllers/usuario.controller.php`,{
+            method: "POST",
+            body : parametros
+          })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+              console.log(datos)
+              modalregistro.show();
+              // modalregistro.reset();
+              
+              $("#nombres").value     = datos.nombres;
+              $("#apellidos").value   = datos.apellidos;
+              $("#rol").value         = datos.rol;
+              $("#email").value       = datos.email;
+              // $("#avatar").value
+
+              
+            })
+            .catch(e =>  {
+              console.error(e);
+            });               
+        }
         
         
-        // $('#eliminar').addEventListener('click', function(){
-        //   usuario   = $('#eliminar').getAttribute('data-userid');
-        //   console.log("usuario")
-        // });
+        
+
         listar_usuarios();
 
-        $("#eliminar").addEventListener('click',function(){
-          console.log("hola");
-          usuario   = $('#eliminar').getAttribute('data-userid');
-          console.log(usuario)
+        $('#prueba').addEventListener('click', function(){
+          recupear_usuarios_id();
+        });
+
+        $("#contenerdor-cards").addEventListener('click',(event)=>{
+         
+           const usuarioid= event.target.dataset.id;
+
+
+          // var Bandera = true
+          // console.log(usuarioid)
+
+          if(event.target.classList.contains("editar")){
+
+            console.log("holla")
+            console.log(usuarioid)
+
+          }else if(event.target.classList.contains("eliminar")){
+            console.log("algo")
+            console.log(usuarioid)
+          }
+
+
+
         });
 
         $('#registrar').addEventListener('click', function(){
-          usuario   = $('#eliminar').getAttribute('data-userid');
-          console.log(usuario)
-          // registrar_usuarios();
-
+          registrar_usuarios();
         });
 
 

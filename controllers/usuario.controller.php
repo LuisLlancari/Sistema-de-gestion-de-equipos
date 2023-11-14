@@ -58,6 +58,9 @@ if(isset($_POST['operacion'])){
 
       $claveEncritada = password_hash($_POST['claveacceso'],PASSWORD_BCRYPT);
 
+      $ahora = date('dmYhis');
+      $nombreArchivo = sha1($ahora). ".jpg";
+
 
       $datosEnviar = [
         "nombres"      => $_POST['nombres'],
@@ -65,8 +68,14 @@ if(isset($_POST['operacion'])){
         "rol"          => $_POST['rol'],
         "claveacceso"  => $claveEncritada,
         "email"        => $_POST['email'],
-        "avatar"       => $_POST['avatar']
+        "avatar"       => $nombreArchivo
       ];
+
+      if(isset($_FILES['avatar'])){
+        if(move_uploaded_file($_FILES['avatar']['tmp_name'], "../images/" . $nombreArchivo)){ 
+          $datosEnviar["avatar"]= $nombreArchivo;
+        }   
+      }
 
       echo json_encode($usuario->registrar_usuario($datosEnviar));
 
@@ -93,6 +102,11 @@ if(isset($_POST['operacion'])){
     break;
 
     case 'modificar_usuario';
+      
+      $ahora = date('dmYhis');
+      $nombreArchivo = sha1($ahora). ".jpg";
+
+
       $datosEnviar = [
         "idusuario"    => $_POST['idusuario'],
         "nombres"      => $_POST['nombres'],
@@ -100,8 +114,14 @@ if(isset($_POST['operacion'])){
         "rol"          => $_POST['rol'],
         "claveacceso"  => $_POST['claveacceso'],
         "email"        => $_POST['email'],
-        "avatar"       => $_POST['avatar']
+        "avatar"       => $nombreArchivo
       ];
+
+      if(isset($_FILES['avatar'])){
+        if(move_uploaded_file($_FILES['avatar']['tmp_name'], "../images/" . $nombreArchivo)){ 
+          $datosEnviar["avatar"]= $nombreArchivo;
+        }   
+      }
 
       echo json_encode($usuario->modificar_usuario($datosEnviar));
 
