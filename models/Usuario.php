@@ -35,7 +35,17 @@ class Usuario extends Conexion {
         die($e->getMessage());
     }
   }
+  
+  public function listar_por_id($datos = []){
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_usuarios_obtener_id(?)");
+      $consulta->execute(array($datos['idusuario']));
+      return $consulta->fetchAll(PDO::FETCH_ASSOC);
 
+    } catch (Exception $e){
+        die($e->getMessage());
+    }
+  }
   //CREANDO FUNCION PARA AGREGAR
   public function registrar_usuario($datos = []){
     try {

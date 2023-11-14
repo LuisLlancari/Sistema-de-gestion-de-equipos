@@ -80,6 +80,17 @@ if(isset($_POST['operacion'])){
       $usuario->eliminar_usuario($datosEnviar);
 
     break;
+    
+    break;
+
+    case 'listar_usuario_por_id';
+      $datosEnviar = [
+        "idusuario"     => $_POST['idusuario']
+      ];
+
+      echo json_encode($usuario->listar_por_id($datosEnviar));
+
+    break;
 
     case 'modificar_usuario';
       $datosEnviar = [

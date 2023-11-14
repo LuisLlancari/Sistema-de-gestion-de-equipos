@@ -126,8 +126,8 @@
 
   <script>
     document.addEventListener("DOMContentLoaded",() => {
-    function $(id){return document.querySelector(id)}
-    const cuerpo = document.querySelector("#contenerdor-cards");
+      const cuerpo = document.querySelector("#contenerdor-cards");
+      function $(id){return document.querySelector(id)};  
 
 
         function listar_usuarios(){
@@ -158,8 +158,8 @@
                           <p class="card-text">correo: ${element.email}</p>
                           <p class="card-text">cargo: ${element.rol}</p>
                           <div class="container">
-                          <button type="button" class="btn btn-sm btn-warning">Editar</button>
-                          <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                          <button type="button" data-userid="${element.idusuario}" id="editar"  class="btn btn-sm btn-warning">Editar</button>
+                          <button type="button" data-userid="${element.idusuario}" id="eliminar" class="btn btn-sm btn-danger">Eliminar</button>
                           </div>
                       </div>
                       </div>
@@ -204,11 +204,50 @@
             });               
         }
 
-        $('#registrar').addEventListener('click', function(){
-          registrar_usuarios();
+        // function eliminar_usuarios(){
+        //   const parametros = new FormData();
+        //   parametros.append("operacion"     ,"registrar_usuario");
+        //   parametros.append("idusaurio"       ,$("#nombres").value);
+
+        //   fetch(`../../controllers/usuario.controller.php`,{
+        //     method: "POST",
+        //     body : parametros
+        //   })
+        //     .then(respuesta => respuesta.json())
+        //     .then(datos => {
+        //       console.log(datos);
+        //     if (datos.idusuario > 0){
+        //     alert(`Usuario registrado con ID: ${datos.idusuario}`)
+        //     $("#form-usuario").reset();  
+
+        //     }
+
+        //     })
+        //     .catch(e =>  {
+        //       console.error(e);
+        //     });               
+        // }
+        
+        
+        // $('#eliminar').addEventListener('click', function(){
+        //   usuario   = $('#eliminar').getAttribute('data-userid');
+        //   console.log("usuario")
+        // });
+        listar_usuarios();
+
+        $("#eliminar").addEventListener('click',function(){
+          console.log("hola");
+          usuario   = $('#eliminar').getAttribute('data-userid');
+          console.log(usuario)
         });
 
-        listar_usuarios();
+        $('#registrar').addEventListener('click', function(){
+          usuario   = $('#eliminar').getAttribute('data-userid');
+          console.log(usuario)
+          // registrar_usuarios();
+
+        });
+
 
     });
 
