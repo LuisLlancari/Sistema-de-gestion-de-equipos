@@ -2,7 +2,7 @@
 
 require_once 'Conexion.php';
 
-class Marca extends Conexion{
+class Sector extends Conexion{
     
     private $conexion;
 
@@ -13,7 +13,7 @@ class Marca extends Conexion{
 // FUNCION PARA LISTAR
     public function listar(){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_listar_marca()");
+            $consulta = $this->conexion->prepare("CALL spu_listar_sectores()");
             $consulta->execute();
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
@@ -25,10 +25,14 @@ class Marca extends Conexion{
 // FUNCION PARA REGISTRAR
     public function registrar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_insertar_marca(?)");
+            $consulta = $this->conexion->prepare("CALL spu_insertar_sectores(?,?,?,?,?)");
             $consulta->execute(
                 array(
-                    $datos ['marca']
+                    $datos ['idequipo'],
+                    $datos ['idusuario'],
+                    $datos ['nombre'],
+                    $datos ['fecha_inicio'],
+                    $datos ['fecha_fin']
                 )
             );
         }

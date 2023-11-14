@@ -10,6 +10,7 @@ class Categoria extends Conexion{
         $this->conexion = parent::getConexion();
     }
 
+// FUNCION PARA LISTAR
     public function listar(){
         try{
             $consulta = $this->conexion->prepare("CALL spu_listar_categorias()");
@@ -21,6 +22,7 @@ class Categoria extends Conexion{
         }
     }
 
+// FUNCION PARA REGISTRAR
     public function registrar($datos = []){
         try{
             $consulta = $this->conexion->prepare("CALL spu_categorias_registrar(?)");
