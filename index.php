@@ -117,7 +117,7 @@
           if (datos.acceso === true) {
             toast("Acceso correcto");
             setTimeout(() => { //Una pequeña pausa para que se muestre el SweetAlert
-              window.location.href = './views/index.php';
+              window.location.href = './views/graficos/index.php';
             }, 1000);
           } else {
             // SweetAlert

@@ -6,7 +6,11 @@ class Equipo extends Conexion{
 
     private $conexion;
 
+    /**
+     * Método constructor, se invoca automáticamente al crear una nueva instancia de la clase
+     */
     public function __CONSTRUCT(){
+        //Accedemos al método getConexion de la clase padre(superclase)
         $this->conexion = parent::getConexion();
     }
 
@@ -69,6 +73,36 @@ class Equipo extends Conexion{
             )
         );
 
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método que nos sirve para obtener los datos del equipo por id
+     */
+    public function getEquipo($datos = []){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_equipos_obtener(?)");
+            $consulta->execute(array($datos['idequipo']));
+
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * método para obtener el equipo por idcategoria
+     */
+    public function getEquipoCat($datos = []){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_equipos_listar_categoria(?)");
+            $consulta->execute(array($datos['idcategoria']));
+
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());

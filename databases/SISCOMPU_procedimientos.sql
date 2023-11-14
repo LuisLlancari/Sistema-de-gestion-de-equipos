@@ -1,5 +1,5 @@
-
 USE SISCOMPU;
+
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados USUARIOS -------------------------------
 -- -------------------------------------------------------------------------------------
@@ -39,11 +39,13 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_usuarios_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_listar()
 BEGIN
 	SELECT * FROM usuarios
-		WHERE inactive_at IS NULL;
+    WHERE
+		inactive_at IS NULL;
 END $$
 DELIMITER ;
 
@@ -56,6 +58,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_usuario_modificar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuario_modificar
 (
@@ -85,6 +88,23 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_usuarios_obtener;
+DELIMITER $$
+CREATE PROCEDURE  spu_usuarios_obtener(in _idusuario INT)
+BEGIN
+	SELECT * FROM usuarios
+	WHERE 
+		idusuario = _idusuario;
+END $$
+DELIMITER ;
+/*
+DROP PROCEDURE IF EXISTS 
+DELIMITER $$
+CREATE PROCEDURE  
+BEGIN
+END $$
+DELIMITER ;
+*/
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados CATEGORIAS ----------------------------
 -- -------------------------------------------------------------------------------------
@@ -180,6 +200,27 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 select * from equipos;
 
+-- VISTA EQUIPOS
+DROP VIEW IF EXISTS vws_equipos;
+CREATE VIEW vws_equipos
+AS
+	SELECT EQUI.idequipo,
+    CAT.idcategoria,
+    CAT.categoria,
+    MAR.idmarca,
+    MAR.marca,
+    EQUI.modelo_equipo,
+    EQUI.numero_serie,
+    EQUI.imagen,
+	USU.nombres
+    FROM equipos EQUI
+    INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
+    INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
+    INNER JOIN usuarios USU ON USU.idusuario = EQUI.idusuario
+	WHERE EQUI.inactive_at IS NULL;
+
+--
+
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_registrar
 (
@@ -199,27 +240,56 @@ BEGIN
 END $$
 DELIMITER ;
 
-
+DROP PROCEDURE IF EXISTS spu_equipos_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_listar()
 BEGIN
-	SELECT EQUI.idequipo,
-    CAT.categoria,
-    MAR.marca,
-    USU.nombres,
-    EQUI.modelo_equipo,
-    EQUI.numero_serie,
-    EQUI.imagen
-    FROM equipos EQUI
-    INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
-    INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
-    INNER JOIN usuarios USU ON USU.idusuario = EQUI.idusuario
-    WHERE EQUI.inactive_at IS NULL;
+	SELECT * FROM vws_equipos;
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_equipos_listar_categoria;
 DELIMITER $$
-CREATE PROCEDURE spu_equipos_eliminar(IN id_equipo INT)
+CREATE PROCEDURE spu_equipos_listar_categoria(IN _idcategoria INT)
+BEGIN
+	IF _idcategoria = 0 THEN
+		SELECT * FROM vws_equipos;
+	ELSE 
+		SELECT * FROM vws_equipos
+		WHERE
+			idcategoria = _idcategoria;
+	END IF;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_equipos_modificar;
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_modificar
+(
+	IN _idequipo		INT,
+    IN _idcategoria		INT,
+    IN _idmarca			INT,
+    IN _idusuario 		INT,
+    IN _modelo_equipo 	VARCHAR(45),
+    IN _numero_serie	VARCHAR(45),
+    IN _imagen			VARCHAR(200)
+)
+BEGIN
+	UPDATE equipos SET
+		idcategoria 	= _idcategoria,
+		idmarca			= _idmarca,
+		idusuario		= _idusuario,
+		modelo_equipo	= _modelo_equipo,
+		numero_serie	= _numero_serie,
+		imagen			= _imagen,
+        update_at		= now()
+	WHERE 
+		idequipo = _idequipo;
+END $$
+DELIMTTER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_eliminar(IN _idequipo INT)
 BEGIN 
 	UPDATE equipos
     SET inactive_at = NOW()
@@ -227,22 +297,44 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_equipos_obtener;
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_obtener(in _idequipo INT)
+BEGIN
+	SELECT * FROM vws_equipos
+	WHERE
+		idequipo = _idequipo;
+END $$
+DELIMITER ;
 
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados DATASHEET -----------------------------
 -- -------------------------------------------------------------------------------------
 select * from datasheet;
 
-DELIMITER $$
-CREATE PROCEDURE spu_datasheet_listar()
-BEGIN
-	SELECT DSH.iddatasheet,
+-- VISTA DATASHEET
+DROP VIEW IF EXISTS vw_datasheet;
+CREATE VIEW vw_datasheet
+AS
+	SELECT 
+    DSH.iddatasheet,
+    DSH.idequipo,
     EQUI.numero_serie,
     DSH.clave,
-    DSH.valor
+    DSH.valor,
+    DSH.inactive_at
     FROM datasheet DSH
     INNER JOIN equipos EQUI ON EQUI.idequipo = DSH.idequipo
-    WHERE DSH.inactive_at IS NULL;
+	WHERE DSH.inactive_at IS NULL;
+--
+
+DROP PROCEDURE IF EXISTS spu_datasheet_listar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_listar(IN _idequipo INT)
+BEGIN
+	SELECT * FROM vw_datasheet
+    WHERE idequipo = _idequipo
+    ORDER BY clave;
 END$$
 DELIMITER ;
 
@@ -262,6 +354,36 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_datasheet_modificar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_modificar
+(
+	IN _iddatasheet INT,
+    IN _idequipo INT,
+    IN _clave VARCHAR(45),
+    IN _valor VARCHAR(300)
+)
+BEGIN
+	UPDATE datasheet SET
+		idequipo 	= _idequipo,
+		clave 		= _clave,
+		valor		= _valor,
+        update_at 	= now()
+	WHERE
+		iddatasheet = _iddatasheet;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_datasheet_eliminar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_eliminar(IN _iddatasheet INT)
+BEGIN
+	UPDATE datasheet SET
+		inactive_at = now()
+	WHERE
+		iddatasheet = _iddatasheet;
+END $$
+DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados CRONOGRAMAS --------------------------
 -- -------------------------------------------------------------------------------------

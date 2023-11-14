@@ -6,6 +6,10 @@ require_once "../models/Equipo.php";
 
 if(isset($_POST['operacion'])){
 
+    /**
+     * CREAMOS UN OBJETO
+     * $equipo => Objeto que almacena la clase Equipo en la variable $equipo 
+     */
     $equipo = new Equipo();
 
     switch ($_POST['operacion']){
@@ -27,14 +31,14 @@ if(isset($_POST['operacion'])){
                 "idusuario"     => $_POST['idusuario'],
                 "modelo_equipo" => $_POST['modelo_equipo'],
                 "numero_serie"  => $_POST['numero_serie'],
-                "imagen"        =>  ""/* $nombreImagen */
+                "imagen"        =>  $nombreImagen 
             ];
 
-            /* if(move_uploaded_file($_FILES['imagen']['tmp_name'], "../images/" . $nombreImagen)){
+            if(move_uploaded_file($_FILES['imagen']['tmp_name'], "../images/" . $nombreImagen)){
 
                 $datosEnviar['imagen'] = $nombreImagen;
             }
- */
+ 
             echo json_encode($equipo->registrar($datosEnviar));
 
             break;
@@ -56,13 +60,27 @@ if(isset($_POST['operacion'])){
                 "imagen"        => $nombreImagen
             ];
 
-            /* 
-            if(move_uploaded_file($__FILES['imagen'], "../images/" . $nombreImagen)){
+             
+            if(move_uploaded_file($_FILES['imagen']['tmp_name'], "../images/" . $nombreImagen)){
                 
-                $datosEnviar = ['imagen'];
-            } */
+                $datosEnviar['imagen'] = $nombreImagen;
+            }
 
             echo json_encode($equipo->modificar($datosEnviar));
+            break;
+
+        case 'getEquipo' :
+
+            $datosEnviar = ["idequipo" => $_POST['idequipo']];
+
+            echo json_encode($equipo->getEquipo($datosEnviar));
+            break;
+
+        case 'getEquipoCat' :
+
+            $datosEnviar = ["idcategoria" => $_POST['idcategoria']];
+    
+            echo json_encode($equipo->getEquipoCat($datosEnviar));
             break;
         
         case 'eliminar':
