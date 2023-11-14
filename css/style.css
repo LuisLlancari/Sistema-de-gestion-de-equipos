@@ -117,7 +117,8 @@ a{
 }
 
 .show{
-  left: 0
+  /* left: 0 */
+  display: block;
 }
 
 .body-pd{
@@ -142,6 +143,9 @@ a{
 
 }
 
+.nav_list ul{
+  display: none;
+}
 @media screen and (min-width: 768px){
   
   .btn-sidebar{
