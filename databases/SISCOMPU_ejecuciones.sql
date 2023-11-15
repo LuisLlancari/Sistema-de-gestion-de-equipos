@@ -12,7 +12,7 @@ UPDATE usuarios SET
 select * from usuarios;
 CALL spu_usuarios_login('adriana@gmail.com');
 CALL spu_usuarios_registrar('Adriana', 'Durand Buenamarca', 'Administrador', 'SENATI123', 'adriana@gmail.com', NULL);
-
+CALL spu_usuarios_listar();
 -- EQUIPOS
 CALL spu_equipos_registrar(2, 1, 1, 'Equipo Nuevo Modelo', 'JSYEKE-0928200', NULL);
 insert into equipos(idcategoria, idmarca, idusuario, modelo_equipo, numero_serie, imagen)
@@ -57,6 +57,13 @@ VALUES
 UPDATE datasheet SET
 	inactive_at = null;
 
+-- SECTORES
+	INSERT INTO sectores (sector)values('psicología'),('secretaría'),('aula de profesores');
+    select * from sectores;
+
+-- MANTENIMIENTO SECTORES
+select * from MAN_sectores;
+    INSERT INTO MAN_sectores(idsector,idequipo,idusuario,fecha_inicio) value(1,1,1,'2023-12-12');
 
 
 

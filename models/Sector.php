@@ -13,7 +13,7 @@ class Sector extends Conexion{
 // FUNCION PARA LISTAR
     public function listar(){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_listar_sectores()");
+            $consulta = $this->conexion->prepare("CALL spu_listar_MANsectores()");
             $consulta->execute();
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }

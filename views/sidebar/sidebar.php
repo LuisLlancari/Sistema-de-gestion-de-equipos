@@ -8,17 +8,17 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
 $accesos = [
     "ADMIN" =>[
+        "graficos"      => ["index"],
         "cronograma"    => [],
         "datasheet"     => [],
         "equipos"       => ["equipos-catalogo","equipos-listar"],
-        "usuario"      => ["usuario"],
-        "graficos"      => ["index"]
+        "usuario"      => ["usuario"]
     ],
     "ASIST" =>[
+        "graficos"      => ["index"],
         "cronograma"    => [],
         "datasheet"     => [],
-        "equipos"       => ["equipos-catalogo"],
-        "graficos"      => ["index"]
+        "equipos"       => ["equipos-catalogo"]
         ]
     ];
 ?>
@@ -26,7 +26,7 @@ $accesos = [
 <html lang="en">
 
 <head>
-  <title>Title</title>
+  <title>SISCOMPU</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

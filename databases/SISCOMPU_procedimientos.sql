@@ -629,3 +629,38 @@ BEGIN
 	UPDATE mantenimiento SET
 		inactive_at = now();
 END $$
+
+-- -------------------------------------------------------------------------------------
+-- ------------------ Procedimientos Almacenados SECTORES -----------------------------
+-- -------------------------------------------------------------------------------------
+select * from sectores;
+
+DROP PROCEDURE spu_listar_sectores;
+DELIMITER $$
+CREATE PROCEDURE spu_listar_sectores()
+BEGIN
+	SELECT idsector, sector
+    FROM sectores
+    WHERE inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_listar_MANsectores;
+DELIMITER $$
+CREATE PROCEDURE spu_listar_MANsectores()
+BEGIN
+	SELECT MANSEC.idmantenimiento_sector,
+    SEC.sector,
+	CAT.categoria,
+    EQUI.numero_serie,
+    USU.nombres,
+    MANSEC.fecha_inicio,
+	MANSEC.fecha_fin
+    FROM MAN_sectores MANSEC
+    INNER JOIN sectores SEC ON SEC.idsector = MANSEC.idsector
+	INNER JOIN equipos EQUI ON EQUI.idequipo = MANSEC.idequipo
+	INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
+	INNER JOIN usuarios USU ON USU.idusuario = MANSEC.idusuario
+    WHERE MANSEC.inactive_at IS NULL;
+END $$
+DELIMITER ;
