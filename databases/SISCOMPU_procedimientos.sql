@@ -179,7 +179,25 @@ DELIMITER ;
 -- ------------------ Procedimientos Almacenados EQUIPOS -----------------------------
 -- -------------------------------------------------------------------------------------
 select * from equipos;
-
+-- VISTA EQUIPOS
+DROP VIEW IF EXISTS vws_equipos;
+CREATE VIEW vws_equipos
+AS
+	SELECT EQUI.idequipo,
+    CAT.idcategoria,
+    CAT.categoria,
+    MAR.idmarca,
+    MAR.marca,
+    EQUI.modelo_equipo,
+    EQUI.numero_serie,
+    EQUI.imagen,
+	USU.nombres
+    FROM equipos EQUI
+    INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
+    INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
+    INNER JOIN usuarios USU ON USU.idusuario = EQUI.idusuario
+	WHERE EQUI.inactive_at IS NULL;
+    
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_registrar
 (
@@ -224,6 +242,30 @@ BEGIN
 	UPDATE equipos
     SET inactive_at = NOW()
 		WHERE idequipo = _idequipo;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_equipos_listar_categoria;
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_listar_categoria(IN _idcategoria INT)
+BEGIN
+	IF _idcategoria = 0 THEN
+		SELECT * FROM vws_equipos;
+	ELSE 
+		SELECT * FROM vws_equipos
+		WHERE
+			idcategoria = _idcategoria;
+	END IF;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_equipos_obtener;
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_obtener(in _idequipo INT)
+BEGIN
+	SELECT * FROM vws_equipos
+	WHERE
+		idequipo = _idequipo;
 END $$
 DELIMITER ;
 
