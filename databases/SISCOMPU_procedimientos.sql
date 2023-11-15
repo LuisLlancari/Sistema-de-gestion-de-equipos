@@ -218,19 +218,34 @@ select * from sectores;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_sectores()
 BEGIN
-	SELECT SEC.idsector,
-    SEC.nombre,
-    EQUI.numero_serie,
-    USU.nombres,
-    SEC.fecha_inicio,
-    SEC.fecha_fin
-    FROM sectores SEC
-    INNER JOIN equipos EQUI ON EQUI.idequipo = SEC.idequipo
-    INNER JOIN usuarios USU ON USU.idusuario = SEC.idusuario
-    WHERE SEC.inactive_at IS NULL;
+	SELECT idsector, sector
+    FROM sectores
+    WHERE inactive_at IS NULL;
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS spu_listar_MANsectores;
+DELIMITER $$
+CREATE PROCEDURE spu_listar_MANsectores()
+BEGIN
+	SELECT MANSEC.idmantenimiento_sector,
+    SEC.sector,
+	CAT.categoria,
+    EQUI.numero_serie,
+    USU.nombres,
+    MANSEC.fecha_inicio,
+	MANSEC.fecha_fin
+    FROM MAN_sectores MANSEC
+    INNER JOIN sectores SEC ON SEC.idsector = MANSEC.idsector
+	INNER JOIN equipos EQUI ON EQUI.idequipo = MANSEC.idequipo
+	INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
+	INNER JOIN usuarios USU ON USU.idusuario = MANSEC.idusuario
+    WHERE MANSEC.inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_insertar_sectores;
 DELIMITER $$
 CREATE PROCEDURE spu_insertar_sectores
 (
@@ -248,6 +263,14 @@ BEGIN
 END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE spu_MANsector_eliminar(IN _idmantenimiento_sector INT)
+BEGIN 
+	UPDATE MAN_sectores
+    SET inactive_at = NOW()
+		WHERE idmantenimiento_sector = _idmantenimiento_sector;
+END $$
+DELIMITER ;
 
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados EQUIPOS -----------------------------
@@ -351,7 +374,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_equipos_obtener;
+DROP PROCEDURE IF EXISTS spu_equipos_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_obtener(in _idequipo INT)
 BEGIN
@@ -414,14 +437,7 @@ DELIMTTER ;
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados DATASHEET -----------------------------
 -- -------------------------------------------------------------------------------------
-select * from datasheet;
--- VISTA DATASHEET
-DROP VIEW IF EXISTS vw_datasheet;
-CREATE VIEW vw_datasheet
-AS
-	SELECT 
-    DSH.iddatasheet,
-    DSH.idequipo,
+
 -- VISTA DATASHEET
 DROP VIEW IF EXISTS vw_datasheet;
 CREATE VIEW vw_datasheet
@@ -433,22 +449,11 @@ AS
     DSH.clave,
     DSH.valor,
     DSH.inactive_at
-    DSH.valor,
-    DSH.inactive_at
     FROM datasheet DSH
     INNER JOIN equipos EQUI ON EQUI.idequipo = DSH.idequipo
 	WHERE DSH.inactive_at IS NULL;
 --
 
-DROP PROCEDURE IF EXISTS spu_datasheet_listar;
-DELIMITER $$
-CREATE PROCEDURE spu_datasheet_listar(IN _idequipo INT)
-BEGIN
-	SELECT * FROM vw_datasheet
-    WHERE idequipo = _idequipo
-    ORDER BY clave;
-	WHERE DSH.inactive_at IS NULL;
---
 
 DROP PROCEDURE IF EXISTS spu_datasheet_listar;
 DELIMITER $$
@@ -460,12 +465,6 @@ BEGIN
 END$$
 DELIMITER ;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_datasheet_listar`(IN _idequipo INT)
-BEGIN
-	SELECT * FROM vw_datasheet
-    WHERE idequipo = _idequipo
-    ORDER BY clave;
-END
 
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_registrar

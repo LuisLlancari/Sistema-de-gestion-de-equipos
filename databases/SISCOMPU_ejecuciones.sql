@@ -14,7 +14,7 @@ CALL spu_listar_categorias;
 CALL spu_listar_marca;
 CALL spu_insertar_marca("SONY");
 CALL spu_insertar_marca("EPSON");
-select * from mantenimiento;
+select * from sectores;
 CALL spu_insertar_sectores(1,1,'Laboratorio', '2023-12-02', NULL);
 CALL spu_mantenimiento_registrar(1, 1, 'Restauración del sistema; Formateo exitoso');
 CALL spu_cronogramas_registrar(1, 'Formateo', 'Malo', '2023-12-12');
@@ -23,12 +23,21 @@ CALL spu_mantenimiento_listar;
 CALL spu_mantenimiento_modificar(1, 1, 1, 'Modificación del Mantenimiento II');
 CALL spu_mantenimiento_modificar(3, 1, 2, 'Segunda modificación de Prueba');
 CALL spu_listar_mantenimiento_porID(1);
+CALL spu_listar_MANsectores();
+
+INSERT INTO sectores(sector) VALUES
+("Psicología"),
+("Secretaría"),
+("Aula de Profesores");
+
+INSERT INTO MAN_sectores(idsector, idequipo, idusuario, fecha_inicio) VALUES
+(2, 2, 3, '2023-12-12');
 
 
 -- Encriptando las claves : SENATI123
 UPDATE usuarios SET
 	claveacceso = '$2y$10$75lA.B0Xsqf12p96E/myo.MJG3EylGhH92ENeFKMcQ2Ysjk//FmHm'
-	WHERE idusuario = 3;
+	WHERE idusuario = 6;
 
 -- esto de Luis Ll
 insert into marcas(marca) values("Asus"),("lenovo");
