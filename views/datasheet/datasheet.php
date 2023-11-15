@@ -163,7 +163,8 @@ require_once "../sidebar/sidebar.php";
         function $(id){
             return document.querySelector(id);
         }
-        const tabla = $("#tabla-cronograma")
+        // almacenamos el id del cuerpo de la tabla
+        const tabla = $("#tabla-cronograma tbody")
         
         //id del equipo(dato obtenido de la solicutud get)
         const idEquipoObt = idObt
@@ -310,10 +311,10 @@ require_once "../sidebar/sidebar.php";
                 });
         }
 
-        function listar_cronograma(){
+        function listar_cronograma(equipoid){
           const parametros = new FormData();
           parametros.append("operacion"     ,"listar_cronograma_id");
-          parametros.append("idequipo"     ,1);
+          parametros.append("idequipo"     ,equipoid);
 
           fetch(`../../controllers/cronograma.controller.php`,{
             method: "POST",
@@ -321,27 +322,22 @@ require_once "../sidebar/sidebar.php";
           })
             .then(respuesta => respuesta.json())
             .then(datos => {
-                console.log(datos);
 
-              
+               // poner un if
             tabla.innerHTML = '';
-            datos.forEach(registro => {
-                let nuevafila =``;
+            let nuevafila =``;
                 nuevafila = `
               <tr>
-                <td>${registro.fecha_programadaidos}</td>
-                <td>${registro.nombres}</td>
-                <td>${registro.nombrepais}</td>
+                <td>${datos.tipo_mantenimiento}</td>
+                <td>${datos.estado}</td>
+                <td>${datos.fecha_programada}</td>
                 </td>
               </tr>
               `;
-
               tabla.innerHTML += nuevafila;
+    
 
-          });
-
-            }
-)
+            } )
             .catch(e =>  {
               console.error(e);
             });               
@@ -381,7 +377,7 @@ require_once "../sidebar/sidebar.php";
             reiniciarModal();
         });
 
-        listar_cronograma();
+        listar_cronograma(idEquipoObt);
         getdatasheet(idEquipoObt);
     });
   </script>

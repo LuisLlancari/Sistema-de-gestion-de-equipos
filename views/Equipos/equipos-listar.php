@@ -451,19 +451,19 @@ require_once "../sidebar/sidebar.php";
               parametros.append("operacion","eliminar");
               parametros.append("idequipo",idEquipo);
 
-            fetch(`../../controllers/equipo.controller.php`,{
-              method: "POST",
-              body: parametros
-            })
-              .then(result => result.json())
-              .then(data => {
-                toast("El registro se eliminó con exito");
-                getEquipos();
+              fetch(`../../controllers/equipo.controller.php`,{
+                method: "POST",
+                body: parametros
               })
-              .catch(e => {
-                console.error(e);
-                alertError("No se logró eliminar el registro","Ocurrió un error","Intentelo después");
-              });
+                .then(result => result.json())
+                .then(data => {
+                  toast("El registro se eliminó con exito");
+                  getEquipos();
+                })
+                .catch(e => {
+                  console.error(e);
+                  alertError("No se logró eliminar el registro","Ocurrió un error","Intentelo después");
+                });
             }
 
 
