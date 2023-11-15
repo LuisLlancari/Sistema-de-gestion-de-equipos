@@ -25,7 +25,7 @@ require_once "../sidebar/sidebar.php";
                           </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <di v class="col-md-4">
                         <div class="card mb-3" style="max-width: 540px;">
                             <div class="row g-0">
                               <div class="col-md-4" style="background-color:#2422E5;" >
@@ -40,7 +40,7 @@ require_once "../sidebar/sidebar.php";
                               </div>
                             </div>
                           </div>
-                    </div>
+                    </di>
 
                     <div class="col-md-4">
                         <div class="card mb-3" style="max-width: 540px;">
@@ -312,12 +312,12 @@ require_once "../sidebar/sidebar.php";
 
               $("#marcaEdit").appendChild(tagOption);
 
-            });
-          })
-          .catch(e =>{
-            console.error(e);
-          });
-        }
+                });
+              })
+              .catch(e =>{
+                console.error(e);
+              });
+            }
 
 
             function getEquipos(){

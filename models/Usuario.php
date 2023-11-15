@@ -35,6 +35,18 @@ class Usuario extends Conexion {
         die($e->getMessage());
     }
   }
+  
+  public function listar_por_id($datos = []){
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_usuarios_obtener_id(?)");
+      $consulta->execute(array($datos['idusuario']));
+      return $consulta->fetch(PDO::FETCH_ASSOC);
+
+    } catch (Exception $e){
+        die($e->getMessage());
+    }
+  }
+
 
   //CREANDO FUNCION PARA AGREGAR
   public function registrar_usuario($datos = []){
@@ -50,7 +62,7 @@ class Usuario extends Conexion {
           $datos['avatar']
           )
         );
-      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+      return $consulta->fetch(PDO::FETCH_ASSOC);
 
     } catch (Exception $e){
         die($e->getMessage());
@@ -72,14 +84,13 @@ class Usuario extends Conexion {
   //CREANDO FUNCION PARA EDITAR
   public function modificar_usuario($datos = []){
     try {
-      $consulta = $this->conexion->prepare("CALL spu_usuario_modificar(?,?,?,?,?,?,?)");
+      $consulta = $this->conexion->prepare("CALL spu_usuario_modificar(?,?,?,?,?,?)");
       $consulta->execute(
         array(
           $datos['idusuario'],
           $datos['nombres'],
           $datos['apellidos'],
           $datos['rol'],
-          $datos['claveacceso'],
           $datos['email'],
           $datos['avatar']
         )
@@ -90,6 +101,63 @@ class Usuario extends Conexion {
         die($e->getMessage());
     }
   }
+
+  public function recuperar_usuario($datos = []){
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_usuarios_recuperar(?)");
+      $consulta->execute(array($datos['email']));
+      return $consulta->fetch(PDO::FETCH_ASSOC);
+      
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function generar_codigo($datos = []){
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_usuarios_generar_clave(?,?)");
+      $consulta->execute(
+        array(
+          $datos['idusuario'],
+          $datos['codigo']
+          )
+        );
+      return $consulta->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function verificar_codigo($datos = []){
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_usuarios_verificar(?)");
+      $consulta->execute(array($datos['idusuario']));
+
+      return $consulta->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  public function cambiar_contraseña($datos = []){
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_canbiar_contraseña(?,?)");
+      $consulta->execute(
+        array(
+          $datos['idusuario'],
+          $datos['claveacceso']
+        )
+      );
+
+      return $consulta->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+
+  }
+
+
+
 } 
 
 ?>
