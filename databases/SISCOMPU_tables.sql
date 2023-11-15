@@ -28,6 +28,7 @@ CREATE TABLE marcas(
     CONSTRAINT	uk_marca_marc UNIQUE(marca)
 )ENGINE = INNODB;
 
+DROP TABLE IF EXISTS categorias;
 CREATE TABLE categorias
 (
 	idcategoria 		INT PRIMARY KEY AUTO_INCREMENT,

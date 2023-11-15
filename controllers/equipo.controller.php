@@ -38,7 +38,6 @@ if(isset($_POST['operacion'])){
 
                 $datosEnviar['imagen'] = $nombreImagen;
             }
-            */
             echo json_encode($equipo->registrar($datosEnviar));
 
             break;

@@ -3,18 +3,9 @@ USE SISCOMPU;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados USUARIOS -------------------------------
 -- -------------------------------------------------------------------------------------
-select * from usuarios;
-
-DROP PROCEDURE IF EXISTS spu_usuarios_login;
-DELIMITER $$
-CREATE PROCEDURE spu_usuarios_recuperar(IN _email VARCHAR(60))
-BEGIN
-	SELECT idusuario, email
-		FROM usuarios WHERE email = _email AND inactive_at IS NULL;
-END $$
-DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS spu_usuarios_generar_clave;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_generar_clave(IN _idusuario INT, IN _codigo CHAR(6))
 BEGIN
@@ -26,6 +17,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_usuarios_verificar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_verificar(IN _idusuario INT)
 BEGIN
@@ -34,7 +26,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-
+DROP PROCEDURE IF EXISTS spu_canbiar_contraseña;
 DELIMITER $$
 CREATE PROCEDURE spu_canbiar_contraseña(IN _idusuario INT,IN _claveacceso VARCHAR(60))
 BEGIN
@@ -47,7 +39,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-
+DROP PROCEDURE IF EXISTS spu_usuarios_login;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_login(IN _email VARCHAR(60))
 BEGIN
@@ -64,7 +56,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-
+DROP PROCEDURE IF EXISTS spu_usuarios_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_registrar
 (
@@ -84,7 +76,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-
+DROP PROCEDURE IF EXISTS spu_usuarios_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_listar()
 BEGIN
@@ -93,7 +85,7 @@ BEGIN
 END $$
 DELIMITER ;
 	
-    
+DROP PROCEDURE IF EXISTS spu_usuarios_obtener_id;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_obtener_id(IN _idusuario INT)
 BEGIN
@@ -102,7 +94,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-
+DROP PROCEDURE IF EXISTS spu_usuarios_eliminar
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_eliminar(IN _idusuario INT)
 BEGIN 
@@ -150,20 +142,14 @@ BEGIN
 		idusuario = _idusuario;
 END $$
 DELIMITER ;
-DROP PROCEDURE IF EXISTS spu_usuarios_obtener;
-DELIMITER $$
-CREATE PROCEDURE  spu_usuarios_obtener(in _idusuario INT)
-BEGIN
-	SELECT * FROM usuarios
-	WHERE 
-		idusuario = _idusuario;
-END $$
-DELIMITER ;
+
+
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados CATEGORIAS ----------------------------
 -- -------------------------------------------------------------------------------------
-select * from categorias;
 
+
+DROP PROCEDURE IF EXISTS spu_listar_categorias;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_categorias()
 BEGIN
@@ -173,6 +159,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_categorias_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_categorias_registrar(
 	IN _categoria VARCHAR(45)
@@ -185,8 +172,8 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados MARCAS -----------------------------
 -- -------------------------------------------------------------------------------------
-select * from marcas;
 
+DROP PROCEDURE IF EXISTS spu_listar_marca;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_marca()
 BEGIN
@@ -196,6 +183,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_insertar_marca;
 DELIMITER $$
 CREATE PROCEDURE spu_insertar_marca
 (
@@ -213,8 +201,8 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados SECTORES -----------------------------
 -- -------------------------------------------------------------------------------------
-select * from sectores;
 
+DROP PROCEDURE IF EXISTS spu_listar_sectores;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_sectores()
 BEGIN
@@ -231,6 +219,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_insertar_sectores;
 DELIMITER $$
 CREATE PROCEDURE spu_insertar_sectores
 (
@@ -252,7 +241,7 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados EQUIPOS -----------------------------
 -- -------------------------------------------------------------------------------------
-select * from equipos;
+
 -- VISTA EQUIPOS
 DROP VIEW IF EXISTS vws_equipos;
 CREATE VIEW vws_equipos
@@ -272,6 +261,7 @@ AS
     INNER JOIN usuarios USU ON USU.idusuario = EQUI.idusuario
 	WHERE EQUI.inactive_at IS NULL;
     
+DROP PROCEDURE IF EXISTS spu_equipos_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_registrar
 (
@@ -293,11 +283,9 @@ DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS spu_equipos_listar;
-DROP PROCEDURE IF EXISTS spu_equipos_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_listar()
 BEGIN
-	SELECT * FROM vws_equipos;
 	SELECT * FROM vws_equipos;
 END $$
 DELIMITER ;
@@ -342,6 +330,7 @@ BEGIN
 END $$
 DELIMTTER ;
 
+DROP PROCEDURE IF EXISTS spu_equipos_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_eliminar(IN _idequipo INT)
 BEGIN 
@@ -358,26 +347,6 @@ BEGIN
 	SELECT * FROM vws_equipos
 	WHERE
 		idequipo = _idequipo;
-END $$
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS spu_datasheet_modificar;
-DELIMITER $$
-CREATE PROCEDURE spu_datasheet_modificar
-(
-	IN _iddatasheet INT,
-    IN _idequipo INT,
-    IN _clave VARCHAR(45),
-    IN _valor VARCHAR(300)
-)
-BEGIN
-	UPDATE datasheet SET
-		idequipo 	= _idequipo,
-		clave 		= _clave,
-		valor		= _valor,
-        update_at 	= now()
-	WHERE
-		iddatasheet = _iddatasheet;
 END $$
 DELIMITER ;
 
@@ -407,21 +376,14 @@ BEGIN
 	WHERE 
 		idequipo = _idequipo;
 END $$
-DELIMTTER ;
+DELIMITER ;
 
 
 
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados DATASHEET -----------------------------
 -- -------------------------------------------------------------------------------------
-select * from datasheet;
--- VISTA DATASHEET
-DROP VIEW IF EXISTS vw_datasheet;
-CREATE VIEW vw_datasheet
-AS
-	SELECT 
-    DSH.iddatasheet,
-    DSH.idequipo,
+
 -- VISTA DATASHEET
 DROP VIEW IF EXISTS vw_datasheet;
 CREATE VIEW vw_datasheet
@@ -431,8 +393,6 @@ AS
     DSH.idequipo,
     EQUI.numero_serie,
     DSH.clave,
-    DSH.valor,
-    DSH.inactive_at
     DSH.valor,
     DSH.inactive_at
     FROM datasheet DSH
@@ -460,13 +420,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_datasheet_listar`(IN _idequipo INT)
-BEGIN
-	SELECT * FROM vw_datasheet
-    WHERE idequipo = _idequipo
-    ORDER BY clave;
-END
-
+DROP PROCEDURE IF EXISTS spu_datasheet_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_registrar
 (
@@ -483,36 +437,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_datasheet_modificar;
-DELIMITER $$
-CREATE PROCEDURE spu_datasheet_modificar
-(
-	IN _iddatasheet INT,
-    IN _idequipo INT,
-    IN _clave VARCHAR(45),
-    IN _valor VARCHAR(300)
-)
-BEGIN
-	UPDATE datasheet SET
-		idequipo 	= _idequipo,
-		clave 		= _clave,
-		valor		= _valor,
-        update_at 	= now()
-	WHERE
-		iddatasheet = _iddatasheet;
-END $$
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS spu_datasheet_eliminar;
-DELIMITER $$
-CREATE PROCEDURE spu_datasheet_eliminar(IN _iddatasheet INT)
-BEGIN
-	UPDATE datasheet SET
-		inactive_at = now()
-	WHERE
-		iddatasheet = _iddatasheet;
-END $$
-DELIMITER ;
 
 DROP PROCEDURE IF EXISTS spu_datasheet_modificar;
 DELIMITER $$
@@ -538,8 +462,7 @@ DROP PROCEDURE IF EXISTS spu_datasheet_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_eliminar(IN _iddatasheet INT)
 BEGIN
-	UPDATE datasheet SET
-		inactive_at = now()
+	delete from datasheet
 	WHERE
 		iddatasheet = _iddatasheet;
 END $$
@@ -647,6 +570,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_listar_mantenimiento_porID;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_mantenimiento_porID(IN _idmantenimiento INT)
 BEGIN
@@ -663,6 +587,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_mantenimiento_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_registrar
 (
@@ -678,6 +603,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_mantenimiento_modificar;
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_modificar
 (
