@@ -18,6 +18,15 @@ require_once "../sidebar/sidebar.php";
     integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
   </script>
     <script src="../../js/sidebar.js"></script>
+    <script>
+      const obt = document.querySelector("#rolobt");
+
+      console.log(obt.textContent);
+
+      if(obt.textContent == "ADMIN"){
+        console.log("eres un administrador")
+      }
+    </script>
 </body>
 
 </html>

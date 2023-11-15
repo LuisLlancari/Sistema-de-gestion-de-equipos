@@ -113,6 +113,7 @@ END $$
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS spu_usuario_modificar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuario_modificar
 (

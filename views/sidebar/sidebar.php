@@ -11,6 +11,7 @@ $accesos = [
         "cronograma"    => [],
         "datasheet"     => [],
         "equipos"       => ["equipos-catalogo","equipos-listar"],
+        "usuario"      => ["usuario"],
         "graficos"      => ["index"]
     ],
     "ASIST" =>[
@@ -48,12 +49,13 @@ $accesos = [
             <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i>
         </div>
         <div class="">
-            <span class="text-uppercase"><?=$_SESSION["apellidos"]?>,</span> <span><?=$_SESSION["nombres"]?> - <?=$_SESSION["rol"]?></span> 
+            <span class="text-uppercase"><?=$_SESSION["apellidos"]?>,</span> <span><?=$_SESSION["nombres"]?> -</span><span id="rolobt"><?=$_SESSION["rol"]?></span> 
         </div>
         <div class="header_img"> 
                 
                 <?php
-                    echo "<img src='../../images/".$_SESSION["avatar"].".jpg' alt=''>";
+                    echo "<img src='../../images/".$_SESSION["avatar"]."' alt=''>";
+                    
                 ?> 
             </div>
         </header>
@@ -66,13 +68,13 @@ $accesos = [
                         $categorias = $accesos[$_SESSION["rol"]];
                         foreach ($categorias as $categoria => $subcategoria) {
                             
-                            if($categoria != "equipos" && $categoria != "graficos"){
+                            if($categoria != "equipos" && $categoria != "graficos" && $categoria != "usuario"){
                             echo "
                             <li>
                                     <a href='../{$categoria}/{$categoria}.php' class='nav_link'><span class='nav_name'>{$categoria}</span></a>
                                     "; 
                             }
-                                if($categoria == "equipos" || $categoria == "graficos"){
+                                if($categoria == "equipos" || $categoria == "graficos" || $categoria == "usuario"){
                                     echo "
                                     <a href='#' class='nav_link'><span class='nav_name'>{$categoria}</span></a>
                                     ";

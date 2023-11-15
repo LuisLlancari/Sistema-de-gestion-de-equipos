@@ -49,5 +49,5 @@ VALUES
 select * from usuarios;
 
 UPDATE usuarios SET
-	avatar = '54f46406250ef8ea16e464e9c6ddec46d1c66740' WHERE idusuario = 2;
+	rol = 'ADMIN' where rol= 'Administrador';
 
