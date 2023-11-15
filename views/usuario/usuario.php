@@ -83,7 +83,7 @@
                   <label for="rol" class="form-label">Seleccione su rol</label>
                   <select name="" id="rol" class="form-select" required>
                   <option value="">Seleccion:</option>
-                  <option value="Administrador">Administrador</option>
+                  <option value="ADMIN">Administrador</option>
                   <option value="Invitado">Invitado</option>
                 </select>
                 </div>

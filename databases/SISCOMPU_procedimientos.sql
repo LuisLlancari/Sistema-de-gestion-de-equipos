@@ -150,6 +150,7 @@ BEGIN
 		idusuario = _idusuario;
 END $$
 DELIMITER ;
+
 DROP PROCEDURE IF EXISTS spu_usuarios_obtener;
 DELIMITER $$
 CREATE PROCEDURE  spu_usuarios_obtener(in _idusuario INT)
@@ -293,7 +294,6 @@ DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS spu_equipos_listar;
-DROP PROCEDURE IF EXISTS spu_equipos_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_listar()
 BEGIN
@@ -406,8 +406,8 @@ BEGIN
 
 	WHERE 
 		idequipo = _idequipo;
-END $$
-DELIMTTER ;
+END$$
+DELIMITER ;
 
 
 
@@ -415,14 +415,10 @@ DELIMTTER ;
 -- ------------------ Procedimientos Almacenados DATASHEET -----------------------------
 -- -------------------------------------------------------------------------------------
 select * from datasheet;
+
+    
 -- VISTA DATASHEET
-DROP VIEW IF EXISTS vw_datasheet;
-CREATE VIEW vw_datasheet
-AS
-	SELECT 
-    DSH.iddatasheet,
-    DSH.idequipo,
--- VISTA DATASHEET
+
 DROP VIEW IF EXISTS vw_datasheet;
 CREATE VIEW vw_datasheet
 AS
@@ -431,8 +427,6 @@ AS
     DSH.idequipo,
     EQUI.numero_serie,
     DSH.clave,
-    DSH.valor,
-    DSH.inactive_at
     DSH.valor,
     DSH.inactive_at
     FROM datasheet DSH
@@ -447,25 +441,10 @@ BEGIN
 	SELECT * FROM vw_datasheet
     WHERE idequipo = _idequipo
     ORDER BY clave;
-	WHERE DSH.inactive_at IS NULL;
---
-
-DROP PROCEDURE IF EXISTS spu_datasheet_listar;
-DELIMITER $$
-CREATE PROCEDURE spu_datasheet_listar(IN _idequipo INT)
-BEGIN
-	SELECT * FROM vw_datasheet
-    WHERE idequipo = _idequipo
-    ORDER BY clave;
 END$$
 DELIMITER ;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_datasheet_listar`(IN _idequipo INT)
-BEGIN
-	SELECT * FROM vw_datasheet
-    WHERE idequipo = _idequipo
-    ORDER BY clave;
-END
+
 
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_registrar
