@@ -129,7 +129,10 @@
     document.addEventListener("DOMContentLoaded",() => {
       const cuerpo = document.querySelector("#contenerdor-cards");
       var modalregistro = new bootstrap.Modal($('#modal-registrar'));
-      function $(id){return document.querySelector(id)};  
+      function $(id){return document.querySelector(id)};
+        
+        let varBandera = true;
+  
 
 
         function listar_usuarios(){
@@ -180,13 +183,19 @@
 
         function registrar_usuarios(){
           const parametros = new FormData();
-          parametros.append("operacion"     ,"registrar_usuario");
           parametros.append("nombres"       ,$("#nombres").value);
           parametros.append("apellidos"     ,$("#apellidos").value);
           parametros.append("rol"           ,$("#rol").value);
-          parametros.append("claveacceso"   ,$("#contraseña").value);
           parametros.append("email"         ,$("#email").value);
           parametros.append("avatar"        ,$("#avatar").files[0]);
+
+          if(varBandera){
+
+            parametros.append("operacion"     ,"registrar_usuario");
+            parametros.append("claveacceso"   ,$("#contraseña").value);
+          }else{
+            parametros.append("operacion"     ,"modificar_usuario");
+          }
 
           fetch(`../../controllers/usuario.controller.php`,{
             method: "POST",
@@ -198,6 +207,7 @@
             if (datos.idusuario > 0){
             alert(`Usuario registrado con ID: ${datos.idusuario}`)
             $("#form-usuario").reset();  
+            listar_usuarios();
 
             }
 
@@ -218,7 +228,9 @@
           })
             .then(respuesta => respuesta.json())
             .then(datos => {
-              
+
+
+          
             })
             .catch(e =>  {
               console.error(e);
@@ -266,23 +278,18 @@
          
            const usuarioid= event.target.dataset.id;
 
-
           // var Bandera = true
           // console.log(usuarioid)
-
           if(event.target.classList.contains("editar")){
-
             console.log("holla")
             console.log(usuarioid)
-
           }else if(event.target.classList.contains("eliminar")){
-            console.log("algo")
-            console.log(usuarioid)
+            
+            eliminar_usuarios(usuarioid);
+            listar_usuarios();
           }
-
-
-
         });
+
 
         $('#registrar').addEventListener('click', function(){
           registrar_usuarios();
