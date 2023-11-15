@@ -54,6 +54,7 @@ if(isset($_POST['operacion'])){
       echo json_encode($usuario->listar_usuario());
     break;
 
+    
     case 'registrar_usuario':
 
       $claveEncritada = password_hash($_POST['claveacceso'],PASSWORD_BCRYPT);
@@ -90,7 +91,6 @@ if(isset($_POST['operacion'])){
 
     break;
     
-    break;
 
     case 'listar_usuario_por_id';
       $datosEnviar = [
@@ -100,6 +100,7 @@ if(isset($_POST['operacion'])){
       echo json_encode($usuario->listar_por_id($datosEnviar));
 
     break;
+
 
     case 'modificar_usuario';
       
@@ -112,7 +113,6 @@ if(isset($_POST['operacion'])){
         "nombres"      => $_POST['nombres'],
         "apellidos"    => $_POST['apellidos'],
         "rol"          => $_POST['rol'],
-        "claveacceso"  => $_POST['claveacceso'],
         "email"        => $_POST['email'],
         "avatar"       => $nombreArchivo
       ];
@@ -127,6 +127,7 @@ if(isset($_POST['operacion'])){
 
     break;
 
+
     case 'recuperar_usuario';
       $datosEnviar =[
         "email" => $_POST['email']
@@ -134,6 +135,7 @@ if(isset($_POST['operacion'])){
       echo json_encode($usuario->recuperar_usuario($datosEnviar));
     break;
     
+
     case 'generar_codigo';
 
       $codigo = random_int(100000 ,999999 );
@@ -151,6 +153,7 @@ if(isset($_POST['operacion'])){
       }
     break;
 
+
     case 'verificar_codigo';
       $datosEnviar = [
         "idusuario" => $_POST['idusuario'],
@@ -159,6 +162,7 @@ if(isset($_POST['operacion'])){
       echo json_encode($usuario->verificar_codigo($datosEnviar));
     break;
     
+
     case 'cambiar_contraseña';
 
       $claveCambiada = password_hash($_POST['claveacceso'],PASSWORD_BCRYPT);

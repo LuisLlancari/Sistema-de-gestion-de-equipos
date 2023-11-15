@@ -46,6 +46,8 @@ class Usuario extends Conexion {
         die($e->getMessage());
     }
   }
+
+
   //CREANDO FUNCION PARA AGREGAR
   public function registrar_usuario($datos = []){
     try {
@@ -82,14 +84,13 @@ class Usuario extends Conexion {
   //CREANDO FUNCION PARA EDITAR
   public function modificar_usuario($datos = []){
     try {
-      $consulta = $this->conexion->prepare("CALL spu_usuario_modificar(?,?,?,?,?,?,?)");
+      $consulta = $this->conexion->prepare("CALL spu_usuario_modificar(?,?,?,?,?,?)");
       $consulta->execute(
         array(
           $datos['idusuario'],
           $datos['nombres'],
           $datos['apellidos'],
           $datos['rol'],
-          $datos['claveacceso'],
           $datos['email'],
           $datos['avatar']
         )
