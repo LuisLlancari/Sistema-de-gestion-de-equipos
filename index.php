@@ -1,3 +1,10 @@
+<?php
+
+if(isset($_SESSION["status"]) && $_SESSION["status"]){
+
+  header("Location:./views/graficos/index.php");
+}
+?>
 <!doctype html>
 <html lang="es">
 

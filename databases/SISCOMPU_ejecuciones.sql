@@ -4,6 +4,7 @@
 -- 1°: Uso DB
 USE SISCOMPU;
 
+select * from usuarios;
 CALL spu_usuarios_login('adriana@gmail.com');
 CALL spu_equipos_registrar(2, 1, 1, 'Equipo Nuevo Modelo', 'JSYEKE-0928200', NULL);
 CALL spu_usuarios_registrar('Adriana', 'Durand Buenamarca', 'Administrador', 'SENATI123', 'adriana@gmail.com', NULL);
@@ -28,3 +29,8 @@ CALL spu_listar_mantenimiento_porID(1);
 UPDATE usuarios SET
 	claveacceso = '$2y$10$75lA.B0Xsqf12p96E/myo.MJG3EylGhH92ENeFKMcQ2Ysjk//FmHm'
 	WHERE idusuario = 3;
+
+select * from usuarios;
+
+UPDATE usuarios SET
+	avatar = '54f46406250ef8ea16e464e9c6ddec46d1c66740' WHERE idusuario = 2;

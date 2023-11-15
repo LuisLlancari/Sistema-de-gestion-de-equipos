@@ -5,6 +5,7 @@ USE SISCOMPU;
 -- -------------------------------------------------------------------------------------
 select * from usuarios;
 
+DROP PROCEDURE IF EXISTS spu_usuarios_login;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_login(IN _email VARCHAR(60))
 BEGIN
@@ -14,7 +15,8 @@ BEGIN
         USU.nombres,
         USU.email,
         USU.claveacceso,
-        USU.rol
+        USU.rol,
+        USU.avatar
     FROM usuarios AS USU
     WHERE USU.email = _email AND USU.inactive_at IS NULL;
 END $$
