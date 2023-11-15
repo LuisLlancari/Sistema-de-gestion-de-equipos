@@ -12,7 +12,7 @@ $accesos = [
         "cronograma"    => [],
         "datasheet"     => [],
         "equipos"       => ["equipos-catalogo","equipos-listar"],
-        "usuario"      => ["usuario"],
+        "usuario"       => ["usuario"],
         "graficos"      => ["index"],
         "sector"        => ["listar"],
     ],
