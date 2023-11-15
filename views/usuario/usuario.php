@@ -297,9 +297,9 @@
 
         //ESTE BOTON ABRE EL MODAL PARA "REGISTRAR"
         $('#registro').addEventListener('click', function(){
+          varBandera = true;
           $("#contraseña").removeAttribute('disabled');
           $("#form-usuario").reset();  
-          varBandera = true;
           modalregistro.show();
         });
 
