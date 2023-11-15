@@ -85,6 +85,15 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_usuarios_obtener;
+DELIMITER $$
+CREATE PROCEDURE  spu_usuarios_obtener(in _idusuario INT)
+BEGIN
+	SELECT * FROM usuarios
+	WHERE 
+		idusuario = _idusuario;
+END $$
+DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados CATEGORIAS ----------------------------
 -- -------------------------------------------------------------------------------------
@@ -218,30 +227,11 @@ END $$
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS spu_equipos_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_listar()
 BEGIN
-	SELECT EQUI.idequipo,
-    CAT.categoria,
-    MAR.marca,
-    USU.nombres,
-    EQUI.modelo_equipo,
-    EQUI.numero_serie,
-    EQUI.imagen
-    FROM equipos EQUI
-    INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
-    INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
-    INNER JOIN usuarios USU ON USU.idusuario = EQUI.idusuario
-    WHERE EQUI.inactive_at IS NULL;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE spu_equipos_eliminar(IN id_equipo INT)
-BEGIN 
-	UPDATE equipos
-    SET inactive_at = NOW()
-		WHERE idequipo = _idequipo;
+	SELECT * FROM vws_equipos;
 END $$
 DELIMITER ;
 
@@ -256,6 +246,41 @@ BEGIN
 		WHERE
 			idcategoria = _idcategoria;
 	END IF;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_equipos_modificar;
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_modificar
+(
+	IN _idequipo		INT,
+    IN _idcategoria		INT,
+    IN _idmarca			INT,
+    IN _idusuario 		INT,
+    IN _modelo_equipo 	VARCHAR(45),
+    IN _numero_serie	VARCHAR(45),
+    IN _imagen			VARCHAR(200)
+)
+BEGIN
+	UPDATE equipos SET
+		idcategoria 	= _idcategoria,
+		idmarca			= _idmarca,
+		idusuario		= _idusuario,
+		modelo_equipo	= _modelo_equipo,
+		numero_serie	= _numero_serie,
+		imagen			= _imagen,
+        update_at		= now()
+	WHERE 
+		idequipo = _idequipo;
+END $$
+DELIMTTER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_eliminar(IN id_equipo INT)
+BEGIN 
+	UPDATE equipos
+    SET inactive_at = NOW()
+		WHERE idequipo = _idequipo;
 END $$
 DELIMITER ;
 
@@ -307,8 +332,9 @@ AS
     FROM datasheet DSH
     INNER JOIN equipos EQUI ON EQUI.idequipo = DSH.idequipo
 	WHERE DSH.inactive_at IS NULL;
-    
-    
+--
+
+DROP PROCEDURE IF EXISTS spu_datasheet_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_listar(IN _idequipo INT)
 BEGIN
@@ -338,6 +364,37 @@ BEGIN
     VALUES
     (_idequipo, _clave, _valor);
     SELECT @@last_insert_id 'iddatasheet';
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_datasheet_modificar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_modificar
+(
+	IN _iddatasheet INT,
+    IN _idequipo INT,
+    IN _clave VARCHAR(45),
+    IN _valor VARCHAR(300)
+)
+BEGIN
+	UPDATE datasheet SET
+		idequipo 	= _idequipo,
+		clave 		= _clave,
+		valor		= _valor,
+        update_at 	= now()
+	WHERE
+		iddatasheet = _iddatasheet;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_datasheet_eliminar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_eliminar(IN _iddatasheet INT)
+BEGIN
+	UPDATE datasheet SET
+		inactive_at = now()
+	WHERE
+		iddatasheet = _iddatasheet;
 END $$
 DELIMITER ;
 
