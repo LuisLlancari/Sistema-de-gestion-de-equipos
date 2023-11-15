@@ -3,6 +3,7 @@ session_start();
 date_default_timezone_set("America/Lima");
 
 require_once "../models/Equipo.php";
+require_once '../test/filtro.php';
 
 if(isset($_POST['operacion'])){
 
@@ -29,15 +30,16 @@ if(isset($_POST['operacion'])){
                 "idcategoria"   => $_POST['idcategoria'],
                 "idmarca"       => $_POST['idmarca'],
                 "idusuario"     => $_SESSION['idusuario'],
-                "modelo_equipo" => $_POST['modelo_equipo'],
-                "numero_serie"  => $_POST['numero_serie'],
-                "imagen"        => $nombreImagen 
+                "modelo_equipo" => filtrar($_POST['modelo_equipo']),
+                "numero_serie"  => filtrar($_POST['numero_serie']),
+                "imagen"        =>  $nombreImagen 
             ];
 
             if(move_uploaded_file($_FILES['imagen']['tmp_name'], "../images/" . $nombreImagen)){
 
                 $datosEnviar['imagen'] = $nombreImagen;
             }
+            
             echo json_encode($equipo->registrar($datosEnviar));
 
             break;
@@ -54,8 +56,8 @@ if(isset($_POST['operacion'])){
                 "idcategoria"   => $_POST['idcategoria'],
                 "idmarca"       => $_POST['idmarca'],
                 "idusuario"     => $_SESSION['idusuario'],
-                "modelo_equipo" => $_POST['modelo_equipo'],
-                "numero_serie"  => $_POST['numero_serie'],
+                "modelo_equipo" => filtrar($_POST['modelo_equipo']),
+                "numero_serie"  => filtrar($_POST['numero_serie']),
                 "imagen"        => $nombreImagen
             ];
 

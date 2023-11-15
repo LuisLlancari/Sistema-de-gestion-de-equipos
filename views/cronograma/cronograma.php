@@ -18,6 +18,36 @@ require_once "../sidebar/sidebar.php";
     integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
   </script>
     <script src="../../js/sidebar.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded",() => {
+        function $(id){return document.querySelector(id)};
+
+
+        function listar_cronogramas(){
+          const parametros = new FormData();
+          parametros.append("operacion" ,"listar_cronograma");
+
+          fetch(`../../controllers/cronograma.controller.php`,{
+            method: "POST",
+            body : parametros
+          })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+              console.log(datos);
+            })
+            .catch(e =>  {
+              console.error(e);
+            });               
+        }
+
+        listar_cronogramas();
+        
+
+
+    });
+      
+    </script>
 </body>
 
 </html>

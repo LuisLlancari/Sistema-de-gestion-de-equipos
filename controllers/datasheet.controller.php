@@ -1,6 +1,7 @@
 <?php
 
 require_once "../models/Datasheet.php";
+require_once "../test/filtro.php";
 
 if(isset($_POST['operacion'])){
 
@@ -18,9 +19,11 @@ if(isset($_POST['operacion'])){
 
             $datosEnviar = [
                 "idequipo"  => $_POST['idequipo'],
-                "clave"     => $_POST['clave'],
-                "valor"     => $_POST['valor']
+                "clave"     => filtrar($_POST['clave']),
+                "valor"     => filtrar($_POST['valor'])
+                
             ];
+            
 
             echo json_encode($datasheet->registrar($datosEnviar));
             break;
@@ -30,8 +33,8 @@ if(isset($_POST['operacion'])){
             $datosEnviar = [
                 "iddatasheet"   => $_POST['iddatasheet'],
                 "idequipo"      => $_POST['idequipo'],
-                "clave"         => $_POST['clave'],
-                "valor"         => $_POST['valor']
+                "clave"         => filtrar($_POST['clave']),
+                "valor"         => filtrar($_POST['valor'])
             ];
 
             echo json_encode($datasheet->modificar($datosEnviar));
