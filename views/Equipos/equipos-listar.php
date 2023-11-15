@@ -437,7 +437,7 @@ require_once "../sidebar/sidebar.php";
                   $("#marcaEdit").value     = element.idmarca;
                   $("#modeloEdit").value    = element.modelo_equipo;
                   $("#serieEdit").value     = element.numero_serie;
-                  $("#imagenEdit").value    = element.imagen;
+                  $("#imagenEdit").files[0];
                 }
               });
             }

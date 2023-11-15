@@ -31,7 +31,7 @@ if(isset($_POST['operacion'])){
                 "idusuario"     => $_SESSION['idusuario'],
                 "modelo_equipo" => $_POST['modelo_equipo'],
                 "numero_serie"  => $_POST['numero_serie'],
-                "imagen"        =>  $nombreImagen 
+                "imagen"        => $nombreImagen 
             ];
 
             if(move_uploaded_file($_FILES['imagen']['tmp_name'], "../images/" . $nombreImagen)){
@@ -59,10 +59,10 @@ if(isset($_POST['operacion'])){
                 "imagen"        => $nombreImagen
             ];
 
-            /* 
-            if(move_uploaded_file($__FILES['imagen'], "../images/" . $nombreImagen)){                
-                $datosEnviar = ['imagen'];
-            } */
+            
+            if(move_uploaded_file($_FILES['imagen']['tmp_name'], "../images/" . $nombreImagen)){                
+                $datosEnviar['imagen'] = $nombreImagen;
+            }
 
             echo json_encode($equipo->modificar($datosEnviar));
             break;

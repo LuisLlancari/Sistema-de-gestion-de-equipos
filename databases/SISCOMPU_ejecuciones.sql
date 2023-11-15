@@ -12,9 +12,12 @@ UPDATE usuarios SET
 select * from usuarios;
 CALL spu_usuarios_login('adriana@gmail.com');
 CALL spu_usuarios_registrar('Adriana', 'Durand Buenamarca', 'Administrador', 'SENATI123', 'adriana@gmail.com', NULL);
+CALL spu_usuarios_registrar('Adriana', 'Durand Buenamarca', 'Administrador', 'SENATI123', 'adriana@gmail.com', NULL);
 CALL spu_usuarios_listar();
 -- EQUIPOS
 CALL spu_equipos_registrar(2, 1, 1, 'Equipo Nuevo Modelo', 'JSYEKE-0928200', NULL);
+CALL spu_equipos_modificar(1,2,2,2,'0','0','111111111');
+CALL spu_equipos_listar();
 insert into equipos(idcategoria, idmarca, idusuario, modelo_equipo, numero_serie, imagen)
 VALUES 
 	(1,2,1,'ALl ON ONE','9876521',null),
