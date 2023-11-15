@@ -6,6 +6,48 @@ USE SISCOMPU;
 select * from usuarios;
 
 DELIMITER $$
+CREATE PROCEDURE spu_usuarios_recuperar(IN _email VARCHAR(60))
+BEGIN
+	SELECT idusuario, email
+		FROM usuarios WHERE email = _email AND inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_generar_clave(IN _idusuario INT, IN _codigo CHAR(6))
+BEGIN
+	UPDATE usuarios
+		SET codigo = _codigo
+			WHERE idusuario = _idusuario;
+            SELECT idusuario FROm usuarios
+			WHERE idusuario = _idusuario;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_verificar(IN _idusuario INT)
+BEGIN
+	SELECT idusuario, codigo FROM usuarios
+		WHERE idusuario = _idusuario;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE spu_canbiar_contraseña(IN _idusuario INT,IN _claveacceso VARCHAR(60))
+BEGIN
+	UPDATE usuarios
+		SET claveacceso = _claveacceso,
+			codigo 		= null
+			WHERE idusuario = _idusuario;
+		SELECT idusuario FROm usuarios
+			WHERE idusuario = _idusuario;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
 CREATE PROCEDURE spu_usuarios_login(IN _email VARCHAR(60))
 BEGIN
     SELECT
@@ -42,8 +84,16 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_listar()
 BEGIN
-	SELECT * FROM usuarios
+	SELECT idusuario, apellidos, rol, email, avatar FROM usuarios
 		WHERE inactive_at IS NULL;
+END $$
+DELIMITER ;
+	
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_obtener_id(IN _idusuario INT)
+BEGIN
+	SELECT idusuario, apellidos, rol, email, avatar FROM usuarios
+		WHERE idusuario = _idusuario AND inactive_at IS NULL;
 END $$
 DELIMITER ;
 
@@ -276,7 +326,7 @@ END $$
 DELIMTTER ;
 
 DELIMITER $$
-CREATE PROCEDURE spu_equipos_eliminar(IN id_equipo INT)
+CREATE PROCEDURE spu_equipos_eliminar(IN _idequipo INT)
 BEGIN 
 	UPDATE equipos
     SET inactive_at = NOW()
@@ -313,6 +363,36 @@ BEGIN
 		iddatasheet = _iddatasheet;
 END $$
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_equipos_modificar;
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_modificar
+(
+	IN _idequipo		INT,
+    IN _idcategoria		INT,
+    IN _idmarca			INT,
+    IN _idusuario 		INT,
+    IN _modelo_equipo 	VARCHAR(45),
+    IN _numero_serie	VARCHAR(45),
+    IN _imagen			VARCHAR(200)
+)
+BEGIN
+
+	UPDATE equipos SET
+		idcategoria 	= _idcategoria,
+		idmarca			= _idmarca,
+		idusuario		= _idusuario,
+		modelo_equipo	= _modelo_equipo,
+		numero_serie	= _numero_serie,
+		imagen			= _imagen,
+        update_at       = now()
+
+	WHERE 
+		idequipo = _idequipo;
+END $$
+DELIMTTER ;
+
+
 
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados DATASHEET -----------------------------
