@@ -94,6 +94,15 @@ BEGIN
 		idusuario = _idusuario;
 END $$
 DELIMITER ;
+DROP PROCEDURE IF EXISTS spu_usuarios_obtener;
+DELIMITER $$
+CREATE PROCEDURE  spu_usuarios_obtener(in _idusuario INT)
+BEGIN
+	SELECT * FROM usuarios
+	WHERE 
+		idusuario = _idusuario;
+END $$
+DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados CATEGORIAS ----------------------------
 -- -------------------------------------------------------------------------------------
@@ -228,9 +237,11 @@ DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS spu_equipos_listar;
+DROP PROCEDURE IF EXISTS spu_equipos_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_listar()
 BEGIN
+	SELECT * FROM vws_equipos;
 	SELECT * FROM vws_equipos;
 END $$
 DELIMITER ;
@@ -306,12 +317,31 @@ AS
 	SELECT 
     DSH.iddatasheet,
     DSH.idequipo,
+-- VISTA DATASHEET
+DROP VIEW IF EXISTS vw_datasheet;
+CREATE VIEW vw_datasheet
+AS
+	SELECT 
+    DSH.iddatasheet,
+    DSH.idequipo,
     EQUI.numero_serie,
     DSH.clave,
     DSH.valor,
     DSH.inactive_at
+    DSH.valor,
+    DSH.inactive_at
     FROM datasheet DSH
     INNER JOIN equipos EQUI ON EQUI.idequipo = DSH.idequipo
+	WHERE DSH.inactive_at IS NULL;
+--
+
+DROP PROCEDURE IF EXISTS spu_datasheet_listar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_listar(IN _idequipo INT)
+BEGIN
+	SELECT * FROM vw_datasheet
+    WHERE idequipo = _idequipo
+    ORDER BY clave;
 	WHERE DSH.inactive_at IS NULL;
 --
 
@@ -338,6 +368,37 @@ BEGIN
     VALUES
     (_idequipo, _clave, _valor);
     SELECT @@last_insert_id 'iddatasheet';
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_datasheet_modificar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_modificar
+(
+	IN _iddatasheet INT,
+    IN _idequipo INT,
+    IN _clave VARCHAR(45),
+    IN _valor VARCHAR(300)
+)
+BEGIN
+	UPDATE datasheet SET
+		idequipo 	= _idequipo,
+		clave 		= _clave,
+		valor		= _valor,
+        update_at 	= now()
+	WHERE
+		iddatasheet = _iddatasheet;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_datasheet_eliminar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_eliminar(IN _iddatasheet INT)
+BEGIN
+	UPDATE datasheet SET
+		inactive_at = now()
+	WHERE
+		iddatasheet = _iddatasheet;
 END $$
 DELIMITER ;
 
