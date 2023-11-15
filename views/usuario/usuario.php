@@ -21,8 +21,7 @@
 
         <div class="mb-3">
          <h1>Lista de trabajdores</h1>
-         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-registrar">Agregar usuario</button>
-         <button type="button" class="btn btn-danger" id="prueba">boton Prueba </button>
+         <button type="button" class="btn btn-primary" id="registro">Agregar usuario</button>
         </div>
       </div>
       <div class="col-md-4"></div>
@@ -62,7 +61,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Registrar usuario</h1>
+          <h1 class="modal-title fs-5" id="titulo-modal">Registrar usuario</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -108,7 +107,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" id="cerrar" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" id="registrar" >Registrar</button>
+          <button type="button" class="btn btn-primary" id="agregar" >Agregar Usuario</button>
         </div>
       </div>
     </div>
@@ -127,14 +126,14 @@
 
   <script>
     document.addEventListener("DOMContentLoaded",() => {
-      const cuerpo = document.querySelector("#contenerdor-cards");
-      var modalregistro = new bootstrap.Modal($('#modal-registrar'));
-      function $(id){return document.querySelector(id)};
+        const cuerpo = document.querySelector("#contenerdor-cards");
+        var modalregistro = new bootstrap.Modal($('#modal-registrar'));
+        function $(id){return document.querySelector(id)};
         
         let varBandera = true;
   
 
-
+        //FUNCION QUE LISTA A LOS USUARIOS EN CARDS
         function listar_usuarios(){
           const parametros = new FormData();
           parametros.append("operacion","listar_usuario");
@@ -180,8 +179,10 @@
             });               
         }
 
-
+        //FUNCION QUE REGISTRA UN USUARIO
         function registrar_usuarios(){
+          var  usuario  = $('#agregar').getAttribute('userid');
+
           const parametros = new FormData();
           parametros.append("nombres"       ,$("#nombres").value);
           parametros.append("apellidos"     ,$("#apellidos").value);
@@ -195,28 +196,29 @@
             parametros.append("claveacceso"   ,$("#contraseña").value);
           }else{
             parametros.append("operacion"     ,"modificar_usuario");
+            parametros.append("idusuario"     ,usuario);
           }
-
+          
           fetch(`../../controllers/usuario.controller.php`,{
             method: "POST",
             body : parametros
           })
+          
             .then(respuesta => respuesta.json())
             .then(datos => {
               console.log(datos);
             if (datos.idusuario > 0){
             alert(`Usuario registrado con ID: ${datos.idusuario}`)
             $("#form-usuario").reset();  
-            listar_usuarios();
-
+            // listar_usuarios()
             }
-
             })
             .catch(e =>  {
               console.error(e);
             });               
         }
 
+        //FUNCION QUE ELEMINA UN USUARIO POR ID
         function eliminar_usuarios(idusuario){
           const parametros = new FormData();
           parametros.append("operacion"     ,"eliminar_usuario");
@@ -229,18 +231,22 @@
             .then(respuesta => respuesta.json())
             .then(datos => {
 
-
-          
-            })
+            }
+            )
             .catch(e =>  {
               console.error(e);
             });               
         }
 
-        function recupear_usuarios_id (){
+        //FUNCION QUE TRAE EL LOS DATOS DE LOS USUARIOS POR ID
+        function recupear_usuarios_id(idusuario){
+
+          $("#form-usuario").reset();  
+          $("#titulo-modal").innerText = "Editar Usuario";
+          $("#contraseña").setAttribute('disabled','true');
           const parametros = new FormData();
           parametros.append("operacion"     ,"listar_usuario_por_id");
-          parametros.append("idusuario"     ,1);
+          parametros.append("idusuario"     ,idusuario);
 
           fetch(`../../controllers/usuario.controller.php`,{
             method: "POST",
@@ -256,6 +262,7 @@
               $("#apellidos").value   = datos.apellidos;
               $("#rol").value         = datos.rol;
               $("#email").value       = datos.email;
+              $('#agregar').setAttribute('userid',datos.idusuario)
               // $("#avatar").value
 
               
@@ -267,34 +274,41 @@
         
         
         
-
+        // FUNCION QUE LISTA A LOS USUARIOS
         listar_usuarios();
 
-        $('#prueba').addEventListener('click', function(){
-          recupear_usuarios_id();
-        });
+       
 
+        //ESTO LEE EL EVENTO CLICK DEL BOTON EDITAR O ELIMINAR
         $("#contenerdor-cards").addEventListener('click',(event)=>{
-         
-           const usuarioid= event.target.dataset.id;
-
-          // var Bandera = true
-          // console.log(usuarioid)
-          if(event.target.classList.contains("editar")){
-            console.log("holla")
-            console.log(usuarioid)
-          }else if(event.target.classList.contains("eliminar")){
+           var usuarioid= event.target.dataset.id;
             
+          if(event.target.classList.contains("editar")){
+
+            varBandera = false;
+            recupear_usuarios_id(usuarioid);
+
+          }else if(event.target.classList.contains("eliminar")){         
             eliminar_usuarios(usuarioid);
-            listar_usuarios();
+            // listar_usuarios();
           }
         });
 
 
-        $('#registrar').addEventListener('click', function(){
-          registrar_usuarios();
+        //ESTE BOTON ABRE EL MODAL PARA "REGISTRAR"
+        $('#registro').addEventListener('click', function(){
+          $("#contraseña").removeAttribute('disabled');
+          $("#form-usuario").reset();  
+          varBandera = true;
+          modalregistro.show();
         });
 
+
+        //ESTE BOTON ENVIA LOS DATOS DEL FORMULARIO, SEA LISTAR O REGISTRAR
+        $('#agregar').addEventListener('click', function(){
+          registrar_usuarios();
+        });
+        
 
     });
 
