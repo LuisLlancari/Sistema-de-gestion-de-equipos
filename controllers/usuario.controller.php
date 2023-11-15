@@ -2,7 +2,8 @@
 session_start();
 
 require_once '../models/Usuario.php';
-require_once '../test/email.php';
+// require_once '../test/email.php';
+require_once '../test/filtro.php';
 
 if(isset($_POST['operacion'])){
 
@@ -65,11 +66,11 @@ if(isset($_POST['operacion'])){
 
 
       $datosEnviar = [
-        "nombres"      => $_POST['nombres'],
-        "apellidos"    => $_POST['apellidos'],
+        "nombres"      => filtrar($_POST['nombres']),
+        "apellidos"    => filtrar($_POST['apellidos']),
         "rol"          => $_POST['rol'],
         "claveacceso"  => $claveEncritada,
-        "email"        => $_POST['email'],
+        "email"        => filtrar($_POST['email']),
         "avatar"       => $nombreArchivo
       ];
 
@@ -111,10 +112,10 @@ if(isset($_POST['operacion'])){
 
       $datosEnviar = [
         "idusuario"    => $_POST['idusuario'],
-        "nombres"      => $_POST['nombres'],
-        "apellidos"    => $_POST['apellidos'],
+        "nombres"      => filtrar($_POST['nombres']),
+        "apellidos"    => filtrar($_POST['apellidos']),
         "rol"          => $_POST['rol'],
-        "email"        => $_POST['email'],
+        "email"        => filtrar($_POST['email']),
         "avatar"       => $nombreArchivo
       ];
 
@@ -150,7 +151,7 @@ if(isset($_POST['operacion'])){
       echo json_encode($usuario->generar_codigo($datosEnviar));
 
       if(strval($metodo) ==  "2"){
-        enviarMail(strval($direccion),strval($codigo));
+        // enviarMail(strval($direccion),strval($codigo));
       }
     break;
 

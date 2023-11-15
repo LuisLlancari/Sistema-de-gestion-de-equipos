@@ -143,7 +143,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados CATEGORIAS ----------------------------
 -- -------------------------------------------------------------------------------------
@@ -397,7 +396,11 @@ BEGIN
 
 	WHERE 
 		idequipo = _idequipo;
+<<<<<<< HEAD
 END $$
+=======
+END$$
+>>>>>>> rama-luis
 DELIMITER ;
 
 
@@ -405,8 +408,16 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados DATASHEET -----------------------------
 -- -------------------------------------------------------------------------------------
+<<<<<<< HEAD
 
 -- VISTA DATASHEET
+=======
+select * from datasheet;
+
+    
+-- VISTA DATASHEET
+
+>>>>>>> rama-luis
 DROP VIEW IF EXISTS vw_datasheet;
 CREATE VIEW vw_datasheet
 AS
@@ -422,7 +433,10 @@ AS
 	WHERE DSH.inactive_at IS NULL;
 --
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> rama-luis
 DROP PROCEDURE IF EXISTS spu_datasheet_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_listar(IN _idequipo INT)
@@ -433,12 +447,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_datasheet_listar`(IN _idequipo INT)
-BEGIN
-	SELECT * FROM vw_datasheet
-    WHERE idequipo = _idequipo
-    ORDER BY clave;
-END
+
 
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_registrar
@@ -490,6 +499,25 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados CRONOGRAMAS --------------------------
 -- -------------------------------------------------------------------------------------
+call spu_cronogramas_listar();
+DROP PROCEDURE IF EXISTS spu_cronogramas_listar_id;
+DELIMITER $$
+call spu_cronogramas_listar_id(1);
+CREATE PROCEDURE spu_cronogramas_listar_id(IN _idequipo INT)
+BEGIN
+	SELECT
+		cro.idcronograma,
+        equ.modelo_equipo,
+        equ.numero_serie,
+        cro.tipo_mantenimiento,
+        cro.estado,
+        cro.fecha_programada
+    FROM cronogramas as cro
+    INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+    WHERE
+		cro.idequipo =_idequipo AND cro.inactive_at IS NULL;
+END $$
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS spu_cronogramas_listar;
 DELIMITER $$
