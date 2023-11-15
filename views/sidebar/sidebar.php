@@ -12,7 +12,9 @@ $accesos = [
         "cronograma"    => [],
         "datasheet"     => [],
         "equipos"       => ["equipos-catalogo","equipos-listar"],
-        "usuario"      => ["usuario"]
+        "usuario"      => ["usuario"],
+        "graficos"      => ["index"],
+        "sector"        => ["listar"],
     ],
     "ASIST" =>[
         "graficos"      => ["index"],
@@ -26,7 +28,7 @@ $accesos = [
 <html lang="en">
 
 <head>
-  <title>SISCOMPU</title>
+  <title>Lista de Opciones</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -68,13 +70,13 @@ $accesos = [
                         $categorias = $accesos[$_SESSION["rol"]];
                         foreach ($categorias as $categoria => $subcategoria) {
                             
-                            if($categoria != "equipos" && $categoria != "graficos" && $categoria != "usuario"){
+                            if($categoria != "equipos" && $categoria != "graficos" && $categoria != "usuario" && $categoria != "sector"){
                             echo "
                             <li>
                                     <a href='../{$categoria}/{$categoria}.php' class='nav_link'><span class='nav_name'>{$categoria}</span></a>
                                     "; 
                             }
-                                if($categoria == "equipos" || $categoria == "graficos" || $categoria == "usuario"){
+                                if($categoria == "equipos" || $categoria == "graficos" || $categoria == "usuario" || $categoria == "sector"){
                                     echo "
                                     <a href='#' class='nav_link'><span class='nav_name'>{$categoria}</span></a>
                                     ";
