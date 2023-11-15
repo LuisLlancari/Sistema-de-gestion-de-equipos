@@ -527,6 +527,25 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados CRONOGRAMAS --------------------------
 -- -------------------------------------------------------------------------------------
+call spu_cronogramas_listar();
+DROP PROCEDURE IF EXISTS spu_cronogramas_listar_id;
+DELIMITER $$
+call spu_cronogramas_listar_id(1);
+CREATE PROCEDURE spu_cronogramas_listar_id(IN _idequipo INT)
+BEGIN
+	SELECT
+		cro.idcronograma,
+        equ.modelo_equipo,
+        equ.numero_serie,
+        cro.tipo_mantenimiento,
+        cro.estado,
+        cro.fecha_programada
+    FROM cronogramas as cro
+    INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+    WHERE
+		cro.idequipo =_idequipo AND cro.inactive_at IS NULL;
+END $$
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS spu_cronogramas_listar;
 DELIMITER $$

@@ -65,7 +65,19 @@ class Cronograma extends Conexion{
       die($e->getMessage());
     }
   }
+  
+  public function listar_cronograma_id($datos = []){
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_cronogramas_listar_id(?)");
+      $consulta->execute(array(
+        $datos['idequipo']
+      ));
 
+      return $consulta->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
 
 
 }

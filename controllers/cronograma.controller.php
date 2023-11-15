@@ -11,7 +11,13 @@ if(isset($_POST['operacion'])){
     case 'listar_cronograma':
       echo json_encode($cronograma->listar_cronogramas());
       break;
-    
+      
+    case 'listar_cronograma_id':
+
+      $datosEnviar = ["idequipo" => $_POST['idequipo']];
+
+      echo json_encode($cronograma->listar_cronograma_id($datosEnviar));
+      break;
 
     case 'registrar_cronograma':
         $datosEnviar = [
@@ -26,6 +32,7 @@ if(isset($_POST['operacion'])){
       
       
     case '':
+      
       # code...
       break;
       
