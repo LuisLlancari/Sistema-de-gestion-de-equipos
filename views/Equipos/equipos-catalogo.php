@@ -118,7 +118,7 @@ require_once "../sidebar/sidebar.php";
                       </div>
                       <div class="card-body">
                         <div>
-                          <img src="../../images/${element.imagen}" alt="${element.modelo_equipo}">
+                          <img src="../../images/${element.imagen}" style="height: 10rem; width: 12rem;" alt="${element.modelo_equipo}">
                         </div>
                         <div>
                           <strong>Modelo : </strong>${element.modelo_equipo}
