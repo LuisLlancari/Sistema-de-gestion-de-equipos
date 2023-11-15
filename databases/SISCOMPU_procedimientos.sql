@@ -269,24 +269,61 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_datasheet_modificar;
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_modificar
+(
+	IN _iddatasheet INT,
+    IN _idequipo INT,
+    IN _clave VARCHAR(45),
+    IN _valor VARCHAR(300)
+)
+BEGIN
+	UPDATE datasheet SET
+		idequipo 	= _idequipo,
+		clave 		= _clave,
+		valor		= _valor,
+        update_at 	= now()
+	WHERE
+		iddatasheet = _iddatasheet;
+END $$
+DELIMITER ;
 
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados DATASHEET -----------------------------
 -- -------------------------------------------------------------------------------------
 select * from datasheet;
-
-DELIMITER $$
-CREATE PROCEDURE spu_datasheet_listar()
-BEGIN
-	SELECT DSH.iddatasheet,
+-- VISTA DATASHEET
+DROP VIEW IF EXISTS vw_datasheet;
+CREATE VIEW vw_datasheet
+AS
+	SELECT 
+    DSH.iddatasheet,
+    DSH.idequipo,
     EQUI.numero_serie,
     DSH.clave,
-    DSH.valor
+    DSH.valor,
+    DSH.inactive_at
     FROM datasheet DSH
     INNER JOIN equipos EQUI ON EQUI.idequipo = DSH.idequipo
-    WHERE DSH.inactive_at IS NULL;
+	WHERE DSH.inactive_at IS NULL;
+    
+    
+DELIMITER $$
+CREATE PROCEDURE spu_datasheet_listar(IN _idequipo INT)
+BEGIN
+	SELECT * FROM vw_datasheet
+    WHERE idequipo = _idequipo
+    ORDER BY clave;
 END$$
 DELIMITER ;
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_datasheet_listar`(IN _idequipo INT)
+BEGIN
+	SELECT * FROM vw_datasheet
+    WHERE idequipo = _idequipo
+    ORDER BY clave;
+END
 
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_registrar
