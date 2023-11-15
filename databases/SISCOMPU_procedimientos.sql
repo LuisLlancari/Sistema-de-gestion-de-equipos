@@ -276,7 +276,7 @@ END $$
 DELIMTTER ;
 
 DELIMITER $$
-CREATE PROCEDURE spu_equipos_eliminar(IN id_equipo INT)
+CREATE PROCEDURE spu_equipos_eliminar(IN _idequipo INT)
 BEGIN 
 	UPDATE equipos
     SET inactive_at = NOW()
