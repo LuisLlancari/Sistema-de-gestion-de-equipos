@@ -5,7 +5,7 @@ class Conexion{
   private $puerto = "3306";
   private $baseDatos = "SISCOMPU";
   private $usuario = "root";
-  private $clave = "admin1234@/@";
+  private $clave = "";
 
   public function getConexion(){
 
@@ -17,7 +17,7 @@ class Conexion{
         dbname={$this->baseDatos};
         charset=UTF8",
         $this->usuario,
-        $this->clave,
+        $this->clave
       );
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       return $pdo;

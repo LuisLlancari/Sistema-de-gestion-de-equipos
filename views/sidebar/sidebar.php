@@ -1,8 +1,34 @@
+<?php
+
+session_start();
+if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
+    header("Location:../../index.php");
+
+}
+
+$accesos = [
+    "ADMIN" =>[
+        "graficos"      => ["index"],
+        "cronograma"    => [],
+        "datasheet"     => [],
+        "equipos"       => ["equipos-catalogo","equipos-listar"],
+        "usuario"       => ["usuario"],
+        "graficos"      => ["index"],
+        "sector"        => ["listar"],
+    ],
+    "ASIST" =>[
+        "graficos"      => ["index"],
+        "cronograma"    => [],
+        "datasheet"     => [],
+        "equipos"       => ["equipos-catalogo"]
+        ]
+    ];
+?>
 <!doctype html>
 <html lang="en">
 
 <head>
-  <title>Title</title>
+  <title>Lista de Opciones</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,7 +39,8 @@
     <link rel="stylesheet" href="../../css/style.css">
 
     <!-- INCONOS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body id="body-pd">
@@ -22,28 +49,90 @@
 
     <nav class ="navbar">
         <header class="header" id="header">
-            <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
-            <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
+            <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i>
+        </div>
+        <div class="">
+            <span class="text-uppercase"><?=$_SESSION["apellidos"]?>,</span> <span><?=$_SESSION["nombres"]?> -</span><span id="rolobt"><?=$_SESSION["rol"]?></span> 
+        </div>
+        <div class="header_img"> 
+                
+                <?php
+                    echo "<img src='../../images/".$_SESSION["avatar"]."' alt=''>";
+                    
+                ?> 
+            </div>
         </header>
         <div class="l-navbar" id="sidebar">
             <nav class="nav">
-                <div> 
-                    <a href="#" class="nav_logo"> 
-                    <i class='bx bx-layer nav_logo-icon'></i> <span class="nav_logo-name">SISCOMPU</span> </a>
-                    <div class="nav_list"> 
-                        <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Dashboard</span> 
-                        </a> <a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Usuarios</span> </a> 
-                        <a href="../Equipos/equipos-catalogo.php" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Equipos</span></a>
-                        <ul>
+                <div>
+                <a href="#" class="nav_logo"><span class="nav_logo-name">SISCOMPU</span></a>
+                <div class="nav_list"> 
+                    <?php
+                        $categorias = $accesos[$_SESSION["rol"]];
+                        foreach ($categorias as $categoria => $subcategoria) {
+                            
+                            if($categoria != "equipos" && $categoria != "graficos" && $categoria != "usuario" && $categoria != "sector"){
+                            echo "
                             <li>
-                                </a> <a href="../Equipos/equipos-listar.php" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Lista</span> </a>
+                                    <a href='../{$categoria}/{$categoria}.php' class='nav_link'><span class='nav_name'>{$categoria}</span></a>
+                                    "; 
+                            }
+                                if($categoria == "equipos" || $categoria == "graficos" || $categoria == "usuario" || $categoria == "sector"){
+                                    echo "
+                                    <a href='#' class='nav_link'><span class='nav_name'>{$categoria}</span></a>
+                                    ";
+                                }                       
+                                
+
+                                if($subcategoria){
+                                    echo "<div class='m-3'>";
+                                    foreach ($subcategoria as $item) {
+                                        # code...
+                                        echo "
+                                        <li>
+                                            <a href='../{$categoria}/{$item}.php' class='nav_link'><span class='nav_name'>{$item}</span></a> 
+                                        </li>
+                                        ";
+                                    }
+                                    echo "
+                                    </div>
+                                    ";
+                                }
+
+                            echo "
                             </li>
-                        </ul> 
-                        <a href="#" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i> <span class="nav_name">Bookmark</span> </a> 
-                        <a href="#" class="nav_link"> <i class='bx bx-folder nav_icon'></i> <span class="nav_name">Files</span> </a> 
-                        <a href="#" class="nav_link"> <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Stats</span> </a> 
+                            ";
+
+                    
+                        }
+                    ?>
+                    <!--  
+                        <li>
+                            <a href="#" class="nav_link active"><span class="nav_name">Dashboard</span></a> 
+                        </li>
+                        <li>
+                            <a href="#" class="nav_link"><span class="nav_name">Usuarios</span></a>
+                        </li>
+                        <li>
+                            <a href="../equipos/equipos-catalogo.php" class="nav_link"><span class="nav_name">Equipos</span></a>
+                            <ul>
+                                <li>
+                                    </a> <a href="../equipos/equipos-listar.php" class="nav_link"><span class="nav_name">Lista</span></a>
+                                </li>
+                            </ul> 
+                        </li>
+                        <li>
+                            <a href="#" class="nav_link"><span class="nav_name">Bookmark</span> </a> 
+                        </li>
+                        <li>
+                            <a href="#" class="nav_link"><span class="nav_name">Files</span> </a> 
+                        </li>
+                        <li>
+                            <a href="#" class="nav_link"><span class="nav_name">Stats</span> </a> 
+                        </li> -->
                     </div>
-                </div> <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+                </div> 
+                <a href="../../controllers/usuario.controller.php?operacion=destroy" class="nav_link"> <span class="nav_name">SignOut</span></a>
             </nav>
         </div>
         <!--Container Main start-->

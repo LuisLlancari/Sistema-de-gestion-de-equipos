@@ -29,6 +29,7 @@ class Usuario extends Conexion {
     try {
       $consulta = $this->conexion->prepare("CALL spu_usuarios_listar()");
       $consulta->execute();
+      
       return $consulta->fetchAll(PDO::FETCH_ASSOC);
 
     } catch (Exception $e){

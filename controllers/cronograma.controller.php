@@ -32,6 +32,7 @@ if(isset($_POST['operacion'])){
       
       
     case '':
+      
       # code...
       break;
       

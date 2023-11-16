@@ -133,12 +133,12 @@ require_once "../sidebar/sidebar.php";
                   </select>
                 </div>
 
-                <!-- ESTE LABEL SOLO ES DE PRUEBA YA QUE EL USUARIO SE DEBE DE GUARDAR DE FORMA AUTOMÁTICA SIN ESCRIBIR -->
+<!--                 ESTE LABEL SOLO ES DE PRUEBA YA QUE EL USUARIO SE DEBE DE GUARDAR DE FORMA AUTOMÁTICA SIN ESCRIBIR
                 <div class="mb-2">
                   <label for="usuario" class="form-label">Usuario</label>
                   <input type="text" class="form-control" name="usuario" id="usuarioEdit">
-                </div>
-                <!-- ------------ -->
+                </div> -->
+           
                 <div class="mb-2">
                   <label for="modelo" class="form-label">Modelo</label>
                   <input type="text" class="form-control" name="modelo" id="modeloEdit">
@@ -383,7 +383,6 @@ require_once "../sidebar/sidebar.php";
 
               $("#categoriaEdit").value = "";
               $("#marcaEdit").value     = "";
-              $("#usuarioEdit").value   = "";
               $("#modeloEdit").value    = "";
               $("#serieEdit").value     = "";
               $("#imagenEdit").value    = "";
@@ -404,7 +403,6 @@ require_once "../sidebar/sidebar.php";
               
               parametros.append("idcategoria",$("#categoriaEdit").value);
               parametros.append("idmarca",$("#categoriaEdit").value);
-              parametros.append("idusuario",$("#usuarioEdit").value);
               parametros.append("modelo_equipo",$("#modeloEdit").value);
               parametros.append("numero_serie",$("#serieEdit").value);
               parametros.append("imagen",$("#imagenEdit").files[0]);
@@ -437,10 +435,9 @@ require_once "../sidebar/sidebar.php";
                 if(element.idequipo == idEquipo){
                   $("#categoriaEdit").value = element.idcategoria;
                   $("#marcaEdit").value     = element.idmarca;
-                  $("#usuarioEdit").value   = element.nombres;
                   $("#modeloEdit").value    = element.modelo_equipo;
                   $("#serieEdit").value     = element.numero_serie;
-                  $("#imagenEdit").value    = element.imagen;
+                  $("#imagenEdit").files[0];
                 }
               });
             }
@@ -451,19 +448,19 @@ require_once "../sidebar/sidebar.php";
               parametros.append("operacion","eliminar");
               parametros.append("idequipo",idEquipo);
 
-            fetch(`../../controllers/equipo.controller.php`,{
-              method: "POST",
-              body: parametros
-            })
-              .then(result => result.json())
-              .then(data => {
-                toast("El registro se eliminó con exito");
-                getEquipos();
+              fetch(`../../controllers/equipo.controller.php`,{
+                method: "POST",
+                body: parametros
               })
-              .catch(e => {
-                console.error(e);
-                alertError("No se logró eliminar el registro","Ocurrió un error","Intentelo después");
-              });
+                .then(result => result.json())
+                .then(data => {
+                  toast("El registro se eliminó con exito");
+                  getEquipos();
+                })
+                .catch(e => {
+                  console.error(e);
+                  alertError("No se logró eliminar el registro","Ocurrió un error","Intentelo después");
+                });
             }
 
 

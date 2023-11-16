@@ -31,8 +31,62 @@ require_once "../sidebar/sidebar.php";
                         <div class="bg-secondary text-white text-center">
                             <h1>Cronograma</h1>
                         </div>
+<<<<<<< HEAD
                         <!-- tabla -->
                         <!-- fin tabla -->
+=======
+
+
+                        <table class="table table-sm table-striped  "  id="tabla-cronograma">
+                            <colgroup>
+                                <col width="18%"> <!-- Categoria -->
+                                <col width="10%"> <!-- Descripción -->
+                                <col width="10%"> <!-- Precio -->
+
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                <th>tipo de matenimiento</th>
+                                <th>estado</th>
+                                <th>fecha programada</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            
+                                <!-- DATOS CARGADOS DE FORMA ASINCRONA -->
+                            </tbody>
+                        </table>
+
+                        <!-- <div class="row">
+                            <div class="col-md-5 m-4">
+                                <div class="mb-2">
+                                    <label for="" class="form-label">Valor</label>
+                                    <h6>Clave</h6>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="" class="form-label">Valor</label>
+                                    <h6>Clave</h6>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="" class="form-label">Valor</label>
+                                    <h6>Clave</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-5 m-4">
+                                <div class="mb-2">
+                                    <label for="" class="form-label">Valor</label>
+                                    <h6>Clave</h6>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="" class="form-label">Valor</label>
+                                    <h6>Clave</h6>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="" class="form-label">Valor</label>
+                                    <h6>Clave</h6>
+                                </div>
+                            </div> -->
+>>>>>>> 4cf9cbe93e56ee5fe29c77cee67bece6e30ce7c4
                     </div>
 
                     <!-- DATASHEET -->
@@ -110,11 +164,13 @@ require_once "../sidebar/sidebar.php";
   <script>
 
     document.addEventListener("DOMContentLoaded", () => {
-
+        
         function $(id){
             return document.querySelector(id);
         }
-
+        // almacenamos el id del cuerpo de la tabla
+        const tabla = $("#tabla-cronograma tbody")
+        
         //id del equipo(dato obtenido de la solicutud get)
         const idEquipoObt = idObt
         console.log(idEquipoObt);
@@ -260,10 +316,17 @@ require_once "../sidebar/sidebar.php";
                 });
         }
 
+<<<<<<< HEAD
         function listar_cronograma(){
             const parametros = new FormData();
           parametros.append("operacion","listar_cronograma_id");
           parametros.append("idequipo",1);
+=======
+        function listar_cronograma(equipoid){
+          const parametros = new FormData();
+          parametros.append("operacion"     ,"listar_cronograma_id");
+          parametros.append("idequipo"     ,equipoid);
+>>>>>>> 4cf9cbe93e56ee5fe29c77cee67bece6e30ce7c4
 
           fetch(`../../controllers/cronograma.controller.php`,{
             method: "POST",
@@ -271,6 +334,7 @@ require_once "../sidebar/sidebar.php";
           })
             .then(respuesta => respuesta.json())
             .then(datos => {
+<<<<<<< HEAD
                 console.log(datos);
             })
             .catch(e =>  {
@@ -280,6 +344,30 @@ require_once "../sidebar/sidebar.php";
 
         listar_cronograma();
 
+=======
+
+               // poner un if
+            tabla.innerHTML = '';
+            let nuevafila =``;
+                nuevafila = `
+              <tr>
+                <td>${datos.tipo_mantenimiento}</td>
+                <td>${datos.estado}</td>
+                <td>${datos.fecha_programada}</td>
+                </td>
+              </tr>
+              `;
+              tabla.innerHTML += nuevafila;
+    
+
+            } )
+            .catch(e =>  {
+              console.error(e);
+            });               
+        }
+
+    
+>>>>>>> 4cf9cbe93e56ee5fe29c77cee67bece6e30ce7c4
 
         $("#datasheet").addEventListener("click",(event) =>{
 
@@ -313,6 +401,7 @@ require_once "../sidebar/sidebar.php";
             reiniciarModal();
         });
 
+        listar_cronograma(idEquipoObt);
         getdatasheet(idEquipoObt);
     });
   </script>
