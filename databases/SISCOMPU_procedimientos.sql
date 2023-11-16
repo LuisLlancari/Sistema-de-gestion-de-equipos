@@ -487,6 +487,27 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS spu_cronogramas_listar;
 DELIMITER $$
+CREATE PROCEDURE spu_cronogramas_listar_id(IN _idequipo INT)
+BEGIN
+	SELECT
+		equ.idequipo,
+		cro.idcronograma,
+        equ.modelo_equipo,
+        equ.numero_serie,
+        cro.tipo_mantenimiento,
+        cro.estado,
+        cro.fecha_programada
+    FROM cronogramas cro
+    INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+    WHERE
+		equ.idequipo = _idequipo AND cro.inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS spu_cronogramas_listar;
+DELIMITER $$
 CREATE PROCEDURE spu_cronogramas_listar()
 BEGIN
 	SELECT

@@ -31,35 +31,8 @@ require_once "../sidebar/sidebar.php";
                         <div class="bg-secondary text-white text-center">
                             <h1>Cronograma</h1>
                         </div>
-                        <div class="row">
-                            <div class="col-md-5 m-4">
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                            </div>
-                            <div class="col-md-5 m-4">
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                            </div>
+                        <!-- tabla -->
+                        <!-- fin tabla -->
                     </div>
 
                     <!-- DATASHEET -->
@@ -286,6 +259,27 @@ require_once "../sidebar/sidebar.php";
                     alertError("No se guardaron los cambios","Ocurrió un error", "vuelva a intentarlo");
                 });
         }
+
+        function listar_cronograma(){
+            const parametros = new FormData();
+          parametros.append("operacion","listar_cronograma_id");
+          parametros.append("idequipo",1);
+
+          fetch(`../../controllers/cronograma.controller.php`,{
+            method: "POST",
+            body : parametros
+          })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                console.log(datos);
+            })
+            .catch(e =>  {
+              console.error(e);
+            });             
+        }
+
+        listar_cronograma();
+
 
         $("#datasheet").addEventListener("click",(event) =>{
 

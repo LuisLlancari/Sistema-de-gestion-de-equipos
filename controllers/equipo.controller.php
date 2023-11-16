@@ -13,11 +13,15 @@ if(isset($_POST['operacion'])){
     $equipo = new Equipo();
 
     switch ($_POST['operacion']){
+   
+            
         case 'listar':
         
             echo json_encode($equipo->listar());
             break;
         
+
+
         case 'registrar':
 
             $hoy = date("dmYhis");
@@ -38,7 +42,7 @@ if(isset($_POST['operacion'])){
 
                 $datosEnviar['imagen'] = $nombreImagen;
             }
-            */
+        
             echo json_encode($equipo->registrar($datosEnviar));
 
             break;
