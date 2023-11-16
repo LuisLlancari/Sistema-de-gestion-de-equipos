@@ -31,10 +31,8 @@ require_once "../sidebar/sidebar.php";
                         <div class="bg-secondary text-white text-center">
                             <h1>Cronograma</h1>
                         </div>
-<<<<<<< HEAD
                         <!-- tabla -->
                         <!-- fin tabla -->
-=======
 
 
                         <table class="table table-sm table-striped  "  id="tabla-cronograma">
@@ -86,7 +84,6 @@ require_once "../sidebar/sidebar.php";
                                     <h6>Clave</h6>
                                 </div>
                             </div> -->
->>>>>>> 4cf9cbe93e56ee5fe29c77cee67bece6e30ce7c4
                     </div>
 
                     <!-- DATASHEET -->
