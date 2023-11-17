@@ -5,6 +5,7 @@
   --first-color: #062280;
   --first-color-light: #6BADEB;
   --white-color: #F7F6FB;
+  --white-2: #adadad;
   --body-font: 'Nunito', sans-serif;
   --normal-font-size: 1rem;
   --z-fixed: 100
@@ -59,116 +60,8 @@ a{
   width: 40px
 }
 
-.l-navbar{
-  position: fixed;
-  top: 0;
-  left: 0%;
-  width: var(--nav-width);
-  height: 100vh;
-  background-color: var(--first-color);
-  padding: .5rem 1rem 0 0;
-  transition: .5s;
-  z-index: var(--z-fixed)
-}
-
-.nav{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden
-}
-
-.nav_logo, .nav_link{
-  display: grid;
-  grid-template-columns: max-content max-content;
-  align-items: center;
-  column-gap: 1rem;
-  padding: .5rem 0 .5rem 1.5rem
-}
-
-.nav_logo{
-  margin-bottom: 2rem
-}
-
-.nav_logo-icon{
-  font-size: 1.25rem;
-  color: var(--white-color)
-}
-
-.nav_logo-name{
-  color: var(--white-color);
-  font-weight: 700
-}
-
-.nav_link{
-  position: relative;
-  color: var(--first-color-light);
-  margin-bottom: 1.5rem;
-  transition: .3s
-}
-
-.nav_link:hover{
-  color: var(--white-color)
-}
-
-.nav_icon{
-  font-size: 1.25rem
-}
-
-.show{
-  left: 0
-}
-
-.body-pd{
-  padding-left: calc(var(--nav-width) + 1rem)
-}
-
-.active{
-  color: var(--white-color)
-}
-
-.active::before{
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 2px;
-  height: 32px;
-  background-color: var(--white-color)
-}
-
-.height-100{
-  height:100vh
-
-}
 
 @media screen and (min-width: 768px){
-  
-  .btn-sidebar{
-    z-index: 2;
-      top: 10px;
-      left: calc(var(--nav-width) + 10rem);
-      height: 37px;
-      width: 37px;
-      text-align: center;
-      background: #062280;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: left 0.4s ease;
-  }
-
-  .btn-sidebar.click{
-    left: 260px;
-  }
-  .btn-sidebar span{
-      color: white;
-      font-size: 15px;
-      line-height: 36px;
-  }
-  .btn-sidebar.click span:before{
-    content: '\f00d';
-  }
-  
 
   body{
     margin: calc(var(--header-height) + 1rem) 0 0 0;
@@ -203,28 +96,66 @@ a{
   }
 } 
 
-.btn-sidebar{
-    position: absolute;
-    z-index: 2;
-      top: 10px;
-      left: calc(var(--nav-width) - 10rem);
-      height: 37px;
-      width: 37px;
-      text-align: center;
-      background: #062280;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: left 0.4s ease;
-  } 
-  .btn-sidebar.click{
-    left: 260px;
-  }
-  .btn-sidebar span{
-      color: white;
-      font-size: 15px;
-      line-height: 36px;
-  }
-  .btn-sidebar.click span:before{
-    content: '\f00d';
-  }
+
+/* Fixed sidenav, full height */
+.sidenav {
+  position: fixed;
+  height: 100%;
+  width: 200px;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+  font-family: var(--body-font);
+}
+
+/* Style the sidenav links and the dropdown button */
+.sidenav a, .dropdown-btn {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+  border: none;
+  background: none;
+  width:100%;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+}
+
+/* On mouse-over */
+.sidenav a:hover, .dropdown-btn:hover {
+  color: #f1f1f1;
+}
+
+/* Main content */
+.main {
+  margin-left: 200px; /* Same as the width of the sidenav */
+  font-size: 20px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+/* Add an active class to the active dropdown button */
+.active {
+  background-color: green;
+  color: white;
+}
+
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown-container {
+  display: none;
+  background-color: #262626;
+  padding-left: 8px;
+}
+
+/* Optional: Style the caret down icon */
+.fa-caret-down {
+  float: right;
+  padding-right: 8px;
+}
+
+
   

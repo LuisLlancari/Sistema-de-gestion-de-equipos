@@ -137,9 +137,9 @@ CREATE TABLE sectores
 	update_at			DATE			NULL,
 	inactive_at			DATE			NULL
 )ENGINE = INNODB;
-
-DROP TABLE IF EXISTS MAN_sectores;
-CREATE TABLE MAN_sectores
+use siscompu;
+DROP TABLE IF EXISTS sectores_detalle;
+CREATE TABLE sectores_detalle
 (
 	idmantenimiento_sector			INT PRIMARY KEY AUTO_INCREMENT,
     idsector						INT 	NOT NULL,
