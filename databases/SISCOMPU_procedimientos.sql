@@ -431,14 +431,47 @@ CREATE PROCEDURE spu_datasheet_registrar
     IN _valor VARCHAR(300)
 )
 BEGIN
-	INSERT INTO datasheet
-    (idequipo, clave, valor)
-    VALUES
-    (_idequipo, _clave, _valor);
-    SELECT @@last_insert_id 'iddatasheet';
+    DECLARE cantidad INT;
+	DECLARE estadoExist DATE;
+    
+    SELECT COUNT(*) INTO cantidad
+    FROM datasheet
+	WHERE 
+		idequipo 	= _idequipo AND
+		clave		= _clave
+	ORDER BY create_at asc
+	LIMIT 1;
+    
+    IF cantidad > 0
+		THEN
+			-- verificamos si existe la clave
+			SELECT inactive_at INTO estadoExist
+			FROM datasheet 
+			WHERE 
+				idequipo 	= _idequipo AND
+				clave		= _clave
+			ORDER BY create_at asc
+            LIMIT 1;
+	
+				IF estadoExist IS NOT NULL 
+					THEN
+						INSERT INTO datasheet
+						(idequipo, clave, valor)
+						VALUES
+						(_idequipo, _clave, _valor);
+						SELECT @@last_insert_id 'iddatasheet';
+				ELSE
+					SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe un registro';
+				END IF;
+ELSE 
+		INSERT INTO datasheet
+		(idequipo, clave, valor)
+		VALUES
+		(_idequipo, _clave, _valor);
+		SELECT @@last_insert_id 'iddatasheet';
+	END IF;
 END $$
 DELIMITER ;
-
 
 DROP PROCEDURE IF EXISTS spu_datasheet_modificar;
 DELIMITER $$
@@ -464,7 +497,8 @@ DROP PROCEDURE IF EXISTS spu_datasheet_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_eliminar(IN _iddatasheet INT)
 BEGIN
-	delete from datasheet
+	UPDATE datasheet SET
+		inactive_at = now()
 	WHERE
 		iddatasheet = _iddatasheet;
 END $$

@@ -70,8 +70,7 @@ CREATE TABLE datasheet
 	create_at			DATE			NOT NULL DEFAULT NOW(),
 	update_at			DATE			NULL,
 	inactive_at			DATE			NULL,
-    CONSTRAINT fk_idequipo_dat 	FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo),
-    CONSTRAINT uk_idequipoclave UNIQUE	(idequipo,clave)
+    CONSTRAINT fk_idequipo_dat 	FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo)
 )ENGINE = INNODB;
 
 DROP TABLE IF EXISTS cronogramas;
@@ -112,7 +111,6 @@ CREATE TABLE sectores
 	update_at			DATE			NULL,
 	inactive_at			DATE			NULL
 )ENGINE = INNODB;
-use siscompu;
 
 DROP TABLE IF EXISTS sectores_detalle;
 CREATE TABLE sectores_detalle

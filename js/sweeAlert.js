@@ -40,7 +40,7 @@
         /**
          * Pregintar
          */
-        function mostrarPregunta(titulo, mensaje) {
+        function mostrarPregunta(titulo, mensaje,funcion) {
             return Swal.fire({
                 title: titulo,
                 text: mensaje,
@@ -52,6 +52,13 @@
                 cancelButtonColor: '#797D7F',
                 footer: 'SISCOMPU'
             }).then((result) => {
+
+                if(result.isConfirmed){
+                    if(typeof funcion == 'function'){
+                        funcion();
+                    }
+                }
+
                 return result;
             });
         }

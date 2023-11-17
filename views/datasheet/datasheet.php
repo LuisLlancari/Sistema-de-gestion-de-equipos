@@ -21,12 +21,10 @@ require_once "../sidebar/sidebar.php";
             <div class="row">
                 
                 <div class="col-md-2">
-                    <div class="d-grid">
-                        <button id="registrarData" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modalId">Registrar data</button>
-                    </div>
+
                 </div>
 
-                <div class="col-md-10">
+                <div class="col-md-12">
 
                     <!-- CRONOGRANA -->
                     <div>
@@ -58,8 +56,21 @@ require_once "../sidebar/sidebar.php";
 
                     <!-- DATASHEET -->
                     <div>
-                        <div class="bg-secondary text-white text-center">
-                            <h1>Datasheet</h1>
+                        <div class="bg-secondary text-white">
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <div class="m-2">
+                                        <button id="registrarData" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modalId">Registrar</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="text-center">
+                                        <h1>Datasheet</h1>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
                         </div>
                         <div class="row">
                             <div class="col-md-4 m-4">
@@ -172,6 +183,19 @@ require_once "../sidebar/sidebar.php";
 
         let varBandera = false; 
 
+        function validarUsuario(){
+
+            if($("#rolObt").textContent == "ADMIN"){
+
+                const botonesEditar = document.querySelectorAll(".boton-render");
+                
+                botonesEditar.forEach(botonEditar => {
+
+                    botonEditar.style.display ="none";
+                });
+            }
+
+        }
         function obtenerDatasheet(idequipoIN){
 
             const parametros = new FormData();
@@ -201,14 +225,15 @@ require_once "../sidebar/sidebar.php";
                                 <td>${element.clave}</td>
                                 <td>${element.valor}</td>
                                 <td>
-                                    <button class="btn btn-info editar" data-id="${element.iddatasheet}" data-bs-toggle="modal" data-bs-target="#modalId">Editar</button>
-                                    <button class="btn btn-danger eliminar" data-id="${element.iddatasheet}">Eliminar</button>
+                                    <button class="btn btn-info boton-render editar" data-id="${element.iddatasheet}" data-bs-toggle="modal" data-bs-target="#modalId">Editar</button>
+                                    <button class="btn btn-danger boton-render eliminar" data-id="${element.iddatasheet}">Eliminar</button>
                                 </td>
                             `;
                             numFila++;
 
                             tablaDatashet.innerHTML += nuevaTabla;
                         });
+                        validarUsuario();
                     }else{
                         let h6Error = ``;
 
@@ -305,8 +330,8 @@ require_once "../sidebar/sidebar.php";
 
         function listar_cronograma(equipoid){
           const parametros = new FormData();
-          parametros.append("operacion"     ,"listar_cronograma_id");
-          parametros.append("idequipo"     ,equipoid);
+          parametros.append("operacion","listar_cronograma_id");
+          parametros.append("idequipo",equipoid);
 
           fetch(`../../controllers/cronograma.controller.php`,{
             method: "POST",
@@ -315,18 +340,26 @@ require_once "../sidebar/sidebar.php";
             .then(respuesta => respuesta.json())
             .then(datos => {
 
+                tabla.innerHTML = '';
                // poner un if
-            tabla.innerHTML = '';
-            let nuevafila =``;
-                nuevafila = `
-              <tr>
-                <td>${datos.tipo_mantenimiento}</td>
-                <td>${datos.estado}</td>
-                <td>${datos.fecha_programada}</td>
-                </td>
-              </tr>
-              `;
-              tabla.innerHTML += nuevafila;
+               if(datos.length >0){
+
+                   let nuevafila =``;
+                       nuevafila = `
+                     <tr>
+                       <td>${datos.tipo_mantenimiento}</td>
+                       <td>${datos.estado}</td>
+                       <td>${datos.fecha_programada}</td>
+                       </td>
+                     </tr>
+                     `;
+                     tabla.innerHTML += nuevafila;
+               }else{
+                tabla.innerHTML = 
+                `
+                    <h6 class="bg-danger text-light">No hay resultados</h6>
+                `;
+               }
     
 
             } )
@@ -363,7 +396,6 @@ require_once "../sidebar/sidebar.php";
                     console.error(e);
                 });
         }
-    
 
         $("#datasheet").addEventListener("click",(event) =>{
 
@@ -382,8 +414,9 @@ require_once "../sidebar/sidebar.php";
             }else if(event.target.classList.contains("eliminar")){
                 console.log(dataid)
 
-                mostrarPregunta("Por favor confirme","¿Desea eliminar este registro?")
-                    .then((result) =>{eliminarDatasheet(dataid)});
+                mostrarPregunta("Por favor confirme","¿Desea eliminar este registro?",() =>{
+                    eliminarDatasheet(dataid);
+                });
             }
         });
 
@@ -399,6 +432,7 @@ require_once "../sidebar/sidebar.php";
 
         listar_cronograma(idEquipoObt);
         obtenerEquipo(idEquipoObt);
+        
     });
   </script>
 </body>

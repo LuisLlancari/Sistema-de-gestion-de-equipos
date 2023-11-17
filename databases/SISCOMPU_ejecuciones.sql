@@ -21,6 +21,7 @@ CALL spu_equipos_modificar(1,2,2,2,'0','0','111111111');
 CALL spu_equipos_listar();
 CALL spu_equipos_obtener(1);
 CALL spu_equipos_listar_categoria();
+
 insert into equipos(idcategoria, idmarca, idusuario, modelo_equipo, numero_serie, imagen)
 VALUES 
 	(1,1,1,'ALl ON ONE','9876521',null),
@@ -90,6 +91,10 @@ VALUES
 -- DATASHEET
 UPDATE datasheet SET
 	inactive_at = null;
+call spu_datasheet_registrar(1,'color','MORADO');
+update datasheet set inactive_at = null;
+select * FROM datasheet;
+update datasheet set auto_increment = 1;
 
 -- SECTORES
 	INSERT INTO sectores (sector)values('psicología'),('secretaría'),('aula de profesores');

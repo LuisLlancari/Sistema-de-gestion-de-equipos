@@ -19,7 +19,7 @@ require_once "../sidebar/sidebar.php";
   </script>
     <script src="../../js/sidebar.js"></script>
     <script>
-      const obt = document.querySelector("#rolobt");
+      const obt = document.querySelector("#rolObt");
 
       console.log(obt.textContent);
 
