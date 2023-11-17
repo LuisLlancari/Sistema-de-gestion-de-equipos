@@ -16,7 +16,7 @@
     
 
   function filtrar($cadenaEntrada){
-    $caracteresProhibidos = array("<",">","*","/","{","}","[","]",";",",",".","(",")");
+    $caracteresProhibidos = array("<",">","*","/","{","}","[","]",";",",","(",")");
     $caracteresReemplazar= array("");
     return str_replace($caracteresProhibidos, $caracteresReemplazar, $cadenaEntrada);
   }

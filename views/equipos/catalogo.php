@@ -8,52 +8,26 @@ require_once "../sidebar/sidebar.php";
         <div class="text-start m-4 ">
           <h1 class>Lista de equipos</h1>
         </div>
-        <div class="row">
-          <div class="col-md-3">
-            <div>
-              <label for="filtro" class="form-lable">Filtro: </label>
-              <input type="range" class="form-range" name="filtro" id="filtroV" value="1000" min="0" max="5000">
+          <!-- FILTROS -->
+          <div class="row">
+            <div class="col-md-2">
+              <select name="marcaS" class="form-select"id="marcaS">
+                <option value="0">Marcas</option>
+                <option value="0">Marcas</option>
+                <option value="0">Marcas</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select name="categoriasS" class="form-select" id="categoriasS">
+                <option value="0">Categorias</option>
+                <option value="0">Categorias</option>
+                <option value="0">Categorias</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <div class="input-group"></div>
             </div>
           </div>
-          <div class="col-md-3">
-            <div class="input-group">
-              <span class="input-group-text" id="nombreValor"> Valor</span>
-              <input type="text" class="form-control"  id="cantidadValor">
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="input-group">
-              <span class="input-group-text" id="nombreValor"> Valor</span>
-              <input type="text" class="form-control"  id="cantidadValor">
-            </div> 
-          </div>
-          <div class="col-md-3">
-            <div class="input-group">
-              <span class="input-group-text" id="nombreValor"> Valor</span>
-              <input type="text" class="form-control"  id="cantidadValor">
-            </div>
-          </div>
-          <div>
-              
-
-
-
-            </div>
-          </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <form action="" id="from-filtro">
-            <div>
-              <label for="busqueda" class="form-label">Busqueda</label>
-              <div class="input-group">
-              <input type="text" class="form-control" id="busqueda">
-              <button type="submit" class="btn btn-success" id="buscar">Buscar</button>
-            </div>
-          </form>
-        </div>
-        </div>
-          <div class="col" style="background-color: #7BEBEF; opacity: 0.5;">
   
           <!-- CATALOGO -->
           <div class="" style="background-color: #DEE3E3;">
