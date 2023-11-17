@@ -4,53 +4,59 @@
 require_once "../sidebar/sidebar.php";
 ?>
     <div class="height-100 bg-light">
-      <!-- BOTÓN -->
-        <div class="btn-sidebar toggled" id="menu-toggle">
-            <span class="fas fa-bars"></span>
-        </div>
       <div>
-        <div class="text-center m-4">
-          <h1 class="fw-bolder">Lista de equipos</h1>
+        <div class="text-start m-4 ">
+          <h1 class>Lista de equipos</h1>
         </div>
         <div class="row">
-          <!-- LATERAL IZQUIERDO -->
-          <div class="col-md-3" style="background-color: #7BEBEF; opacity: 0.5;">
-            <div class="m-4">
-              <div>
-                <label for="filtro" class="form-lable">Filtro: </label>
-                <input type="range" class="form-range" name="filtro" id="filtroV" value="1000" min="0" max="5000">
-              </div>
-              <hr>
-              <form action="" id="from-filtro">
-                <div>
-                  <label for="busqueda" class="form-label">Busqueda</label>
-                  <input type="text" class="form-control" id="busqueda">
-                </div>
-                <div class="d-grid mt-2">
-                  <button type="submit" class="btn btn-success" id="buscar">Buscar</button>
-                </div>
-              </form>
-              <hr>
-              <div>
-                <h6>Resultados</h6>
-                <div class="input-group mt-2">
-                  <span class="input-group-text" id="nombreValor"> Valor</span>
-                  <input type="text" class="form-control"  id="cantidadValor">
-                </div>
-                <div class="input-group mt-2">
-                  <span class="input-group-text" id="nombreValor"> Valor</span>
-                  <input type="text" class="form-control"  id="cantidadValor">
-                </div>
-                <div class="input-group mt-2">
-                  <span class="input-group-text" id="nombreValor"> Valor</span>
-                  <input type="text" class="form-control"  id="cantidadValor">
-                </div>
-              </div>
+          <div class="col-md-3">
+            <div>
+              <label for="filtro" class="form-lable">Filtro: </label>
+              <input type="range" class="form-range" name="filtro" id="filtroV" value="1000" min="0" max="5000">
             </div>
           </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-text" id="nombreValor"> Valor</span>
+              <input type="text" class="form-control"  id="cantidadValor">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-text" id="nombreValor"> Valor</span>
+              <input type="text" class="form-control"  id="cantidadValor">
+            </div> 
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-text" id="nombreValor"> Valor</span>
+              <input type="text" class="form-control"  id="cantidadValor">
+            </div>
+          </div>
+          <div>
+              
+
+
+
+            </div>
+          </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <form action="" id="from-filtro">
+            <div>
+              <label for="busqueda" class="form-label">Busqueda</label>
+              <div class="input-group">
+              <input type="text" class="form-control" id="busqueda">
+              <button type="submit" class="btn btn-success" id="buscar">Buscar</button>
+            </div>
+          </form>
+        </div>
+        </div>
+          <div class="col" style="background-color: #7BEBEF; opacity: 0.5;">
   
-          <!-- LATERAL DERECHO -->
-          <div class="col-md-9" style="background-color: #DEE3E3;">
+          <!-- CATALOGO -->
+          <div class="" style="background-color: #DEE3E3;">
 
           <!-- RENDER CARD -->
             <div class="row" id="card">
@@ -108,6 +114,8 @@ require_once "../sidebar/sidebar.php";
 
               data.forEach(element => {
 
+                const url = data.imagen ? data.image : "noImage.jpg";
+
                 let newCard = ``;
 
                 newCard = `
@@ -118,9 +126,13 @@ require_once "../sidebar/sidebar.php";
                       </div>
                       <div class="card-body">
                         <div>
-                          <img src="../../images/${element.imagen}" style="height: 10rem; width: 12rem;" alt="${element.modelo_equipo}">
+                          <img src="../../images/${url}" style="height: 10rem; width: 12rem;" alt="${element.modelo_equipo}">
                         </div>
                         <div>
+                          <strong>Categoría : </strong>${element.categoria}
+                          <br>
+                          <strong>Descripción : </strong>${element.descripcion}
+                          <br>
                           <strong>Modelo : </strong>${element.modelo_equipo}
                           <br>
                           <strong>Nº serie : </strong>${element.numero_serie}

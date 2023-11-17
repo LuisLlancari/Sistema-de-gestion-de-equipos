@@ -94,7 +94,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_usuarios_eliminar
+DROP PROCEDURE IF EXISTS spu_usuarios_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_eliminar(IN _idusuario INT)
 BEGIN 
@@ -236,11 +236,23 @@ DROP PROCEDURE IF EXISTS spu_insertar_sectores;
 DELIMITER $$
 CREATE PROCEDURE spu_insertar_sectores
 (
-    IN _idequipo	INT,
+    IN _idsector	INT,
+    IN _sector		VARCHAR(45)
+)
+BEGIN
+	INSERT INTO sectores
+    (idsector,sector)
+    VALUES 
+    (_idsector,_sector);
+END $$
+DELIMITER ;
+/*DROP PROCEDURE IF EXISTS spu_insertar_sectores;
+DELIMITER $$
+CREATE PROCEDURE spu_insertar_sectores
+(
+    IN _i	INT,
     IN _idusuario	INT,
-    IN _nombre		VARCHAR(45),
-    IN _fecha_inicio DATE,
-    IN _fecha_fin	DATE
+    IN _nombre		VARCHAR(45)
 )
 BEGIN
 	INSERT INTO sectores
@@ -249,7 +261,8 @@ BEGIN
     (_idequipo, _idusuario, _nombre, _fecha_inicio, NULLIF(_fecha_fin, ''));
 END $$
 DELIMITER ;
-
+*/
+DROP PROCEDURE IF EXISTS spu_MANsector_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_MANsector_eliminar(IN _idmantenimiento_sector INT)
 BEGIN 
@@ -272,9 +285,15 @@ AS
     CAT.categoria,
     MAR.idmarca,
     MAR.marca,
+    EQUI.descripcion,
     EQUI.modelo_equipo,
     EQUI.numero_serie,
     EQUI.imagen,
+    CASE EQUI.estado
+		WHEN '0' THEN 'inactivo'
+        WHEN '1' THEN 'activo'
+        WHEN '3' THEN 'mantenimiento'
+	END AS estado,
 	USU.nombres
     FROM equipos EQUI
     INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
@@ -289,15 +308,17 @@ CREATE PROCEDURE spu_equipos_registrar
 	IN _idcategoria		INT,
     IN _idmarca			INT,
     IN _idusuario 		INT,
+    IN _descripcion		VARCHAR(45),
     IN _modelo_equipo 	VARCHAR(45),
     IN _numero_serie	VARCHAR(45),
-    IN _imagen			VARCHAR(200)
+    IN _imagen			VARCHAR(200),
+    IN _estado			CHAR(1)
 )
 BEGIN
 	INSERT INTO equipos
-    (idcategoria, idmarca, idusuario, modelo_equipo, numero_serie, imagen)
+    (idcategoria, idmarca, idusuario, descripcion, modelo_equipo, numero_serie, imagen, estado)
     VALUES
-    (_idcategoria, _idmarca, _idusuario, _modelo_equipo, _numero_serie, NULLIF(_imagen, ''));
+    (_idcategoria, _idmarca, _idusuario, _descripcion, _modelo_equipo, _numero_serie, NULLIF(_imagen, ''), _estado);
 	SELECT @@last_insert_id 'idequipo';
 END $$
 DELIMITER ;
@@ -325,15 +346,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_equipos_eliminar;
-DELIMITER $$
-CREATE PROCEDURE spu_equipos_eliminar(IN _idequipo INT)
-BEGIN 
-	UPDATE equipos
-    SET inactive_at = NOW()
-		WHERE idequipo = _idequipo;
-END $$
-DELIMITER ;
 
 DROP PROCEDURE IF EXISTS spu_equipos_eliminar;
 DELIMITER $$
@@ -353,9 +365,11 @@ CREATE PROCEDURE spu_equipos_modificar
     IN _idcategoria		INT,
     IN _idmarca			INT,
     IN _idusuario 		INT,
+    IN _descripcion		INT,
     IN _modelo_equipo 	VARCHAR(45),
     IN _numero_serie	VARCHAR(45),
-    IN _imagen			VARCHAR(200)
+    IN _imagen			VARCHAR(200),
+    IN _estado			CHAR(1)
 )
 BEGIN
 
@@ -363,18 +377,16 @@ BEGIN
 		idcategoria 	= _idcategoria,
 		idmarca			= _idmarca,
 		idusuario		= _idusuario,
+        descripcion		= _descripcion,
 		modelo_equipo	= _modelo_equipo,
 		numero_serie	= _numero_serie,
 		imagen			= _imagen,
+        estado			= _estado,
         update_at       = now()
 
 	WHERE 
 		idequipo = _idequipo;
-<<<<<<< HEAD
 END $$
-=======
-END$$
->>>>>>> rama-luis
 DELIMITER ;
 
 
@@ -382,16 +394,8 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados DATASHEET -----------------------------
 -- -------------------------------------------------------------------------------------
-<<<<<<< HEAD
 
 -- VISTA DATASHEET
-=======
-select * from datasheet;
-
-    
--- VISTA DATASHEET
-
->>>>>>> rama-luis
 DROP VIEW IF EXISTS vw_datasheet;
 CREATE VIEW vw_datasheet
 AS
@@ -407,10 +411,6 @@ AS
 	WHERE DSH.inactive_at IS NULL;
 --
 
-<<<<<<< HEAD
-
-=======
->>>>>>> rama-luis
 DROP PROCEDURE IF EXISTS spu_datasheet_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_listar(IN _idequipo INT)
@@ -422,7 +422,7 @@ END$$
 DELIMITER ;
 
 
-
+DROP PROCEDURE IF EXISTS spu_datasheet_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_registrar
 (
@@ -473,10 +473,9 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados CRONOGRAMAS --------------------------
 -- -------------------------------------------------------------------------------------
-call spu_cronogramas_listar();
+
 DROP PROCEDURE IF EXISTS spu_cronogramas_listar_id;
 DELIMITER $$
-call spu_cronogramas_listar_id(1);
 CREATE PROCEDURE spu_cronogramas_listar_id(IN _idequipo INT)
 BEGIN
 	SELECT
@@ -654,7 +653,6 @@ END $$
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados SECTORES -----------------------------
 -- -------------------------------------------------------------------------------------
-select * from sectores;
 
 DROP PROCEDURE spu_listar_sectores;
 DELIMITER $$

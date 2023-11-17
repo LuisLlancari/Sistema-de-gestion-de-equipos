@@ -12,15 +12,17 @@ require_once "../sidebar/sidebar.php";
 ?>  
     <div class="height-100 bg-light">
         <div class="m-4">
-
+            <div class="alert alert-primary" role="alert">
+              <h4 class="alert-heading">Hoja de información</h4>
+              <hr>
+              <p class="mb-0" id="descripcion">--</p>
+            </div>
             
             <div class="row">
                 
                 <div class="col-md-2">
                     <div class="d-grid">
                         <button id="registrarData" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modalId">Registrar data</button>
-                        <button id="modificarData" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modalId">Modificar data</button>
-                        <a href="../cronograma/cronograma.php" type="button" class="btn btn-primary mb-2">Cronograma</a>
                     </div>
                 </div>
 
@@ -33,7 +35,7 @@ require_once "../sidebar/sidebar.php";
                         </div>
 
 
-                        <table class="table table-sm table-striped  "  id="tabla-cronograma">
+                        <table class="table table-sm table-striped"  id="tabla-cronograma">
                             <colgroup>
                                 <col width="18%"> <!-- Categoria -->
                                 <col width="10%"> <!-- Descripción -->
@@ -51,37 +53,7 @@ require_once "../sidebar/sidebar.php";
                             
                                 <!-- DATOS CARGADOS DE FORMA ASINCRONA -->
                             </tbody>
-                        </table>
-
-                        <!-- <div class="row">
-                            <div class="col-md-5 m-4">
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                            </div>
-                            <div class="col-md-5 m-4">
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="" class="form-label">Valor</label>
-                                    <h6>Clave</h6>
-                                </div>
-                            </div> -->
+                        </table>        
                     </div>
 
                     <!-- DATASHEET -->
@@ -91,12 +63,29 @@ require_once "../sidebar/sidebar.php";
                         </div>
                         <div class="row">
                             <div class="col-md-4 m-4">
-                                <img src="../../images/User-Avatar-Profile-Transparent-Clip-Art-PNG.png" style="max-width: 100%;" alt="">
+                                <img id="visor1" src="" style="max-width: 100%;" alt="">
                             </div>
 
                             <!-- RENDER DATASHEET -->
-                            <div class="col-md-5 m-4" id="datasheet">
-
+                            <div class="col-md-6 m-4" id="datasheet">
+                                <table class = "table table-sm table-striped" id="tabla-datasheet">
+                                    <colgroup width="10%">
+                                    <colgroup width="20%">
+                                    <colgroup width="40%">
+                                    <colgroup width="30%">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Claves</th>
+                                            <th>Valores</th>
+                                            <th>Operaciónes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+    
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -171,7 +160,7 @@ require_once "../sidebar/sidebar.php";
         console.log(idEquipoObt);
 
         //obtjto o lugar que contiene los elementos asíncronos
-        const datoslabel = $("#datasheet");
+        const tablaDatashet = $("#tabla-datasheet tbody");
 
         /* variable donde guardamos los datos del equipo, obtenidos  de la consulta  */
         let datosDatasheet = null;
@@ -183,12 +172,12 @@ require_once "../sidebar/sidebar.php";
 
         let varBandera = false; 
 
-        function getdatasheet(idequipo){
+        function obtenerDatasheet(idequipoIN){
 
             const parametros = new FormData();
 
             parametros.append("operacion","listar");
-            parametros.append("idequipo",idequipo);
+            parametros.append("idequipo",idequipoIN);
 
             fetch(`../../controllers/datasheet.controller.php`,{
                 method: "POST",
@@ -201,28 +190,32 @@ require_once "../sidebar/sidebar.php";
                     datosDatasheet = data;
                     if(datosDatasheet.length > 0){
 
-                        datoslabel.innerHTML = "";
+                        tablaDatashet.innerHTML = "";
 
+                        let numFila = 1;
                         data.forEach(element => {
-                            let datosNuevos = ``;
+                            let nuevaTabla = ``;
 
-                            datosNuevos = `
-                                <div class="mb-2">
-                                    <label for="valor" class="form-label clave">${element.clave} :</label><span class="valor">${element.valor}</span>
+                            nuevaTabla = `
+                                <td>${numFila}</td>
+                                <td>${element.clave}</td>
+                                <td>${element.valor}</td>
+                                <td>
                                     <button class="btn btn-info editar" data-id="${element.iddatasheet}" data-bs-toggle="modal" data-bs-target="#modalId">Editar</button>
                                     <button class="btn btn-danger eliminar" data-id="${element.iddatasheet}">Eliminar</button>
-                                </div>
+                                </td>
                             `;
+                            numFila++;
 
-                            datoslabel.innerHTML += datosNuevos;
+                            tablaDatashet.innerHTML += nuevaTabla;
                         });
                     }else{
                         let h6Error = ``;
 
                         h6Error = `
-                        <h6 class="bg-danger">No encontramos datos</h6>
+                        <h6 class="bg-danger text-white">No encontramos datos</h6>
                         `;
-                        datoslabel.innerHTML = h6Error;
+                        $("#datasheet").innerHTML = h6Error;
                     }
                 })
                 .catch(e => {
@@ -244,7 +237,7 @@ require_once "../sidebar/sidebar.php";
                 .then(result => result.json())
                 .then(data => {
                     toast("El registro se eliminó con exito");
-                    getdatasheet(idEquipoObt);
+                    obtenerDatasheet(idEquipoObt);
                 })
                 .catch(e => {
                     console.error(e);
@@ -266,7 +259,6 @@ require_once "../sidebar/sidebar.php";
 
         }
 
-        
         function reiniciarModal(){
             varBandera = false;
             $("#clave").value = "";
@@ -301,7 +293,7 @@ require_once "../sidebar/sidebar.php";
                 .then(result => result.json())
                 .then(data => {
                     toast("Se actualizó con exito");
-                    getdatasheet(idEquipoObt);
+                    obtenerDatasheet(idEquipoObt);
                     reiniciarModal();
 
                 })
@@ -343,6 +335,34 @@ require_once "../sidebar/sidebar.php";
             });               
         }
 
+        function obtenerEquipo(idequipoIN){
+            const parametros = new FormData();
+
+            parametros.append("operacion","obtenerEquipo"),
+            parametros.append("idequipo",idequipoIN),
+
+            fetch(`../../controllers/equipo.controller.php`,{
+                method: "POST",
+                body: parametros,
+            })
+                .then(result => result.json())
+                .then(data =>{
+                    console.log(data);
+                    if(data){
+                        
+                        const url = data.imagen ? data.imagen : "noImage.jpg"; 
+
+                        $("#descripcion").innerText = data.descripcion;
+                        $("#visor1").setAttribute("src","../../images/" + url);
+                        obtenerDatasheet(data.idequipo);
+                        
+
+                    }
+                })
+                .catch(e => {
+                    console.error(e);
+                });
+        }
     
 
         $("#datasheet").addEventListener("click",(event) =>{
@@ -378,7 +398,7 @@ require_once "../sidebar/sidebar.php";
         });
 
         listar_cronograma(idEquipoObt);
-        getdatasheet(idEquipoObt);
+        obtenerEquipo(idEquipoObt);
     });
   </script>
 </body>

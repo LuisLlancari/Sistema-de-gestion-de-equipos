@@ -5,22 +5,38 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     header("Location:../../index.php");
 
 }
+$iconos = [
+
+    "Gráficos" => "fa-chart-bar",
+    "Cronográmas" => "fa-calendar",
+    "Equípos" => "fa-desktop",
+    "Usuarios" => "fa-user",
+    "Sectores" => "fa-building"
+
+];
 
 $accesos = [
     "ADMIN" =>[
-        "sectores"      => ["inicio"],
-        "cronograma"    => [],
-        "equipos"       => ["catalogo","panel"],
-        "usuario"       => ["usuario"],
-        "graficos"      => ["index"],
-        "sector"        => ["listar"],
+        "Sectores"      => ["inicio"],
+        "Cronográmas"    => [],
+        "Equípos"       => ["catalogo","panel"],
+        "Usuarios"       => ["usuario"],
+        "Gráficos"      => ["index"],
     ],
     "ASIST" =>[
-        "graficos"      => ["index"],
-        "cronograma"    => [],
-        "equipos"       => ["catalogo"]
+        "Gráficos"      => ["index"],
+        "Cronográmas"    => [],
+        "Equípos"       => ["catalogo"]
         ]
     ];
+
+    function reemplazarCadena($string){
+        
+        $tildes = ['á', 'é', 'í', 'ó', 'ú', 'Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'G'];
+        $reemplazos = ['a', 'e', 'i', 'o', 'u', 'a', 'e', 'i', 'o', 'u', 'n', 'g'];
+
+        return str_replace($tildes,$reemplazos,$string);
+    }
 ?>
 <!doctype html>
 <html lang="en">
@@ -43,14 +59,12 @@ $accesos = [
 <body id="body-pd">
   <main>
     <div class="sidenav">
-        <header class="header" id="header">
-            <div class="header_toggle"> 
-                <i class='bx bx-menu' id="header-toggle"></i>
+        <a href='#' class='nav_link cat'>SISCOMPU</a>
+        <header class="header"id="header">
+            <div class="centered-span">
+                <span class="text-uppercase"><?=$_SESSION["apellidos"]?> - </span><span class="center-span"><?=$_SESSION["nombres"]?> - </span> <span id="rolobt"><?=$_SESSION["rol"]?></span> 
             </div>
-            <div class="">
-                <span class="text-uppercase text start"><?=$_SESSION["apellidos"]?>,</span> <span><?=$_SESSION["nombres"]?> -</span><span id="rolobt"><?=$_SESSION["rol"]?></span> 
-            </div>
-            <div class="header_img"> 
+            <div class="header_img centered-img"> 
                 
                 <?php
                     echo "<img src='../../images/".$_SESSION["avatar"]."' alt=''>";
@@ -61,23 +75,23 @@ $accesos = [
         <div class="l-navbar" id="sidebar">
             <nav class="nav">
                 <div>
-                    <a href="#" class="nav_logo"><span class="nav_logo-name">SISCOMPU</span></a>
                     <div class="nav_list" id="navlist"> 
-                    <a href="#about"><p></p>About</a>
-                    
                     <?php
                     $categorias = $accesos[$_SESSION["rol"]];
                     foreach ($categorias as $categoria => $subcategoria) {
+
+                        $icono = $iconos[$categoria];
+                        $cadena = reemplazarCadena(strtolower($categoria));
             
-                        if($categoria != "equipos" && $categoria != "graficos" && $categoria != "usuario" && $categoria != "sector"){
+                        if($categoria != "Equípos" && $categoria != "Gráficos" && $categoria != "Usuarios" && $categoria != "Sectores" && $categoria != "Cronográmas"){
                             echo "
-                                <a href='../{$categoria}/{$categoria}.php' class='nav_link cat'><span class='nav_name'>{$categoria}</span></a>
+                                <a href='../{$cadena}/{$cadena}.php' class='nav_link cat'></span>{$categoria}</a>
                             "; 
                         }
 
-                        if($categoria == "equipos" || $categoria == "graficos" || $categoria == "usuario" || $categoria == "sector"){
+                        if($categoria == "Equípos" || $categoria == "Gráficos" || $categoria == "Usuarios" || $categoria == "Sectores" || $categoria != "Cronográmas"){
                             echo "
-                                <a type ='button' href='#' class='dropdown-btn'>$categoria<i class='fa fa-caret-down'></i></span></a>
+                                <a type ='button' href='#' class='dropdown-btn'><i class='fas {$icono}'></i> $categoria<i class='fa fa-caret-down'></i></span></a>
                             ";
                         }                             
                 
@@ -90,7 +104,7 @@ $accesos = [
                     
                                 echo "
                                 <li>
-                                    <a href='../{$categoria}/{$item}.php' class='nav_link'><span class='nav_name'>{$item}</span></a> 
+                                    <a href='../{$cadena}/{$item}.php' class='nav_link'><span class='nav_name'>{$item}</span></a> 
                                 </li>
                                 ";
                             }
@@ -105,8 +119,10 @@ $accesos = [
                     }
                 ?>
             </div>
+        </div>
+        <div class="mt-4">
+            <a href="../../controllers/usuario.controller.php?operacion=destroy" class="nav_link"> <span class="nav_name">SignOut</span></a>
         </div> 
-        <a href="../../controllers/usuario.controller.php?operacion=destroy" class="nav_link"> <span class="nav_name">SignOut</span></a>
     </nav>
     <!--Container Main start-->
   </div>
