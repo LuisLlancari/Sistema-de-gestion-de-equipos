@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-11-2023 a las 17:11:56
+-- Tiempo de generación: 16-11-2023 a las 18:09:48
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -133,6 +133,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_listar_categorias` ()   BEGIN
     WHERE inactive_at IS NULL;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_listar_MANsectores` ()   BEGIN
+	SELECT MANSEC.idmantenimiento_sector,
+    SEC.sector,
+	CAT.categoria,
+    EQUI.numero_serie,
+    USU.nombres,
+    MANSEC.fecha_inicio,
+	MANSEC.fecha_fin
+    FROM MAN_sectores MANSEC
+    INNER JOIN sectores SEC ON SEC.idsector = MANSEC.idsector
+	INNER JOIN equipos EQUI ON EQUI.idequipo = MANSEC.idequipo
+	INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
+	INNER JOIN usuarios USU ON USU.idusuario = MANSEC.idusuario
+    WHERE MANSEC.inactive_at IS NULL;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_listar_marca` ()   BEGIN
 	SELECT idmarca, marca
     FROM marcas
@@ -190,7 +206,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_generar_clave` (IN `_i
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_listar` ()   BEGIN
-	SELECT * FROM usuarios;
+	SELECT idusuario, nombres, apellidos, rol, email, avatar FROM usuarios
+		WHERE inactive_at IS NULL;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_login` (IN `_email` VARCHAR(60))   BEGIN
@@ -333,8 +350,15 @@ CREATE TABLE `equipos` (
 --
 
 INSERT INTO `equipos` (`idequipo`, `idcategoria`, `idmarca`, `idusuario`, `modelo_equipo`, `numero_serie`, `imagen`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 1, 1, 1, 'nuevo', 'nuevo', 'f36dade7cc7f251960df234c44bb2d56f2ecea72.jpg', '2023-11-15', NULL, NULL),
-(3, 2, 2, 1, 'nuevo', '11111', '2e24dec4e98990008125451d5bd8e92f0b1dfb67.jpg', '2023-11-15', '2023-11-15', NULL);
+(1, 2, 2, 2, '0', '0', '111111111', '2023-11-15', '2023-11-15', NULL),
+(3, 2, 2, 2, 'nuevo', '11112', 'b2eb0e3b4bc49bfa0ed33f466c026b6ad1e07c99.jpg', '2023-11-15', '2023-11-15', NULL),
+(5, 2, 2, 1, 'nuevo', '4564', 'efc9337a71a1b923b4a4517c1319821f8cab39da.jpg', '2023-11-15', NULL, NULL),
+(6, 2, 2, 1, 'modelo', '789456', 'c4c7b0dbe3ea6d59c6f399de8e99c0ed10cafec0.jpg', '2023-11-15', NULL, NULL),
+(7, 2, 2, 1, 'NUEVA EPSON', '111111', '5cfb7d57dfce6feb61a7588d21f4dae3872986cf.jpg', '2023-11-15', '2023-11-15', NULL),
+(8, 1, 1, 2, 'MODELO 3', '963852741', '1e8a54c2a4987cf8cd6a3a2336c2cece80b26a34.jpg', '2023-11-15', NULL, NULL),
+(9, 2, 2, 1, 'mdelo 3 ', 'modelo 3 ', '3d88505c1f2d9944c66a892af24c98e83480618f.jpg', '2023-11-15', NULL, NULL),
+(11, 2, 2, 1, 'mdelo 3 ', 'modelo 5', 'cb22b3ff2381eaa9cdf77f66b015b47a67a57c3c.jpg', '2023-11-15', NULL, NULL),
+(13, 1, 1, 2, 'mdeo de thunder', '74185245', '0dc641f198baf8a03d49f1b7c8b679e6b9b1000d.jpg', '2023-11-15', '2023-11-15', NULL);
 
 -- --------------------------------------------------------
 
@@ -382,9 +406,32 @@ INSERT INTO `marcas` (`idmarca`, `marca`, `create_at`, `update_at`, `inactive_at
 
 CREATE TABLE `sectores` (
   `idsector` int(11) NOT NULL,
+  `sector` varchar(45) NOT NULL,
+  `create_at` date NOT NULL DEFAULT current_timestamp(),
+  `update_at` date DEFAULT NULL,
+  `inactive_at` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `sectores`
+--
+
+INSERT INTO `sectores` (`idsector`, `sector`, `create_at`, `update_at`, `inactive_at`) VALUES
+(1, 'psicología', '2023-11-15', NULL, NULL),
+(2, 'secretaría', '2023-11-15', NULL, NULL),
+(3, 'aula de profesores', '2023-11-15', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sectores_detalle`
+--
+
+CREATE TABLE `sectores_detalle` (
+  `idmantenimiento_sector` int(11) NOT NULL,
+  `idsector` int(11) NOT NULL,
   `idequipo` int(11) NOT NULL,
   `idusuario` int(11) NOT NULL,
-  `nombre` varchar(45) NOT NULL,
   `fecha_inicio` date NOT NULL,
   `fecha_fin` date DEFAULT NULL,
   `create_at` date NOT NULL DEFAULT current_timestamp(),
@@ -417,7 +464,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`idusuario`, `nombres`, `apellidos`, `rol`, `claveacceso`, `email`, `avatar`, `codigo`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 'Adrianita', 'Durand Buenamarca', 'ADMIN', '$2y$10$75lA.B0Xsqf12p96E/myo.MJG3EylGhH92ENeFKMcQ2Ysjk//FmHm', 'adriana@gmail.com', '452cac3b55a86acf6d87907b0608670de2788d3b.jpg', NULL, '2023-11-09', '2023-11-15', NULL);
+(1, 'Adrianita', 'Durand Buenamarca', 'ADMIN', '$2y$10$75lA.B0Xsqf12p96E/myo.MJG3EylGhH92ENeFKMcQ2Ysjk//FmHm', 'adriana@gmail.com', '452cac3b55a86acf6d87907b0608670de2788d3b.jpg', NULL, '2023-11-09', '2023-11-15', NULL),
+(2, 'Lucas Alfredo', 'Atuncar valerio', 'ADMIN', '$2y$10$t9Pl8P6iY7RtcBLK20fkL.hNO4eOwvD2gGHlaw6f.P8AOvs3XY2Vq', 'lucasatuncar1@gmail.com', '9a778ded0bbc5e59ec3d35dff25d7aeb561a51fa.jpg', NULL, '2023-11-15', '2023-11-15', NULL);
 
 -- --------------------------------------------------------
 
@@ -524,7 +572,14 @@ ALTER TABLE `marcas`
 -- Indices de la tabla `sectores`
 --
 ALTER TABLE `sectores`
-  ADD PRIMARY KEY (`idsector`),
+  ADD PRIMARY KEY (`idsector`);
+
+--
+-- Indices de la tabla `sectores_detalle`
+--
+ALTER TABLE `sectores_detalle`
+  ADD PRIMARY KEY (`idmantenimiento_sector`),
+  ADD KEY `fk_idsector_sect` (`idsector`),
   ADD KEY `fk_idequipo_sect` (`idequipo`),
   ADD KEY `fk_idusuario_sect` (`idusuario`);
 
@@ -555,13 +610,13 @@ ALTER TABLE `cronogramas`
 -- AUTO_INCREMENT de la tabla `datasheet`
 --
 ALTER TABLE `datasheet`
-  MODIFY `iddatasheet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `iddatasheet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `equipos`
 --
 ALTER TABLE `equipos`
-  MODIFY `idequipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idequipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `mantenimiento`
@@ -579,13 +634,19 @@ ALTER TABLE `marcas`
 -- AUTO_INCREMENT de la tabla `sectores`
 --
 ALTER TABLE `sectores`
-  MODIFY `idsector` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idsector` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `sectores_detalle`
+--
+ALTER TABLE `sectores_detalle`
+  MODIFY `idmantenimiento_sector` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
@@ -619,10 +680,11 @@ ALTER TABLE `mantenimiento`
   ADD CONSTRAINT `fk_idusuario_man` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);
 
 --
--- Filtros para la tabla `sectores`
+-- Filtros para la tabla `sectores_detalle`
 --
-ALTER TABLE `sectores`
+ALTER TABLE `sectores_detalle`
   ADD CONSTRAINT `fk_idequipo_sect` FOREIGN KEY (`idequipo`) REFERENCES `equipos` (`idequipo`),
+  ADD CONSTRAINT `fk_idsector_sect` FOREIGN KEY (`idsector`) REFERENCES `sectores` (`idsector`),
   ADD CONSTRAINT `fk_idusuario_sect` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);
 COMMIT;
 

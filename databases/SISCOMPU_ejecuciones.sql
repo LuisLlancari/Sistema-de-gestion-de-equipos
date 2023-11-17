@@ -9,19 +9,23 @@ USE SISCOMPU;
 UPDATE usuarios SET
 	claveacceso = '$2y$10$75lA.B0Xsqf12p96E/myo.MJG3EylGhH92ENeFKMcQ2Ysjk//FmHm'
 	WHERE idusuario = 1;
+    UPDATE usuarios SET
+	rol = 'ADMIN';
 select * from usuarios;
 CALL spu_usuarios_login('adriana@gmail.com');
 CALL spu_usuarios_registrar('Adriana', 'Durand Buenamarca', 'Administrador', 'SENATI123', 'adriana@gmail.com', NULL);
-CALL spu_usuarios_registrar('Adriana', 'Durand Buenamarca', 'Administrador', 'SENATI123', 'adriana@gmail.com', NULL);
 CALL spu_usuarios_listar();
 -- EQUIPOS
-CALL spu_equipos_registrar(2, 1, 1, 'Equipo Nuevo Modelo', 'JSYEKE-0928200', NULL);
+CALL spu_equipos_registrar(1, 1, 1,'descripcion1', 'Equipo Nuevo Modelo', 'J11111112', NULL,'');
 CALL spu_equipos_modificar(1,2,2,2,'0','0','111111111');
 CALL spu_equipos_listar();
+CALL spu_equipos_obtener(1);
+CALL spu_equipos_listar_categoria();
+
 insert into equipos(idcategoria, idmarca, idusuario, modelo_equipo, numero_serie, imagen)
 VALUES 
-	(1,2,1,'ALl ON ONE','9876521',null),
-	(1,1,2,'Monitor 4k','9876ds521',null);
+	(1,1,1,'ALl ON ONE','9876521',null),
+	(1,1,1,'Monitor 4k','9876ds521',null);
 
 -- CATEGORIAS
 insert into categorias(categoria) values("Pantallas"),("Ordenadores");
@@ -34,14 +38,14 @@ insert into marcas(marca) values("Asus"),("lenovo");
 CALL spu_listar_marca;
 CALL spu_insertar_marca("SONY");
 CALL spu_insertar_marca("EPSON");
-<<<<<<< HEAD
+
 
 -- MANTENIMIENTO
 select * from mantenimiento;
-=======
+
 select * from sectores;
-CALL spu_insertar_sectores(1,1,'Laboratorio', '2023-12-02', NULL);
->>>>>>> RAMA-Adriana
+CALL spu_insertar_sectores(3,1,'Laboratorio', '2023-12-02', NULL);
+
 CALL spu_mantenimiento_registrar(1, 1, 'Restauración del sistema; Formateo exitoso');
 CALL spu_mantenimiento_listar;
 CALL spu_mantenimiento_modificar(1, 1, 1, 'Modificación del Mantenimiento II');
@@ -87,6 +91,10 @@ VALUES
 -- DATASHEET
 UPDATE datasheet SET
 	inactive_at = null;
+call spu_datasheet_registrar(1,'color','MORADO');
+update datasheet set inactive_at = null;
+select * FROM datasheet;
+update datasheet set auto_increment = 1;
 
 -- SECTORES
 	INSERT INTO sectores (sector)values('psicología'),('secretaría'),('aula de profesores');

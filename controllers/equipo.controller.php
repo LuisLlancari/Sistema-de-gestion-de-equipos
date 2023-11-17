@@ -34,9 +34,11 @@ if(isset($_POST['operacion'])){
                 "idcategoria"   => $_POST['idcategoria'],
                 "idmarca"       => $_POST['idmarca'],
                 "idusuario"     => $_SESSION['idusuario'],
+                "descripcion"   => filtrar($_POST['descripcion']),
                 "modelo_equipo" => filtrar($_POST['modelo_equipo']),
                 "numero_serie"  => filtrar($_POST['numero_serie']),
-                "imagen"        =>  $nombreImagen 
+                "imagen"        =>  $nombreImagen, 
+                "estado"        =>  $_['estado'] 
             ];
 
             if(move_uploaded_file($_FILES['imagen']['tmp_name'], "../images/" . $nombreImagen)){
@@ -59,9 +61,11 @@ if(isset($_POST['operacion'])){
                 "idcategoria"   => $_POST['idcategoria'],
                 "idmarca"       => $_POST['idmarca'],
                 "idusuario"     => $_SESSION['idusuario'],
+                "descripcion"   => filtrar($_POST['descripcion']),
                 "modelo_equipo" => filtrar($_POST['modelo_equipo']),
                 "numero_serie"  => filtrar($_POST['numero_serie']),
-                "imagen"        => $nombreImagen
+                "imagen"        =>  $nombreImagen, 
+                "estado"        =>  $_['estado'] 
             ];
 
             
@@ -72,14 +76,14 @@ if(isset($_POST['operacion'])){
             echo json_encode($equipo->modificar($datosEnviar));
             break;
 
-        case 'getEquipo' :
+        case 'obtenerEquipo' :
 
             $datosEnviar = ["idequipo" => $_POST['idequipo']];
 
             echo json_encode($equipo->getEquipo($datosEnviar));
             break;
 
-        case 'getEquipoCat' :
+        case 'otenerEquipoCat' :
 
             $datosEnviar = ["idcategoria" => $_POST['idcategoria']];
     

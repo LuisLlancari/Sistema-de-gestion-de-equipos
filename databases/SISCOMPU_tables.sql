@@ -46,12 +46,14 @@ CREATE TABLE equipos
 		idcategoria			INT 			NOT NULL,
         idmarca				INT 			NOT NULL,
         idusuario			INT 			NOT NULL,
+		descripcion			VARCHAR(45)		NOT NULL,
         modelo_equipo		VARCHAR(45) 	NOT NULL,
         numero_serie 		VARCHAR(45) 	NOT NULL,
         imagen				VARCHAR(200)	NULL,
-		create_at		DATE			NOT NULL DEFAULT NOW(),
-		update_at		DATE			NULL,
-		inactive_at		DATE			NULL,
+        estado				CHAR(1)			NOT NULL DEFAULT '1',
+		create_at			DATE			NOT NULL DEFAULT NOW(),
+		update_at			DATE			NULL,
+		inactive_at			DATE			NULL,
         CONSTRAINT fk_idcategoria_prd	FOREIGN KEY(idcategoria) REFERENCES categorias(idcategoria),
         CONSTRAINT fk_idmarca_prd 		FOREIGN KEY(idmarca) 	 REFERENCES marcas(idmarca),
         CONSTRAINT fk_idusuario_prd 	FOREIGN KEY(idusuario) 	 REFERENCES usuarios(idusuario),
@@ -68,35 +70,7 @@ CREATE TABLE datasheet
 	create_at			DATE			NOT NULL DEFAULT NOW(),
 	update_at			DATE			NULL,
 	inactive_at			DATE			NULL,
-    CONSTRAINT fk_idequipo_dat 	FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo),
-    CONSTRAINT uk_idequipoclave UNIQUE	(idequipo,clave)
-)ENGINE = INNODB;
-
-DROP TABLE IF EXISTS sectores;
-CREATE TABLE sectores
-(
-	idsector			INT PRIMARY KEY AUTO_INCREMENT,
-	sector				VARCHAR(45)		NOT NULL,
-	create_at			DATE			NOT NULL DEFAULT NOW(),
-	update_at			DATE			NULL,
-	inactive_at			DATE			NULL
-)ENGINE = INNODB;
-
-DROP TABLE IF EXISTS MAN_sectores;
-CREATE TABLE MAN_sectores
-(
-	idmantenimiento_sector			INT PRIMARY KEY AUTO_INCREMENT,
-    idsector						INT 	NOT NULL,
-    idequipo						INT 	NOT NULL,
-    idusuario						INT		NOT NULL,
-    fecha_inicio					DATE	NOT NULL,
-    fecha_fin						DATE 	NULL,
-	create_at						DATE	NOT NULL DEFAULT NOW(),
-	update_at						DATE	NULL,
-	inactive_at						DATE	NULL,
-	CONSTRAINT fk_idsector_sect 	FOREIGN KEY(idsector)  REFERENCES sectores(idsector),
-	CONSTRAINT fk_idequipo_sect 	FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo),
-	CONSTRAINT fk_idusuario_sect FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
+    CONSTRAINT fk_idequipo_dat 	FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo)
 )ENGINE = INNODB;
 
 DROP TABLE IF EXISTS cronogramas;
@@ -138,8 +112,8 @@ CREATE TABLE sectores
 	inactive_at			DATE			NULL
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS MAN_sectores;
-CREATE TABLE MAN_sectores
+DROP TABLE IF EXISTS sectores_detalle;
+CREATE TABLE sectores_detalle
 (
 	idmantenimiento_sector			INT PRIMARY KEY AUTO_INCREMENT,
     idsector						INT 	NOT NULL,

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-11-2023 a las 23:29:46
+-- Tiempo de generación: 17-11-2023 a las 10:15:04
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -52,6 +52,42 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_cronogramas_listar` ()   BEGIN
 		cro.inactive_at IS NULL;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_cronogramas_listar_id` (IN `_idequipo` INT)   BEGIN
+	SELECT
+		cro.idcronograma,
+        equ.modelo_equipo,
+        equ.numero_serie,
+        cro.tipo_mantenimiento,
+        cro.estado,
+        cro.fecha_programada
+    FROM cronogramas as cro
+    INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+    WHERE
+		cro.idequipo =_idequipo AND cro.inactive_at IS NULL;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_cronogramas_modificar` (IN `_idcronograma` INT, IN `_idequipo` INT, IN `_tipo_mantenimiento` VARCHAR(45), IN `_estado` VARCHAR(10), IN `_fecha_programada` DATETIME)   BEGIN
+	UPDATE cronogramas SET
+		idequipo 			= _idequipo,			
+		tipo_mantenimiento 	= _tipo_mantenimiento,
+		estado 				= _estado,
+		fecha_programada 	=_fecha_programada
+	WHERE
+		idcronograma = _idcronograma;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_cronogramas_registrar` (IN `_idequipo` INT, IN `_tipo_mantenimiento` VARCHAR(45), IN `_estado` VARCHAR(10), IN `_fecha_programada` DATETIME)   BEGIN
+	INSERT INTO cronogramas
+		(idequipo,tipo_mantenimiento,estado,fecha_programada)
+		VALUES
+        (_idequipo,_tipo_mantenimiento,_estado,_fecha_programada);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_cronograma_eliminar` (IN `_idcronograma` INT)   BEGIN
+	UPDATE cronogramas SET
+		inactive_at = now();
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_datasheet_eliminar` (IN `_iddatasheet` INT)   BEGIN
 	delete from datasheet
 	WHERE
@@ -84,7 +120,6 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_equipos_listar` ()   BEGIN
 	SELECT * FROM vws_equipos;
-	SELECT * FROM vws_equipos;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_equipos_listar_categoria` (IN `_idcategoria` INT)   BEGIN
@@ -97,26 +132,34 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_equipos_listar_categoria` (IN `
 	END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_equipos_modificar` (IN `_idequipo` INT, IN `_idcategoria` INT, IN `_idmarca` INT, IN `_idusuario` INT, IN `_modelo_equipo` VARCHAR(45), IN `_numero_serie` VARCHAR(45), IN `_imagen` VARCHAR(200))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_equipos_modificar` (IN `_idequipo` INT, IN `_idcategoria` INT, IN `_idmarca` INT, IN `_idusuario` INT, IN `_descripcion` INT, IN `_modelo_equipo` VARCHAR(45), IN `_numero_serie` VARCHAR(45), IN `_imagen` VARCHAR(200), IN `_estado` CHAR(1))   BEGIN
 
 	UPDATE equipos SET
 		idcategoria 	= _idcategoria,
 		idmarca			= _idmarca,
 		idusuario		= _idusuario,
+        descripcion		= _descripcion,
 		modelo_equipo	= _modelo_equipo,
 		numero_serie	= _numero_serie,
 		imagen			= _imagen,
+        estado			= _estado,
         update_at       = now()
 
 	WHERE 
 		idequipo = _idequipo;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_equipos_registrar` (IN `_idcategoria` INT, IN `_idmarca` INT, IN `_idusuario` INT, IN `_modelo_equipo` VARCHAR(45), IN `_numero_serie` VARCHAR(45), IN `_imagen` VARCHAR(200))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_equipos_obtener` (IN `_idequipo` INT)   BEGIN
+	SELECT * FROM vws_equipos
+	WHERE
+		idequipo = _idequipo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_equipos_registrar` (IN `_idcategoria` INT, IN `_idmarca` INT, IN `_idusuario` INT, IN `_descripcion` VARCHAR(45), IN `_modelo_equipo` VARCHAR(45), IN `_numero_serie` VARCHAR(45), IN `_imagen` VARCHAR(200), IN `_estado` CHAR(1))   BEGIN
 	INSERT INTO equipos
-    (idcategoria, idmarca, idusuario, modelo_equipo, numero_serie, imagen)
+    (idcategoria, idmarca, idusuario, descripcion, modelo_equipo, numero_serie, imagen, estado)
     VALUES
-    (_idcategoria, _idmarca, _idusuario, _modelo_equipo, _numero_serie, NULLIF(_imagen, ''));
+    (_idcategoria, _idmarca, _idusuario, _descripcion, _modelo_equipo, _numero_serie, NULLIF(_imagen, ''), _estado);
 	SELECT @@last_insert_id 'idequipo';
 END$$
 
@@ -125,6 +168,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_insertar_marca` (IN `_marca` VA
     (marca)
     VALUES 
     (_marca);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_insertar_sectores` (IN `_idsector` INT, IN `_sector` VARCHAR(45))   BEGIN
+	INSERT INTO sectores
+    (idsector,sector)
+    VALUES 
+    (_idsector,_sector);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_listar_categorias` ()   BEGIN
@@ -149,10 +199,35 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_listar_MANsectores` ()   BEGIN
     WHERE MANSEC.inactive_at IS NULL;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_listar_mantenimiento_porID` (IN `_idmantenimiento` INT)   BEGIN
+    SELECT 
+        idmantenimiento,
+        idusuario,
+        idcronograma,
+        descripcion,
+        create_at,
+        update_at,
+        inactive_at
+    FROM mantenimiento
+    WHERE idmantenimiento = _idmantenimiento;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_listar_marca` ()   BEGIN
 	SELECT idmarca, marca
     FROM marcas
     WHERE inactive_at IS NULL;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_listar_sectores` ()   BEGIN
+	SELECT idsector, sector
+    FROM sectores
+    WHERE inactive_at IS NULL;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_MANsector_eliminar` (IN `_idmantenimiento_sector` INT)   BEGIN 
+	UPDATE MAN_sectores
+    SET inactive_at = NOW()
+		WHERE idmantenimiento_sector = _idmantenimiento_sector;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_mantenimiento_eliminar` (IN `_idmantenimiento` INT)   BEGIN
@@ -175,26 +250,26 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_mantenimiento_listar` ()   BEGI
 		man.inactive_at IS NULL;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_mantenimiento_modificar` (IN `_idmantenmimiento` INT, IN `_idusuario` INT, IN `_idcronograma` INT, IN `_descripcion` VARCHAR(300))   BEGIN
+	UPDATE mantenimiento SET
+		idusuario	 = _idusuario,
+		idcronograma =_idcronograma,
+		descripcion  =_descripcion		
+	WHERE
+		idmantenimiento = _idmantenmimiento	;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_mantenimiento_registrar` (IN `_idusuario` INT, IN `_idcronograma` INT, IN `_descripcion` VARCHAR(300))   BEGIN
-	INSERT INTO matenimiento 
+	INSERT INTO mantenimiento 
 		(idusuario,idcronograma,descripcion)
         VALUES
         (_idusuario,_idcronograma,_descripcion);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_matenimiento_listar` ()   BEGIN
-	SELECT
-		man.idusuario,
-        usu.
-        cro.tipo_mantenimiento,
-        equ.numero_serie,
-        man.descripcion
-    FROM mantenimiento as man
-    INNER JOIN usuarios as usu on usu.idusuario = man.idusuario
-    INNER JOIN cronograma as cro ON cro.idcronograma = man.idcronograma
-    INNER JOIN equipos as equ on equ.idequipo = cro.idequipo 
-    WHERE
-		man.inactie_at IS NULL;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_eliminar` (IN `_idusuario` INT)   BEGIN 
+	UPDATE usuarios
+    SET inactive_at = NOW()
+		WHERE idusuario = _idusuario;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_generar_clave` (IN `_idusuario` INT, IN `_codigo` CHAR(6))   BEGIN
@@ -223,14 +298,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_login` (IN `_email` VA
     WHERE USU.email = _email AND USU.inactive_at IS NULL;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_obtener` (IN `_idusuario` INT)   BEGIN
+	SELECT * FROM usuarios
+	WHERE 
+		idusuario = _idusuario;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_obtener_id` (IN `_idusuario` INT)   BEGIN
 	SELECT idusuario, apellidos, nombres, rol, email, avatar FROM usuarios
 		WHERE idusuario = _idusuario AND inactive_at IS NULL;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_recuperar` (IN `_email` VARCHAR(60))   BEGIN
-	SELECT idusuario, email
-		FROM usuarios WHERE email = _email AND inactive_at IS NULL;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_usuarios_registrar` (IN `_nombres` VARCHAR(40), IN `_apellidos` VARCHAR(45), IN `_rol` VARCHAR(20), IN `_claveacceso` VARCHAR(60), IN `_email` VARCHAR(60), IN `_avatar` VARCHAR(200))   BEGIN
@@ -283,8 +359,10 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`idcategoria`, `categoria`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 'Laptops', '2023-11-15', NULL, NULL),
-(2, 'Computadoras', '2023-11-15', NULL, NULL);
+(1, 'Pantallas', '2023-11-16', NULL, NULL),
+(2, 'Ordenadores', '2023-11-16', NULL, NULL),
+(3, 'Computadoras', '2023-11-16', NULL, NULL),
+(4, 'Laptops', '2023-11-16', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -324,7 +402,8 @@ CREATE TABLE `datasheet` (
 --
 
 INSERT INTO `datasheet` (`iddatasheet`, `idequipo`, `clave`, `valor`, `create_at`, `update_at`, `inactive_at`) VALUES
-(3, 1, 'color', 'marron\r\n', '2023-11-15', NULL, NULL);
+(7, 1, 'DESCRIPCIÓN', '120', '2023-11-17', '2023-11-17', NULL),
+(8, 1, 'color', 'gris', '2023-11-17', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -337,9 +416,11 @@ CREATE TABLE `equipos` (
   `idcategoria` int(11) NOT NULL,
   `idmarca` int(11) NOT NULL,
   `idusuario` int(11) NOT NULL,
+  `descripcion` varchar(45) NOT NULL,
   `modelo_equipo` varchar(45) NOT NULL,
   `numero_serie` varchar(45) NOT NULL,
   `imagen` varchar(200) DEFAULT NULL,
+  `estado` char(1) NOT NULL DEFAULT '1',
   `create_at` date NOT NULL DEFAULT current_timestamp(),
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL
@@ -349,16 +430,9 @@ CREATE TABLE `equipos` (
 -- Volcado de datos para la tabla `equipos`
 --
 
-INSERT INTO `equipos` (`idequipo`, `idcategoria`, `idmarca`, `idusuario`, `modelo_equipo`, `numero_serie`, `imagen`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 2, 2, 2, '0', '0', '111111111', '2023-11-15', '2023-11-15', NULL),
-(3, 2, 2, 2, 'nuevo', '11112', 'b2eb0e3b4bc49bfa0ed33f466c026b6ad1e07c99.jpg', '2023-11-15', '2023-11-15', NULL),
-(5, 2, 2, 1, 'nuevo', '4564', 'efc9337a71a1b923b4a4517c1319821f8cab39da.jpg', '2023-11-15', NULL, NULL),
-(6, 2, 2, 1, 'modelo', '789456', 'c4c7b0dbe3ea6d59c6f399de8e99c0ed10cafec0.jpg', '2023-11-15', NULL, NULL),
-(7, 2, 2, 1, 'NUEVA EPSON', '111111', '5cfb7d57dfce6feb61a7588d21f4dae3872986cf.jpg', '2023-11-15', '2023-11-15', NULL),
-(8, 1, 1, 2, 'MODELO 3', '963852741', '1e8a54c2a4987cf8cd6a3a2336c2cece80b26a34.jpg', '2023-11-15', NULL, NULL),
-(9, 2, 2, 1, 'mdelo 3 ', 'modelo 3 ', '3d88505c1f2d9944c66a892af24c98e83480618f.jpg', '2023-11-15', NULL, NULL),
-(11, 2, 2, 1, 'mdelo 3 ', 'modelo 5', 'cb22b3ff2381eaa9cdf77f66b015b47a67a57c3c.jpg', '2023-11-15', NULL, NULL),
-(13, 1, 1, 2, 'mdeo de thunder', '74185245', '0dc641f198baf8a03d49f1b7c8b679e6b9b1000d.jpg', '2023-11-15', '2023-11-15', NULL);
+INSERT INTO `equipos` (`idequipo`, `idcategoria`, `idmarca`, `idusuario`, `descripcion`, `modelo_equipo`, `numero_serie`, `imagen`, `estado`, `create_at`, `update_at`, `inactive_at`) VALUES
+(1, 1, 1, 1, 'descripcion1', 'Equipo Nuevo Modelo', 'J11111111', NULL, '1', '2023-11-17', NULL, NULL),
+(3, 1, 1, 1, 'descripcion1', 'Equipo Nuevo Modelo', 'J11111112', NULL, '', '2023-11-17', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -379,31 +453,6 @@ CREATE TABLE `mantenimiento` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `man_sectores`
---
-
-CREATE TABLE `man_sectores` (
-  `idmantenimiento_sector` int(11) NOT NULL,
-  `idsector` int(11) NOT NULL,
-  `idequipo` int(11) NOT NULL,
-  `idusuario` int(11) NOT NULL,
-  `fecha_inicio` date NOT NULL,
-  `fecha_fin` date DEFAULT NULL,
-  `create_at` date NOT NULL DEFAULT current_timestamp(),
-  `update_at` date DEFAULT NULL,
-  `inactive_at` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `man_sectores`
---
-
-INSERT INTO `man_sectores` (`idmantenimiento_sector`, `idsector`, `idequipo`, `idusuario`, `fecha_inicio`, `fecha_fin`, `create_at`, `update_at`, `inactive_at`) VALUES
-(4, 1, 1, 1, '2023-12-12', NULL, '2023-11-15', NULL, NULL);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `marcas`
 --
 
@@ -420,8 +469,10 @@ CREATE TABLE `marcas` (
 --
 
 INSERT INTO `marcas` (`idmarca`, `marca`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 'EPSON', '2023-11-15', NULL, NULL),
-(2, 'SONY', '2023-11-15', NULL, NULL);
+(1, 'Asus', '2023-11-16', NULL, NULL),
+(2, 'lenovo', '2023-11-16', NULL, NULL),
+(3, 'SONY', '2023-11-16', NULL, NULL),
+(4, 'EPSON', '2023-11-16', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -437,14 +488,23 @@ CREATE TABLE `sectores` (
   `inactive_at` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `sectores`
+-- Estructura de tabla para la tabla `sectores_detalle`
 --
 
-INSERT INTO `sectores` (`idsector`, `sector`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 'psicología', '2023-11-15', NULL, NULL),
-(2, 'secretaría', '2023-11-15', NULL, NULL),
-(3, 'aula de profesores', '2023-11-15', NULL, NULL);
+CREATE TABLE `sectores_detalle` (
+  `idmantenimiento_sector` int(11) NOT NULL,
+  `idsector` int(11) NOT NULL,
+  `idequipo` int(11) NOT NULL,
+  `idusuario` int(11) NOT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_fin` date DEFAULT NULL,
+  `create_at` date NOT NULL DEFAULT current_timestamp(),
+  `update_at` date DEFAULT NULL,
+  `inactive_at` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -471,8 +531,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`idusuario`, `nombres`, `apellidos`, `rol`, `claveacceso`, `email`, `avatar`, `codigo`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 'Adrianita', 'Durand Buenamarca', 'ADMIN', '$2y$10$75lA.B0Xsqf12p96E/myo.MJG3EylGhH92ENeFKMcQ2Ysjk//FmHm', 'adriana@gmail.com', '452cac3b55a86acf6d87907b0608670de2788d3b.jpg', NULL, '2023-11-09', '2023-11-15', NULL),
-(2, 'Lucas Alfredo', 'Atuncar valerio', 'ADMIN', '$2y$10$t9Pl8P6iY7RtcBLK20fkL.hNO4eOwvD2gGHlaw6f.P8AOvs3XY2Vq', 'lucasatuncar1@gmail.com', '9a778ded0bbc5e59ec3d35dff25d7aeb561a51fa.jpg', NULL, '2023-11-15', '2023-11-15', NULL);
+(1, 'Adriana', 'Durand Buenamarca', 'ADMIN', '$2y$10$75lA.B0Xsqf12p96E/myo.MJG3EylGhH92ENeFKMcQ2Ysjk//FmHm', 'adriana@gmailcom', '48df68a6285bc0de5738cc91d24c275b45327294.jpg', NULL, '2023-11-16', '2023-11-16', NULL),
+(3, 'Adriana', 'Durand Buenamarca', 'Administrador', 'SENATI123', 'adriana@gmail.com', NULL, NULL, '2023-11-16', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -486,9 +546,11 @@ CREATE TABLE `vws_equipos` (
 ,`categoria` varchar(45)
 ,`idmarca` int(11)
 ,`marca` varchar(45)
+,`descripcion` varchar(45)
 ,`modelo_equipo` varchar(45)
 ,`numero_serie` varchar(45)
 ,`imagen` varchar(200)
+,`estado` varchar(13)
 ,`nombres` varchar(40)
 );
 
@@ -514,7 +576,7 @@ CREATE TABLE `vw_datasheet` (
 --
 DROP TABLE IF EXISTS `vws_equipos`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_equipos`  AS SELECT `equi`.`idequipo` AS `idequipo`, `cat`.`idcategoria` AS `idcategoria`, `cat`.`categoria` AS `categoria`, `mar`.`idmarca` AS `idmarca`, `mar`.`marca` AS `marca`, `equi`.`modelo_equipo` AS `modelo_equipo`, `equi`.`numero_serie` AS `numero_serie`, `equi`.`imagen` AS `imagen`, `usu`.`nombres` AS `nombres` FROM (((`equipos` `equi` join `categorias` `cat` on(`cat`.`idcategoria` = `equi`.`idcategoria`)) join `marcas` `mar` on(`mar`.`idmarca` = `equi`.`idmarca`)) join `usuarios` `usu` on(`usu`.`idusuario` = `equi`.`idusuario`)) WHERE `equi`.`inactive_at` is null ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_equipos`  AS SELECT `equi`.`idequipo` AS `idequipo`, `cat`.`idcategoria` AS `idcategoria`, `cat`.`categoria` AS `categoria`, `mar`.`idmarca` AS `idmarca`, `mar`.`marca` AS `marca`, `equi`.`descripcion` AS `descripcion`, `equi`.`modelo_equipo` AS `modelo_equipo`, `equi`.`numero_serie` AS `numero_serie`, `equi`.`imagen` AS `imagen`, CASE `equi`.`estado` WHEN '0' THEN 'inactivo' WHEN '1' THEN 'activo' WHEN '3' THEN 'mantenimiento' END AS `estado`, `usu`.`nombres` AS `nombres` FROM (((`equipos` `equi` join `categorias` `cat` on(`cat`.`idcategoria` = `equi`.`idcategoria`)) join `marcas` `mar` on(`mar`.`idmarca` = `equi`.`idmarca`)) join `usuarios` `usu` on(`usu`.`idusuario` = `equi`.`idusuario`)) WHERE `equi`.`inactive_at` is null ;
 
 -- --------------------------------------------------------
 
@@ -569,15 +631,6 @@ ALTER TABLE `mantenimiento`
   ADD KEY `fk_idcronograma_man` (`idcronograma`);
 
 --
--- Indices de la tabla `man_sectores`
---
-ALTER TABLE `man_sectores`
-  ADD PRIMARY KEY (`idmantenimiento_sector`),
-  ADD KEY `fk_idsector_sect` (`idsector`),
-  ADD KEY `fk_idequipo_sect` (`idequipo`),
-  ADD KEY `fk_idusuario_sect` (`idusuario`);
-
---
 -- Indices de la tabla `marcas`
 --
 ALTER TABLE `marcas`
@@ -589,6 +642,15 @@ ALTER TABLE `marcas`
 --
 ALTER TABLE `sectores`
   ADD PRIMARY KEY (`idsector`);
+
+--
+-- Indices de la tabla `sectores_detalle`
+--
+ALTER TABLE `sectores_detalle`
+  ADD PRIMARY KEY (`idmantenimiento_sector`),
+  ADD KEY `fk_idsector_sect` (`idsector`),
+  ADD KEY `fk_idequipo_sect` (`idequipo`),
+  ADD KEY `fk_idusuario_sect` (`idusuario`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -605,7 +667,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `idcategoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idcategoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `cronogramas`
@@ -617,13 +679,13 @@ ALTER TABLE `cronogramas`
 -- AUTO_INCREMENT de la tabla `datasheet`
 --
 ALTER TABLE `datasheet`
-  MODIFY `iddatasheet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `iddatasheet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `equipos`
 --
 ALTER TABLE `equipos`
-  MODIFY `idequipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `idequipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `mantenimiento`
@@ -632,28 +694,28 @@ ALTER TABLE `mantenimiento`
   MODIFY `idmantenimiento` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `man_sectores`
---
-ALTER TABLE `man_sectores`
-  MODIFY `idmantenimiento_sector` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `idmarca` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idmarca` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `sectores`
 --
 ALTER TABLE `sectores`
-  MODIFY `idsector` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idsector` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `sectores_detalle`
+--
+ALTER TABLE `sectores_detalle`
+  MODIFY `idmantenimiento_sector` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
@@ -687,9 +749,9 @@ ALTER TABLE `mantenimiento`
   ADD CONSTRAINT `fk_idusuario_man` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);
 
 --
--- Filtros para la tabla `man_sectores`
+-- Filtros para la tabla `sectores_detalle`
 --
-ALTER TABLE `man_sectores`
+ALTER TABLE `sectores_detalle`
   ADD CONSTRAINT `fk_idequipo_sect` FOREIGN KEY (`idequipo`) REFERENCES `equipos` (`idequipo`),
   ADD CONSTRAINT `fk_idsector_sect` FOREIGN KEY (`idsector`) REFERENCES `sectores` (`idsector`),
   ADD CONSTRAINT `fk_idusuario_sect` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);

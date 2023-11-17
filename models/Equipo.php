@@ -42,9 +42,11 @@ class Equipo extends Conexion{
                     $datos['idcategoria'],
                     $datos['idmarca'],
                     $datos['idusuario'],
+                    $datos['descripcion'],
                     $datos['modelo_equipo'],
                     $datos['numero_serie'],
-                    $datos['imagen']
+                    $datos['imagen'],
+                    $datos['estado'],
                 )
             );
 
@@ -67,9 +69,11 @@ class Equipo extends Conexion{
                 $datos['idcategoria'],
                 $datos['idmarca'],
                 $datos['idusuario'],
+                $datos['descripcion'],
                 $datos['modelo_equipo'],
                 $datos['numero_serie'],
-                $datos['imagen']
+                $datos['imagen'],
+                $datos['estado'],
             )
         );
 
