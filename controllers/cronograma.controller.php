@@ -21,7 +21,7 @@ if(isset($_POST['operacion'])){
 
     case 'registrar_cronograma':
         $datosEnviar = [
-          "idequipo"              => $_POST['idequipo'],
+          "equipo"              => $_POST['equipo'],
           "tipo_mantenimiento"    => $_POST['tipo_mantenimiento'],
           "estado"                => $_POST['estado'],
           "fecha_programada"      => $_POST['fecha_programada'],
@@ -31,15 +31,27 @@ if(isset($_POST['operacion'])){
       break;
       
       
-    case '':
-      
-      # code...
-      break;
-      
-    case '':
-      # code...
-      break;
+      case 'modificar_cronograma':
+        $datosEnviar = [
+          "idcronograma"          => $_POST['idcronograma'],
+          "tipo_mantenimiento"    => $_POST['tipo_mantenimiento'],
+          "estado"                => $_POST['estado'],
+          "fecha_programada"      => $_POST['fecha_programada'],
+        ];
 
+        echo json_encode($cronograma->modificar_cronograma($datosEnviar));
+      break;
+        
+      
+      case 'eliminar_cronograma':
+        $datosEnviar = ["idcronograma" => $_POST['idcronograma']];
+
+        echo json_encode($cronograma->eliminar_cronograma($datosEnviar));
+      break;
+      
+      case '':
+      # code...
+      break;
 
 
   }

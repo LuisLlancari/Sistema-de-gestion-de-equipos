@@ -370,11 +370,9 @@ BEGIN
 
 	WHERE 
 		idequipo = _idequipo;
-<<<<<<< HEAD
+
 END $$
-=======
-END$$
->>>>>>> rama-luis
+
 DELIMITER ;
 
 
@@ -382,16 +380,10 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados DATASHEET -----------------------------
 -- -------------------------------------------------------------------------------------
-<<<<<<< HEAD
+
 
 -- VISTA DATASHEET
-=======
-select * from datasheet;
 
-    
--- VISTA DATASHEET
-
->>>>>>> rama-luis
 DROP VIEW IF EXISTS vw_datasheet;
 CREATE VIEW vw_datasheet
 AS
@@ -536,16 +528,20 @@ DROP PROCEDURE IF EXISTS spu_cronogramas_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_cronogramas_registrar
 (
-	in _idequipo			INT,
+	in _numero_serie		VARCHAR(45),
     in _tipo_mantenimiento 	VARCHAR(45),
     in _estado				VARCHAR(10),
     in _fecha_programada 	DATETIME
 )
 BEGIN
+	SELECT idequipo INTO @equipoid from equipos Where numero_serie = _numero_serie;
+	
 	INSERT INTO cronogramas
 		(idequipo,tipo_mantenimiento,estado,fecha_programada)
 		VALUES
-        (_idequipo,_tipo_mantenimiento,_estado,_fecha_programada);
+        (@equipoid,_tipo_mantenimiento,_estado,_fecha_programada);
+        
+        SELECT @@last_insert_id 'idcronograma';
 END $$
 DELIMITER ;
 
@@ -554,14 +550,12 @@ DELIMITER $$
 CREATE PROCEDURE spu_cronogramas_modificar
 (
 	in _idcronograma		INT,
-	in _idequipo			INT,
     in _tipo_mantenimiento 	VARCHAR(45),
     in _estado				VARCHAR(10),
     in _fecha_programada 	DATETIME
 )
 BEGIN
 	UPDATE cronogramas SET
-		idequipo 			= _idequipo,			
 		tipo_mantenimiento 	= _tipo_mantenimiento,
 		estado 				= _estado,
 		fecha_programada 	=_fecha_programada
@@ -570,12 +564,14 @@ BEGIN
 END $$
 DELIMITER ;
 
+
 DROP PROCEDURE IF EXISTS spu_cronograma_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_cronograma_eliminar(in _idcronograma INT)
 BEGIN
 	UPDATE cronogramas SET
-		inactive_at = now();
+		inactive_at = now()
+			where idcronograma = _idcronograma;
 END $$
 DELIMITER ;
 

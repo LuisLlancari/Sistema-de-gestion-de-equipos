@@ -20,6 +20,7 @@ class Cronograma extends Conexion{
     }
   }
   
+
   public function listar_cronogramas_id($datos = []){
     try {
       $consulta = $this->conexion->prepare("CALL spu_cronogramas_listar_id(?)");
@@ -34,46 +35,43 @@ class Cronograma extends Conexion{
   }
 
 
-
-
   public function registrar_cronograma($datos = []){
     try {
       $consulta = $this->conexion->prepare("CALL spu_cronogramas_registrar(?,?,?,?)");
       $consulta->execute(array(
-        $datos['idequipo'],
+        $datos['equipo'],  //<--- se refiere al numero deserie de equipo
         $datos['tipo_mantenimiento'],
         $datos['estado'],
         $datos['fecha_programada']
       ));
-      // return $consulta->fetchAll(PDO::FETCH_ASSOC);
+      return $consulta->fetch(PDO::FETCH_ASSOC);
 
     } catch (Exception $e) {
       die($e->getMessage());
     }
   }
   
-  public function modificar_cronograma($datos = ['']){
+  public function modificar_cronograma($datos = []){
     try {
-      $consulta = $this->conexion->prepare("CALL spu_usuarios_listar()");
+      $consulta = $this->conexion->prepare("CALL spu_cronogramas_modificar(?,?,?,?)");
       $consulta->execute(array(
-        $datos =[''],
-        $datos =[''],
-        $datos =[''],
-        $datos =[''],
-        $datos =['']
+        $datos['idcronograma'],
+        $datos['tipo_mantenimiento'],
+        $datos['estado'],
+        $datos['fecha_programada']
       ));
-      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+      return $consulta->fetch(PDO::FETCH_ASSOC);
 
     } catch (Exception $e) {
       die($e->getMessage());
     }
   }
   
-  public function eliminar_cronograma(){
+  public function eliminar_cronograma($datos = []){
     try {
-      $consulta = $this->conexion->prepare("CALL spu_usuarios_listar()");
+      $consulta = $this->conexion->prepare("CALL spu_cronograma_eliminar(?)");
       $consulta->execute(array(
-        $datos['']
+        $datos['idcronograma']
       ));
       return $consulta->fetchAll(PDO::FETCH_ASSOC);
 

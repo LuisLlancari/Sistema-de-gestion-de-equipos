@@ -313,17 +313,10 @@ require_once "../sidebar/sidebar.php";
                 });
         }
 
-<<<<<<< HEAD
-        function listar_cronograma(){
-            const parametros = new FormData();
-          parametros.append("operacion","listar_cronograma_id");
-          parametros.append("idequipo",1);
-=======
         function listar_cronograma(equipoid){
           const parametros = new FormData();
           parametros.append("operacion"     ,"listar_cronograma_id");
           parametros.append("idequipo"     ,equipoid);
->>>>>>> 4cf9cbe93e56ee5fe29c77cee67bece6e30ce7c4
 
           fetch(`../../controllers/cronograma.controller.php`,{
             method: "POST",
@@ -331,18 +324,6 @@ require_once "../sidebar/sidebar.php";
           })
             .then(respuesta => respuesta.json())
             .then(datos => {
-<<<<<<< HEAD
-                console.log(datos);
-            })
-            .catch(e =>  {
-              console.error(e);
-            });             
-        }
-
-        listar_cronograma();
-
-=======
-
                // poner un if
             tabla.innerHTML = '';
             let nuevafila =``;
@@ -363,8 +344,7 @@ require_once "../sidebar/sidebar.php";
             });               
         }
 
-    
->>>>>>> 4cf9cbe93e56ee5fe29c77cee67bece6e30ce7c4
+
 
         $("#datasheet").addEventListener("click",(event) =>{
 
