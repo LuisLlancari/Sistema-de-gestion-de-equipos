@@ -7,7 +7,7 @@ if(isset($_POST['operacion'])){
 
   switch ($_POST['operacion']) {
 
-
+//--
     case 'listar_cronograma':
       echo json_encode($cronograma->listar_cronogramas());
       break;
