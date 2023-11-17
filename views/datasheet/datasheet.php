@@ -187,7 +187,7 @@ require_once "../sidebar/sidebar.php";
 
         function validarUsuario(){
 
-            if($("#rolObt").textContent == "ADMIN"){
+            if($("#rolObt").textContent !== "ADMIN"){
 
                 const botonesEditar = document.querySelectorAll(".boton-render");
                 
