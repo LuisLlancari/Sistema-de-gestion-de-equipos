@@ -38,7 +38,7 @@
         }
 
         /**
-         * Pregintar
+         * Preguntar
          */
         function mostrarPregunta(titulo, mensaje,funcion) {
             return Swal.fire({
