@@ -3,7 +3,16 @@ USE SISCOMPU;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados USUARIOS -------------------------------
 -- -------------------------------------------------------------------------------------
-
+DROP PROCEDURE IF EXISTS spu_usuarios_recuperar;
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_recuperar(IN _email VARCHAR(60))
+BEGIN
+	SELECT * FROM usuarios 
+	WHERE 
+		email = _email AND
+		inactive_at IS NULL;
+END $$
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS spu_usuarios_generar_clave;
 DELIMITER $$
@@ -329,7 +338,7 @@ AS
     CASE EQUI.estado
 		WHEN '0' THEN 'inactivo'
         WHEN '1' THEN 'activo'
-        WHEN '3' THEN 'mantenimiento'
+        WHEN '2' THEN 'mantenimiento'
 	END AS estado,
 	USU.nombres
     FROM equipos EQUI

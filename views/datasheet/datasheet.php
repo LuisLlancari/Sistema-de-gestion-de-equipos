@@ -92,7 +92,7 @@ require_once "../sidebar/sidebar.php";
                                             <th>#</th>
                                             <th>Claves</th>
                                             <th>Valores</th>
-                                            <th>Operaciónes</th>
+                                            <th id="operaciones">Operaciónes</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -195,6 +195,8 @@ require_once "../sidebar/sidebar.php";
 
                     botonEditar.style.display ="none";
                 });
+
+                $("#operaciones").classList.add("d-none");
             }
 
         }

@@ -10,25 +10,53 @@ require_once "../sidebar/sidebar.php";
         </div>
           <!-- FILTROS -->
           <div class="row">
-            <div class="col-md-2">
-              <select name="marcaS" class="form-select"id="marcaS">
-                <option value="0">Marcas</option>
-                <option value="0">Marcas</option>
-                <option value="0">Marcas</option>
-              </select>
+            <div class="col-md-4 mt-2" style="margin-left: 2rem;">    
+              <form action="" id="form-busqueda">
+                <div class="input-group">
+                  <input type="text" id="busqueda" class="form-control" placeholder="Busqueda">
+                  <button type="submit" class="btn btn-success">Buscar</button>
+                </div>
+              </form>
             </div>
-            <div class="col-md-2">
-              <select name="categoriasS" class="form-select" id="categoriasS">
-                <option value="0">Categorias</option>
-                <option value="0">Categorias</option>
-                <option value="0">Categorias</option>
-              </select>
+            <!-- offset-md-$ genera un espacio entre columnas -->
+            <div class="col-md-2 offset-md-3 mt-2">
+              <div>
+                <select name="marcaS" class="form-select"id="marcaFiltro">
+                  <option value="0">Marcas</option>
+                  <!-- RENDER MARCAS -->
+                </select>
+              </div>
             </div>
-            <div class="col-md-6">
-              <div class="input-group"></div>
+            <div class="col-md-2 mt-2">
+              <select name="categoriasS" class="form-select" id="categoriasFiltro">
+                <option value="0">Categorias</option>
+                <!-- RENDER CATEGORIAS -->
+              </select>
             </div>
           </div>
-  
+
+          <!-- RESUTADOS -->
+          <div class="row">
+            <div class="col-md-2 mt-2 mb-2" style="margin-left: 2rem;">
+              <div class="input-group">
+                <span class="input-group-text">Marcas:</span>
+                <input type="text" class="form-control" id="marcasCal" readonly>
+              </div>
+            </div>
+            <div class="col-md-2 mt-2 mb-2">
+              <div class="input-group">
+                <span class="input-group-text">Modelos:</span>
+                <input type="text" class="form-control" id="modelosCal" readonly>
+              </div>
+            </div>
+            <div class="col-md-2 mt-2 mb-2">
+              <div class="input-group">
+                <span class="input-group-text">Categorias:</span>
+                <input type="text" class="form-control" id="categoriasCal" readonly>
+              </div>
+            </div>
+          </div>
+
           <!-- CATALOGO -->
           <div class="" style="background-color: #DEE3E3;">
 
@@ -68,6 +96,86 @@ require_once "../sidebar/sidebar.php";
 
       const cardEquipo = $("#card");
 
+      let Equipos = null;  //variable que alacena todos los equipos
+
+      let EqMarcasF = null; //varibale que almacena los equipos filtrados por marcas
+
+      let EqCategoriaF = null; //varibale que almacena los equipos filtrados por categorias y marcas
+
+      let marcaSeleccionada = $("#marcaFiltro").value;
+
+      /* let categoriaSeleccionada = $("#categoriasFiltro").value; */
+
+      function calcularCantidad(equipos){
+
+        const Marcas      = new Set(equipos.map(equipo => equipo.marca));
+        const Modelos     = new Set(equipos.map(equipo => equipo.modelo_equipo));
+        const Categorias  = new Set(equipos.map(equipo => equipo.categoria));
+
+        const cantidadMarca       = Marcas.size;
+        const cantidadModelos     = Modelos.size;
+        const cantidadCategorias  = Categorias.size;
+
+        $("#marcasCal").value     = cantidadMarca;
+        $("#modelosCal").value    = cantidadModelos;
+        $("#categoriasCal").value = cantidadCategorias;
+      }
+
+      function obtenerMarcas(){
+        const parametros = new FormData();
+        parametros.append("operacion","listar");
+
+        fetch(`../../controllers/marca.controller.php`,{
+          method: "POST",
+          body: parametros
+        })
+          .then(result => result.json())
+          .then(data => {
+
+            if(data.length > 0){
+
+              data.forEach(element => {
+                
+                const tagOption = document.createElement("option");
+
+                tagOption.innerText = element.marca;
+                tagOption.value     = element.idmarca;
+              
+              $("#marcaFiltro").appendChild(tagOption); 
+              });
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+
+      function obtenerCategorias(){
+        const parametros = new FormData();
+        parametros.append("operacion","listar");
+
+        fetch(`../../controllers/categoria.controller.php`,{
+          method: "POST",
+          body: parametros
+        })
+          .then(result => result.json())
+          .then(data => {
+
+            if(data.length > 0){
+
+              data.forEach(element => {
+                
+                const tagOption = document.createElement("option");
+
+                tagOption.innerText = element.categoria;
+                tagOption.value     = element.idcategoria;
+              
+              $("#categoriasFiltro").appendChild(tagOption); 
+              });
+            }
+        });  
+      }
+
       function listarEquipos(){
         
         const parametros = new FormData();
@@ -82,7 +190,11 @@ require_once "../sidebar/sidebar.php";
           .then(data =>{
             console.log(data);
 
-            if(data){
+            Equipos = data;
+
+            calcularCantidad(Equipos);
+
+            if(Equipos){
 
               cardEquipo.innerHTML ="";
 
@@ -140,6 +252,72 @@ require_once "../sidebar/sidebar.php";
           });
       }
 
+      function filtrarPorMarca(idmarcaIN){
+
+        if( $("#marcaFiltro").value == 0){
+          listarEquipos();
+        }else{
+          EqMarcasF = Equipos.filter(equipo => equipo.idmarca == idmarcaIN);
+  
+          console.log(EqMarcasF);
+          calcularCantidad(EqMarcasF);
+        }
+      }
+
+      function filtrarPorCategoria(idcategoriaIN){
+        EqCategoriaF = Equipos.filter(equipo =>equipo.idcategoria == idcategoriaIN);
+
+        console.log(EqCategoriaF);
+        calcularCantidad(EqMarcasF);
+      }
+
+      function filtroDoble(listaFiltrada,idcategoriaIN){
+
+        if($("#categoriasFiltro").value == 0){
+          listarEquipos();
+        }else{
+
+          if($("#marcaFiltro").value == 0){
+            filtrarPorCategoria(idcategoriaIN)
+          }else{
+            EqCategoriaF = listaFiltrada.filter(lista => lista.idcategoria == idcategoriaIN);
+    
+            console.log(EqCategoriaF);
+  
+            if(EqCategoriaF.length == 0){
+              console.log("no hay resultados")
+            }
+            calcularCantidad(EqCategoriaF);
+          }
+        }
+
+      }
+      
+      $("#form-busqueda").addEventListener("submit",(event) => {
+        event.preventDefault();
+        console.log("se clickeo")
+        if(Equipos.numero_serie == $("#busqueda").value){
+          listarEquipos();
+          console.log("si hay");
+        }else{
+          console.log("no hay")
+        }
+       });
+
+      $("#marcaFiltro").addEventListener("change",() =>{
+        const idmarca = $("#marcaFiltro").value;
+        filtrarPorMarca(idmarca);
+      })
+      
+      $("#categoriasFiltro").addEventListener("change",() =>{
+        const idcategoria = $("#categoriasFiltro").value;
+        filtroDoble(EqMarcasF,idcategoria);
+        
+      })
+
+      
+      obtenerCategorias();
+      obtenerMarcas();
       listarEquipos();
       
     });
