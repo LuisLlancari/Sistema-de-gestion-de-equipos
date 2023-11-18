@@ -43,19 +43,19 @@ rel="stylesheet">
                   <option value="preventivo">Preventivo</option>
                  </select>     
                 </div>
-            </div>
+              </div>
 
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="fecha" class="form-label">fecha programada</label>
-              <input type="date" class="form-control" id="fecha" required>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="fecha" class="form-label">fecha programada</label>
+                <input type="date" class="form-control" id="fecha" required>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="hora" class="form-label">hora programada</label>
+                <input type="time" class="form-control" id="hora" required>
+              </div>
             </div>
-            
-            <div class="col-md-6 mb-3">
-              <label for="hora" class="form-label">hora programada</label>
-              <input type="time" class="form-control" id="hora" required>
-            </div>
-          </div>
             
             <div class="mb-3">
               <label for="estado" class="form-label">estado</label>
@@ -79,6 +79,36 @@ rel="stylesheet">
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-mantenimiento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h1 class="modal-title fs-5" id="titulo-modalM"></h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="descripcion"> </div>
+            <form action="" autocomplete="off" id="form-mantenimiento">
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="algo" class="form-label">fecha programada</label>
+              <input type="date" class="form-control" id="algo" required>
+            </div>
+
+          </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="agregar">Enviar</button>
+            <button type="button" class="btn btn-danger"  id="borrar">Borrar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 
 
@@ -104,6 +134,7 @@ rel="stylesheet">
       function $(id){return document.querySelector(id)};
 
       var modalregistro = new bootstrap.Modal($('#modal-cronograma'));
+      var modalmantenimiento = new bootstrap.Modal($('#modal-mantenimiento'));
       var bandera = true;
 
 
@@ -213,7 +244,10 @@ rel="stylesheet">
         })
           .then(respuesta => respuesta.json())
           .then(datos => {
-            console.log(datos);
+            $('#form-cronograma').reset();
+            modalregistro.hide();
+            listar_cronogramas();
+
           })
           .catch(e =>  {
             console.error(e);
@@ -233,7 +267,8 @@ rel="stylesheet">
         })
           .then(respuesta => respuesta.json())
           .then(datos => {
-            console.log(datos);
+            $('#form-cronograma').reset();
+
           })
           .catch(e =>  {
             console.error(e);
@@ -270,7 +305,8 @@ rel="stylesheet">
      
 
       $('#agregar').addEventListener('click', function(){
-          registrar_cronograma();
+          // registrar_cronograma();
+          modalregistro.hide();
         });
      
 
