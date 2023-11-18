@@ -12,16 +12,13 @@ if (isset($_POST['operacion'])){
         break;
 
         case 'listar_detalles_sector':
-            echo json_encode($sector->listar_detalles_sector());
-        break;     
+            $idsector = isset($_POST['idsector']) ? $_POST['idsector'] : null;
+            echo json_encode($sector->listar_detalles_sector(['idsector' => $idsector]));
+        break; 
 
         case 'registrar':
             $datosEnviar = [
-                'idequipo' => $_POST['idequipo'],
-                'idusuario' => $_POST['idusuario'],
-                'nombre' => $_POST['nombre'],
-                'fecha_inicio' => $_POST['fecha_inicio'],
-                'fecha_fin' => $_POST['fecha_fin']
+                'sector' => $_POST['sector']
             ];
 
             echo json_encode($sector->registrar($datosEnviar));

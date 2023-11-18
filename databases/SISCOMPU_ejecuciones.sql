@@ -13,7 +13,7 @@ ALTER TABLE sectores_detalle AUTO_INCREMENT 1;
 UPDATE usuarios SET
 	claveacceso = '$2y$10$75lA.B0Xsqf12p96E/myo.MJG3EylGhH92ENeFKMcQ2Ysjk//FmHm'
 	WHERE idusuario = 1;
-select * from usuarios;
+select * from sectores;
 CALL spu_usuarios_login('adriana@gmail.com');
 CALL spu_usuarios_registrar('Jose', 'Alcantara', 'ADMIN', 'SENATI123', 'jose@gmail.com', NULL);
 CALL spu_usuarios_registrar('Adriana', 'Durand Buenamarca', 'Administrador', 'SENATI123', 'adriana@gmail.com', NULL);
@@ -113,9 +113,10 @@ VALUES
 (4, 1, 1, '2023-10-16'),
 (4, 2, 3, '2023-11-20'),
 (4, 4, 1, '2023-09-06'),
-(4, 6, 4, '2023-01-20');
+(3, 6, 4, '2023-01-20');
 
 CALL spu_obtenerporID(4);
 CALL spu_listar_mantenimiento_porID(1);
 CALL spu_obtenerCNsectores();
-
+CALL spu_listar_detalleSectores(4);
+CALL spu_insertar_sector("Aula Zoom");

@@ -19,8 +19,13 @@ require_once "../../views/sidebar/sidebar.php";
       <div class="m-4">
         <h1 class="fw-bolder d-inline-block"><i class="bi bi-shop-window"></i> SECTORES</h1>
         <div class="btn-container float-end">
-          <button class="btn btn-primary rounded-circle">
+          <!-- GUARDAR -->
+          <button class="btn btn-primary rounded-circle" type="submit" id="guardar" data-bs-toggle="modal" data-bs-target="#miModal">
             <i class="bi bi-plus-circle-fill" style="font-size: 1.5em;"></i>
+          </button>
+          <!--ELIMINAR-->
+          <button class="btn btn-danger rounded-circle" id="eliminar">
+            <i class="bi bi-trash3-fill" style="font-size: 1.5em;"></i>
           </button>
         </div>
       </div>
@@ -44,6 +49,36 @@ require_once "../../views/sidebar/sidebar.php";
     </a>
   </div>
 </div>  -->
+
+    <!--MODAL-->
+<div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="miModalLabel">Agregar nuevo sector</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <!-- Contenido del modal -->
+         <!-- Contenido del modal -->
+         <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card text-center border-yellow">
+                  <img src="../../test/sector.jpg" class="card-img-top" alt="..." style="width: 100%; height: 250px;">
+                    <div class="card-body">
+                      <input type="text" class="form-control" id="nuevo_sector" required>
+                    </div>
+                </div>
+            </div>
+          </div>
+        <hr>
+        <button type="button" class="btn btn-outline-primary mx-auto">Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
@@ -84,9 +119,9 @@ require_once "../../views/sidebar/sidebar.php";
               const nuevoItem =`
                 <div class="col-md-4 mb-4">
                   <a href="../../views/sector/detalle_sector.php?sector=${element.idsector}" data-sector="${element.idsector}" class="card text-center border-yellow" style="width: 100%; cursor: pointer; text-decoration: none; color: black;">
-                    <img src="../../test/sector.jpg" class="card-img-top" alt="${element.Nombre_Sector}" style="width: 100%; height: 250px;">
+                    <img src="../../test/sector.jpg" class="card-img-top" alt="${element.Nombre_Sector}" style="width: 100%; height: 200px;">
                     <div class="card-body">
-                      <h4 class="card-title">${element.Nombre_Sector}</h4>
+                      <h3 class="card-title">${element.Nombre_Sector}</h3>
                       <p class="card-text">Cantidad: ${element.Cantidad_Guardados}</p>
                     </div>
                   </a>
