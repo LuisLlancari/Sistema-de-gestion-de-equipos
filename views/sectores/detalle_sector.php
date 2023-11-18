@@ -1,5 +1,5 @@
 <?php
-require_once "../../views/sidebar/sidebar.php";
+require_once "../sidebar/sidebar.php";
 ?>  
 
 <!doctype html>
@@ -13,9 +13,6 @@ require_once "../../views/sidebar/sidebar.php";
 <div class="container">
   <div class="row">
     <div class="col-md-12 text-center">
-      <div class="btn-sidebar toggled" id="menu-toggle">
-        <span class="fas fa-bars"></span>
-      </div>
       <div class="m-4">
         <h1 class="fw-bolder d-inline-block"><i class="bi bi-card-checklist"> </i><span id="sector"></span></h1>
       </div>
@@ -82,7 +79,8 @@ require_once "../../views/sidebar/sidebar.php";
       const tabla = document.querySelector("#tabla-detalle-sector tbody");
       const nombreSectorElemento = document.getElementById("sector");
       const sectorId = new URLSearchParams(window.location.search).get('sector');
-      nombreSectorElemento.innerText = sectorId;
+      const nombre = new URLSearchParams(window.location.search).get('nombre');
+      nombreSectorElemento.innerText = nombre;
 
       function listarDetalles(){
         const parametros = new FormData();
