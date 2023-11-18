@@ -4,6 +4,10 @@
 -- 1°: Uso DB
 USE SISCOMPU;
 
+-- LIMPIEZA
+DELETE FROM sectores_detalle;
+ALTER TABLE sectores_detalle AUTO_INCREMENT 1;
+
 -- USUARIOS
 -- Encriptando las claves : SENATI123
 UPDATE usuarios SET
@@ -13,6 +17,9 @@ UPDATE usuarios SET
 	rol = 'ADMIN';
 select * from usuarios;
 CALL spu_usuarios_login('adriana@gmail.com');
+select * from sectores;
+CALL spu_usuarios_login('adriana@gmail.com');
+CALL spu_usuarios_registrar('Jose', 'Alcantara', 'ADMIN', 'SENATI123', 'jose@gmail.com', NULL);
 CALL spu_usuarios_registrar('Adriana', 'Durand Buenamarca', 'Administrador', 'SENATI123', 'adriana@gmail.com', NULL);
 CALL spu_usuarios_listar();
 -- EQUIPOS
@@ -54,12 +61,8 @@ CALL spu_listar_mantenimiento_porID(1);
 CALL spu_listar_MANsectores();
 
 INSERT INTO sectores(sector) VALUES
-("Psicología"),
-("Secretaría"),
-("Aula de Profesores");
+("Laboratorio1");
 
-INSERT INTO MAN_sectores(idsector, idequipo, idusuario, fecha_inicio) VALUES
-(2, 2, 3, '2023-12-12');
 
 -- SECTORES 
 CALL spu_insertar_sectores(1,1,'Laboratorio', '2023-12-02', NULL);
@@ -68,9 +71,10 @@ CALL spu_insertar_sectores(1,1,'Laboratorio', '2023-12-02', NULL);
 CALL spu_cronogramas_registrar(1, 'Formateo', 'Malo', '2023-12-12');
 CALL spu_cronogramas_registrar(2, 'Cambio de pieza', 'Recuperable', '2023-01-23');
 -- Encriptando las claves : SENATI123
+select*from equipos;
 UPDATE usuarios SET
 	claveacceso = '$2y$10$75lA.B0Xsqf12p96E/myo.MJG3EylGhH92ENeFKMcQ2Ysjk//FmHm'
-	WHERE idusuario = 6;
+	WHERE idusuario = 4;
 
 -- esto de Luis Ll
 insert into marcas(marca) values("Asus"),("lenovo");
@@ -112,11 +116,26 @@ update datasheet set auto_increment = 1;
 select * from MAN_sectores;
     INSERT INTO MAN_sectores(idsector,idequipo,idusuario,fecha_inicio) value(1,1,1,'2023-12-12');
 
+-- USUARIOS
+UPDATE usuarios SET
+	rol = 'ADMIN'
+    WHERE idusuario = 1;
 
-
-
+CALL spu_listar_detalleSectores();
     
+select * from sectores;
+select * from equipos;
+select * from usuarios;
 
+INSERT INTO sectores_detalle(idsector, idequipo, idusuario, fecha_inicio)
+VALUES
+(4, 1, 1, '2023-10-16'),
+(4, 2, 3, '2023-11-20'),
+(4, 4, 1, '2023-09-06'),
+(3, 6, 4, '2023-01-20');
 
-
-
+CALL spu_obtenerporID(4);
+CALL spu_listar_mantenimiento_porID(1);
+CALL spu_obtenerCNsectores();
+CALL spu_listar_detalleSectores(4);
+CALL spu_insertar_sector("Aula Zoom");

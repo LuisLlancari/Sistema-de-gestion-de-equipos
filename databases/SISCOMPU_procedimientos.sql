@@ -201,40 +201,36 @@ DELIMITER ;
 -- ------------------ Procedimientos Almacenados SECTORES -----------------------------
 -- -------------------------------------------------------------------------------------
 
-DROP PROCEDURE IF EXISTS spu_listar_sectores;
+
+DROP PROCEDURE IF EXISTS spu_listar_detalleSectores;
 DELIMITER $$
-CREATE PROCEDURE spu_listar_sectores()
+CREATE PROCEDURE spu_listar_detalleSectores(IN _idsector INT)
 BEGIN
-	SELECT idsector, sector
-    FROM sectores
-    WHERE inactive_at IS NULL;
+    SELECT DET.idmantenimiento_sector,
+		SEC.sector,
+        CAT.categoria,
+        MAR.marca,
+        EQUI.modelo_equipo,
+        EQUI.numero_serie,
+        USU.nombres,
+        USU.apellidos,
+        DET.fecha_inicio,
+        DET.fecha_fin
+    FROM sectores_detalle DET
+    INNER JOIN sectores SEC ON SEC.idsector = DET.idsector
+    INNER JOIN equipos EQUI ON EQUI.idequipo = DET.idequipo
+    INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
+	INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
+    INNER JOIN usuarios USU ON USU.idusuario = DET.idusuario
+    WHERE DET.inactive_at IS NULL
+      AND DET.idsector = _idsector;
 END $$
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS spu_listar_MANsectores;
+DROP PROCEDURE IF EXISTS spu_insertar_sector;
 DELIMITER $$
-CREATE PROCEDURE spu_listar_MANsectores()
-BEGIN
-	SELECT MANSEC.idmantenimiento_sector,
-    SEC.sector,
-	CAT.categoria,
-    EQUI.numero_serie,
-    USU.nombres,
-    MANSEC.fecha_inicio,
-	MANSEC.fecha_fin
-    FROM MAN_sectores MANSEC
-    INNER JOIN sectores SEC ON SEC.idsector = MANSEC.idsector
-	INNER JOIN equipos EQUI ON EQUI.idequipo = MANSEC.idequipo
-	INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
-	INNER JOIN usuarios USU ON USU.idusuario = MANSEC.idusuario
-    WHERE MANSEC.inactive_at IS NULL;
-END $$
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS spu_insertar_sectores;
-DELIMITER $$
-CREATE PROCEDURE spu_insertar_sectores
+CREATE PROCEDURE spu_insertar_sector
 (
     IN _idsector	INT,
     IN _sector		VARCHAR(45)
@@ -255,22 +251,63 @@ CREATE PROCEDURE spu_insertar_sectores
     IN _nombre		VARCHAR(45)
 )
 BEGIN
-	INSERT INTO sectores
-    (idequipo, idusuario, nombre, fecha_inicio, fecha_fin)
-    VALUES 
-    (_idequipo, _idusuario, _nombre, _fecha_inicio, NULLIF(_fecha_fin, ''));
+	INSERT INTO sectores(sector)
+    VALUES(_sector);
+	SELECT @@last_insert_id 'idsector';
 END $$
 DELIMITER ;
 */
 DROP PROCEDURE IF EXISTS spu_MANsector_eliminar;
 DELIMITER $$
-CREATE PROCEDURE spu_MANsector_eliminar(IN _idmantenimiento_sector INT)
+CREATE PROCEDURE spu_sector_eliminar(IN _idmantenimiento_sector INT)
 BEGIN 
 	UPDATE MAN_sectores
     SET inactive_at = NOW()
 		WHERE idmantenimiento_sector = _idmantenimiento_sector;
 END $$
 DELIMITER ;
+
+/*DELIMITER $$
+CREATE PROCEDURE spu_obtenerporID(IN id_sector INT)
+BEGIN
+    SELECT DET.idmantenimiento_sector,
+    SEC.sector,
+	CAT.categoria,
+    MAR.marca,
+	EQUI.modelo_equipo,
+    EQUI.numero_serie,
+    DET.fecha_inicio,
+	DET.fecha_fin
+    FROM sectores_detalle DET
+    INNER JOIN sectores SEC ON SEC.idsector = DET.idsector
+	INNER JOIN equipos EQUI ON EQUI.idequipo = DET.idequipo
+	INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
+    INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
+    WHERE DET.inactive_at IS NULL;
+END $$
+DELIMITER ;*/
+
+DELIMITER $$
+CREATE PROCEDURE spu_obtenerCNsectores()
+BEGIN
+	-- Selecciona los nombre y los cuenta
+    SELECT 
+		s.idsector,
+        s.sector AS Nombre_Sector,
+        COUNT(sd.idsector) AS Cantidad_Guardados
+    FROM
+        sectores s
+	-- Con detalle sectores estoy haciendo el conteo
+    LEFT JOIN
+        sectores_detalle sd ON s.idsector = sd.idsector
+    GROUP BY
+        s.idsector;
+END $$
+DELIMITER ;
+
+
+
+
 
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados EQUIPOS -----------------------------
