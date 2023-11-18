@@ -70,7 +70,35 @@ CREATE TABLE datasheet
 	create_at			DATE			NOT NULL DEFAULT NOW(),
 	update_at			DATE			NULL,
 	inactive_at			DATE			NULL,
-    CONSTRAINT fk_idequipo_dat 	FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo)
+    CONSTRAINT fk_idequipo_dat 	FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo),
+    CONSTRAINT uk_idequipoclave UNIQUE	(idequipo,clave)
+)ENGINE = INNODB;
+
+DROP TABLE IF EXISTS sectores;
+CREATE TABLE sectores
+(
+	idsector			INT PRIMARY KEY AUTO_INCREMENT,
+	sector				VARCHAR(45)		NOT NULL,
+	create_at			DATE			NOT NULL DEFAULT NOW(),
+	update_at			DATE			NULL,
+	inactive_at			DATE			NULL
+)ENGINE = INNODB;
+
+DROP TABLE IF EXISTS sectores_detalle;
+CREATE TABLE sectores_detalle
+(
+	idmantenimiento_sector			INT PRIMARY KEY AUTO_INCREMENT,
+    idsector						INT 	NOT NULL,
+    idequipo						INT 	NOT NULL,
+    idusuario						INT		NOT NULL,
+    fecha_inicio					DATE	NOT NULL,
+    fecha_fin						DATE 	NULL,
+	create_at						DATE	NOT NULL DEFAULT NOW(),
+	update_at						DATE	NULL,
+	inactive_at						DATE	NULL,
+	CONSTRAINT fk_idsector_sect FOREIGN KEY(idsector)  REFERENCES sectores(idsector),
+	CONSTRAINT fk_idequipo_sect FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo),
+	CONSTRAINT fk_idusuario_sect FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
 DROP TABLE IF EXISTS cronogramas;
