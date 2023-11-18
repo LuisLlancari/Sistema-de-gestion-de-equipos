@@ -20,7 +20,7 @@ require_once "../sidebar/sidebar.php";
   <div class="container mx-3">
     <div class="row row-cols-1 row-cols-md-3 g-4" id="contenerdor-cards">
         
-    <!-- <div class="card mb-3" style="max-width: 540px;">
+    <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
             <div class="col-md-4">
             <img src="..." class="img-fluid rounded-start" alt="...">
@@ -37,7 +37,7 @@ require_once "../sidebar/sidebar.php";
             </div>
             </div>
         </div>
-    </div>   -->
+    </div>  
 
 
 
@@ -150,10 +150,10 @@ require_once "../sidebar/sidebar.php";
                 let nuevacard = ``;
                 // Enviar los valores obtenidos en celdas <td></td>
                 nuevacard = `
-                <div class="card mb-3" style="max-width: 540px;" id="cuepo-card">
-                  <div class="row g-0">
+                <div class="card mx-3" style="max-width: 540px;" id="cuepo-card">
+                  <div class="row g-0 justify-content-center">
                       <div class="col-md-4">
-                      <img src="../../images/${rutaImagen}" class="img-fluid rounded-start" alt="...">
+                      <img src="../../images/${rutaImagen}" class="img-fluid" alt="...">
                       </div>
                       <div class="col-md-8">
                       <div class="card-body">
@@ -273,9 +273,8 @@ require_once "../sidebar/sidebar.php";
         
         
         // FUNCION QUE LISTA A LOS USUARIOS
-        listar_usuarios();
+        // listar_usuarios();
 
-       
 
         //ESTO LEE EL EVENTO CLICK DEL BOTON EDITAR O ELIMINAR
         $("#contenerdor-cards").addEventListener('click',(event)=>{
