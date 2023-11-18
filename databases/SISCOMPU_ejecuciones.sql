@@ -88,6 +88,14 @@ VALUES
 	(2,'Mantenimiento','Realizado','2023-08-10'),
 	(2,'Mantenimiento','Cancelado','2023-10-12');
 
+select * from mantenimiento;
+select * from cronogramas;
+insert into mantenimiento(idusuario,idcronograma,descripcion)
+VALUES
+	(1,2,'sin problemas'),
+	(1,3,'con problemas'),
+	(1,4,'algo raro paso');
+
 -- DATASHEET
 UPDATE datasheet SET
 	inactive_at = null;

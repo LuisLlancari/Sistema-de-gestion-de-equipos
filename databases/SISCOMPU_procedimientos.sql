@@ -637,8 +637,9 @@ BEGIN
 	SELECT
 		man.idusuario,
         usu.nombres,
-        cro.tipo_mantenimiento,
+        cro.fecha_programada as 'fecha_del_mantenimiento',
         equ.numero_serie,
+        cro.tipo_mantenimiento,
         man.descripcion
     FROM mantenimiento as man
     INNER JOIN usuarios as usu on usu.idusuario = man.idusuario
@@ -679,6 +680,8 @@ BEGIN
 		(idusuario,idcronograma,descripcion)
         VALUES
         (_idusuario,_idcronograma,_descripcion);
+        
+	SELECT @@last_insert_id 'idmantenimiento';
 END $$
 DELIMITER ;
 

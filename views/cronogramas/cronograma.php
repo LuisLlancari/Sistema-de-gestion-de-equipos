@@ -2,7 +2,10 @@
 
 require_once "../sidebar/sidebar.php";
 ?>  
-
+  <head>
+<link href="/website/css/uicons-bold-rounded.css"
+rel="stylesheet">
+</head>
 
     <div class=" bg-light">
         <h1>cronograma</h1>
@@ -29,9 +32,8 @@ require_once "../sidebar/sidebar.php";
               <div class="col-md-6 mb-3">
                   <label for="equipo" class="form-label">equipo</label>
                   <input type="text" class="form-control" id="equipo" required>
-                  </select>
                 </div>
-
+                      
                 <div class="col-md-6 mb-3">
                   <label for="T-mantenimiento" class="form-label">tipo mantenimiento</label>
                   <select name="" id="T-mantenimiento" class="form-select" required>
@@ -63,11 +65,14 @@ require_once "../sidebar/sidebar.php";
               <option value="cancelado">cancelado</option>
              </select>     
             </div>
+            
+          <div id="nuevos-elementos"></div>
 
           </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" id="agregar">Enviar</button>
+            <button type="button" class="btn btn-success" id="agregar"><i class="fi-sr-eye"></i>Enviar</button>
+            <button type="button" class="btn btn-success" id="agregar"><i class="fi-sr-eye"></i>hecho</button>
             <button type="button" class="btn btn-danger"  id="borrar">Borrar</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
@@ -235,6 +240,32 @@ require_once "../sidebar/sidebar.php";
           });     
       }
 
+
+      function agregarNuevoElemento() {
+        // Crea un nuevo div para el par label e input
+        var nuevoElemento = document.createElement('div');
+        nuevoElemento.classList.add('row', 'mb-3');
+
+        // Crea el label
+        var nuevoLabel = document.createElement('label');
+        nuevoLabel.classList.add('form-label');
+        nuevoLabel.innerText = 'Nuevo Elemento';
+
+        // Crea el input
+        var nuevoInput = document.createElement('input');
+        nuevoInput.classList.add('form-control');
+        nuevoInput.type = 'text';
+
+        // Agrega el label e input al nuevo div
+        nuevoElemento.appendChild(nuevoLabel);
+        nuevoElemento.appendChild(nuevoInput);
+
+        // Agrega el nuevo div al contenedor
+        var contenedor = document.getElementById('nuevos-elementos');
+        contenedor.appendChild(nuevoElemento);
+      }
+
+
       listar_cronogramas();
      
 
@@ -244,7 +275,8 @@ require_once "../sidebar/sidebar.php";
      
 
       $('#borrar').addEventListener('click', function(){
-        eliminar_cronogramas();    
+        agregarNuevoElemento();
+        // eliminar_cronogramas();    
         });
 
 
