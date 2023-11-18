@@ -212,9 +212,9 @@ END $$
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS spu_listar_MANsectores;
+DROP PROCEDURE IF EXISTS spu_listar_detalleSectores;
 DELIMITER $$
-CREATE PROCEDURE spu_listar_MANsectores()
+CREATE PROCEDURE spu_listar_detalleSectores()
 BEGIN
 	SELECT MANSEC.idmantenimiento_sector,
     SEC.sector,
@@ -223,12 +223,12 @@ BEGIN
     USU.nombres,
     MANSEC.fecha_inicio,
 	MANSEC.fecha_fin
-    FROM MAN_sectores MANSEC
+    FROM sectores_detalle MANSEC
     INNER JOIN sectores SEC ON SEC.idsector = MANSEC.idsector
 	INNER JOIN equipos EQUI ON EQUI.idequipo = MANSEC.idequipo
 	INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
 	INNER JOIN usuarios USU ON USU.idusuario = MANSEC.idusuario
-    WHERE MANSEC.inactive_at IS NULL;
+    WHERE MANSEC.inactive_at IS NULL; 
 END $$
 DELIMITER ;
 
@@ -258,6 +258,48 @@ BEGIN
 		WHERE idmantenimiento_sector = _idmantenimiento_sector;
 END $$
 DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_obtenerporID(IN id_sector INT)
+BEGIN
+    SELECT DET.idmantenimiento_sector,
+    SEC.sector,
+	CAT.categoria,
+    MAR.marca,
+	EQUI.modelo_equipo,
+    EQUI.numero_serie,
+    DET.fecha_inicio,
+	DET.fecha_fin
+    FROM sectores_detalle DET
+    INNER JOIN sectores SEC ON SEC.idsector = DET.idsector
+	INNER JOIN equipos EQUI ON EQUI.idequipo = DET.idequipo
+	INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
+    INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
+    WHERE DET.inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_obtenerCNsectores()
+BEGIN
+	-- Selecciona los nombre y los cuenta
+    SELECT 
+		s.idsector,
+        s.sector AS Nombre_Sector,
+        COUNT(sd.idsector) AS Cantidad_Guardados
+    FROM
+        sectores s
+	-- Con detalle sectores estoy haciendo el conteo
+    LEFT JOIN
+        sectores_detalle sd ON s.idsector = sd.idsector
+    GROUP BY
+        s.idsector;
+END $$
+DELIMITER ;
+
+
+
+
 
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados EQUIPOS -----------------------------

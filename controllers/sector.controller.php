@@ -7,9 +7,13 @@ if (isset($_POST['operacion'])){
     $sector = new Sector();
 
     switch ($_POST['operacion']){
-        case 'listar':
-            echo json_encode($sector->listar());
+        case 'obtenerNC':
+            echo json_encode($sector->obtenerNC());
         break;
+
+        case 'listar_detalles_sector':
+            echo json_encode($sector->listar_detalles_sector());
+        break;     
 
         case 'registrar':
             $datosEnviar = [

@@ -14,7 +14,7 @@ $accesos = [
         "equipos"       => ["equipos-catalogo","equipos-listar"],
         "usuario"       => ["usuario"],
         "graficos"      => ["index"],
-        "sector"        => ["listar"],
+        "sector"        => ["listar"]
     ],
     "ASIST" =>[
         "graficos"      => ["index"],

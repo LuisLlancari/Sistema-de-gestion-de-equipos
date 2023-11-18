@@ -82,8 +82,8 @@ CREATE TABLE sectores
 	inactive_at			DATE			NULL
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS MAN_sectores;
-CREATE TABLE MAN_sectores
+DROP TABLE IF EXISTS sectores_detalle;
+CREATE TABLE sectores_detalle
 (
 	idmantenimiento_sector			INT PRIMARY KEY AUTO_INCREMENT,
     idsector						INT 	NOT NULL,
@@ -94,8 +94,8 @@ CREATE TABLE MAN_sectores
 	create_at						DATE	NOT NULL DEFAULT NOW(),
 	update_at						DATE	NULL,
 	inactive_at						DATE	NULL,
-	CONSTRAINT fk_idsector_sect 	FOREIGN KEY(idsector)  REFERENCES sectores(idsector),
-	CONSTRAINT fk_idequipo_sect 	FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo),
+	CONSTRAINT fk_idsector_sect FOREIGN KEY(idsector)  REFERENCES sectores(idsector),
+	CONSTRAINT fk_idequipo_sect FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo),
 	CONSTRAINT fk_idusuario_sect FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 

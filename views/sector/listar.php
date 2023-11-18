@@ -1,45 +1,49 @@
 <?php
-require_once "../sidebar/sidebar.php";
+require_once "../../views/sidebar/sidebar.php";
 ?>  
+
 <!doctype html>
 <html lang="en">
 
 <head>
-  
+<title>Sectores</title>
 </head>
-
 <body>
 
-  <div class="mt-4">
-    <table class="table table-striped" id="tabla-sectores">
-      <colgroup>
-      <col width="5%"> <!-- Codigo -->
-      <col width="15%"> <!-- Sector -->
-      <col width="15%"> <!-- Equipo -->
-      <col width="15%"> <!-- Número de Serie -->
-      <col width="15%"> <!-- Usuario de Registro -->
-      <col width="10%"> <!-- Ingreso -->
-      <col width="10%"> <!-- Salida -->
-      <col width="15%"> <!-- Comandos -->
-    </colgroup>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Sector Asignado</th>
-        <th>Equipo</th>
-        <th>Número de Serie</th>
-        <th>Usuario</th>
-        <th>Ingreso</th>
-        <th>Salida </th>
-        <th>Opraciones</th>
-      </tr>
-    </thead>
-    <tbody>
-         <!-- Datos Asincronos -->
-    </tbody>
-
-    </table>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <div class="btn-sidebar toggled" id="menu-toggle">
+        <span class="fas fa-bars"></span>
+      </div>
+      <div class="m-4">
+        <h1 class="fw-bolder d-inline-block"><i class="bi bi-shop-window"></i> SECTORES</h1>
+        <div class="btn-container float-end">
+          <button class="btn btn-primary rounded-circle">
+            <i class="bi bi-plus-circle-fill" style="font-size: 1.5em;"></i>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
+
+<div class="row" id="lista-sectores">
+
+</div>
+
+<!-- CARD OBLIGATORIO: GENERAL ALMACÉN
+<div class="row row-cols-1 row-cols-md-2 g-4">
+  <div class="col">
+    <a href="../../views/sector/detalle_sector.php" id="card-almacen" class="card text-center border-yellow" style="width: 400px; cursor: pointer; text-decoration: none; color: black;">
+      <img src="../../test/almacen.jpg" class="card-img-top" alt="..." style="width: 400px; height: 250px;">
+      <div class="card-body">
+        <h4 class="card-title">ALMACÉN</h4>
+        <p class="card-text">Cantidad: 00</p>
+      </div>
+    </a>
+  </div>
+</div>  -->
 
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
@@ -49,87 +53,55 @@ require_once "../sidebar/sidebar.php";
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
     integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
   </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
   <script src="../../js/sidebar.js"></script>
   <script src="../../js/sweeAlert.js"></script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const tabla = document.querySelector("#tabla-sectores tbody");
+    function $(id){
+      return document.querySelector(id);
+    }
 
-    function listarSectores(){
+    function mostrarSectores() {
       const parametros = new FormData();
-      parametros.append("operacion", "listar")
+      parametros.append("operacion", "obtenerNC");
 
-      fetch(`../../controllerS/sector.controller.php`, {
-        method: 'POST',
+      fetch(`../../controllers/sector.controller.php`, {
+        method: "POST",
         body: parametros
       })
         .then(respuesta => respuesta.json())
-        .then(datosRecibidos => {
-          let numFila = 1;
-          tabla.innetHTML = '';
+        .then(datos => {
+          console.log("Datos recibidos:", datos);
 
-          datosRecibidos.forEach(registro => {
-            let numfila = ``;
-            nuevafila = `
-              <tr>
-                <td>${numFila}</td>
-                <td>${registro.sector}</td>
-                <td>${registro.categoria}</td>
-                <td>${registro.numero_serie}</td>
-                <td>${registro.nombres}</td>
-                <td>${registro.fecha_inicio}</td>
-                <td>${registro.fecha_fin}</td>
-                <td>
-                <button class='btn btn-danger btn-sm eliminar' type='button'>Operaciones</button>
-                </td>
-              </tr>            
-            `;
-              tabla.innerHTML += nuevafila;
-              numFila++;
-          })
+          if (datos.length === 0) {
+            $("#lista-sectores").innerHTML = `<p>Recarge la página </p><i class="bi bi-arrow-counterclockwise"></i>`;
+          } else {
+            $("#lista-sectores").innerHTML = ``;
+            datos.forEach(element => {
+              // Renderizado
+              const nuevoItem =`
+                <div class="col-md-4 mb-4">
+                  <a href="../../views/sector/detalle_sector.php?sector=${element.idsector}" data-sector="${element.idsector}" class="card text-center border-yellow" style="width: 100%; cursor: pointer; text-decoration: none; color: black;">
+                    <img src="../../test/sector.jpg" class="card-img-top" alt="${element.Nombre_Sector}" style="width: 100%; height: 250px;">
+                    <div class="card-body">
+                      <h4 class="card-title">${element.Nombre_Sector}</h4>
+                      <p class="card-text">Cantidad: ${element.Cantidad_Guardados}</p>
+                    </div>
+                  </a>
+                </div>
+              `;
+              $("#lista-sectores").innerHTML += nuevoItem;
+            });
+          }
         })
-          .catch(e => {
-            console.error(e)
-        })
+        .catch(e => {
+          console.error(e);
+        });
     }
 
-    tabla.addEventListener("click", (event) => {
-        
-        if (event.target.classList.contains("eliminar")){
-          const idproducto = event.target.dataset.idproducto;
-          const parametros = new FormData();
-          parametros.append("operacion", "eliminar");
-          parametros.append("idproducto", idproducto);
-          console.log(idproducto);
-
-          if (confirm("¿Está seguro de eliminar?")){
-            fetch(`../../controllers/producto.controller.php`, {
-              method: "POST",
-              body: parametros
-            })
-              .then(respuesta => respuesta.text())
-              .then(datos => {
-                console.log(datos);
-                listarProductos();
-              })
-              .catch(e => {
-                console.error(e);
-              });
-          }
-        }
-
-        if(event.target.classList.contains("editar")){
-          console.log("Proceso de edición")
-        }
-      });
-
-      listarSectores();
-
-    });
-
-    
+    mostrarSectores();
 
   </script>
 
