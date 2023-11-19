@@ -98,7 +98,7 @@ class Cronograma extends Conexion{
   
   public function listar_cronograma_grafico($datos = []){
     try {
-      $consulta = $this->conexion->prepare("CALL spu_mantenimiento_grafico(?,?)");
+      $consulta = $this->conexion->prepare("CALL spu_cronograma_grafico(?,?)");
       $consulta->execute(array(
         $datos['fechainicio'],
         $datos['fechafin']

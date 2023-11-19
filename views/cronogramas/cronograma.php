@@ -61,6 +61,7 @@ require_once "../sidebar/sidebar.php";
               <select name="" id="estado" class="form-select" required>
               <option value="">Seleccion:</option>
               <option value="completado">completado</option>
+              <option value="pausado">Pausado</option>
               <option value="cancelado">cancelado</option>
              </select>     
             </div>
@@ -264,12 +265,12 @@ require_once "../sidebar/sidebar.php";
       function registrar_cronograma(){
 
  
-      var comentarioFormulario  = $('#comentario').value;
-      if(comentarioFormulario.trim().length==0 && $("#estado").value=="completado"){
-        $('#comentario').classList.add("is-invalid");
-        console.log("comentarioFormulario => ",comentarioFormulario)
-        return;
-      }
+        var comentarioFormulario  = $('#comentario').value;
+        if(comentarioFormulario.trim().length==0 && $("#estado").value=="completado"){
+          $('#comentario').classList.add("is-invalid");
+          console.log("comentarioFormulario => ",comentarioFormulario)
+          return;
+        }
 
 
         //   En esta variable se concatena la fecha y la hora para enviarlos a 
@@ -278,23 +279,19 @@ require_once "../sidebar/sidebar.php";
         var fechaHora = $("#fecha").value+" "+$("#hora").value;
 
         const parametros = new FormData();
-        parametros.append("tipo_mantenimiento",$("#T-mantenimiento").value);
-        parametros.append("fecha_programada"  , fechaHora);
+        parametros.append("tipo_mantenimiento"  ,$("#T-mantenimiento").value);
+        parametros.append("fecha_programada"    , fechaHora);
  
-
-        //if(estado==completado && bandera=false)
-        // validar que campo comentario .ment<=0 
-
         if(bandera){
           parametros.append("operacion"         ,"registrar_cronograma");
           parametros.append("equipo"            ,$("#equipo").value);
         }
         else{
-          parametros.append("operacion","modificar_cronograma");
-          parametros.append("estado"            ,$("#estado").value);
-          parametros.append("idcronograma" ,idcronograma);
-          parametros.append("comentario", $('#comentario').value);
-          parametros.append("idusuario", 1);
+          parametros.append("operacion",       "modificar_cronograma");
+          parametros.append("estado",          $("#estado").value);
+          parametros.append("idcronograma",    idcronograma);
+          parametros.append("comentario",      $('#comentario').value);
+          parametros.append("idusuario",       1);
 
         } 
         fetch(`../../controllers/cronograma.controller.php`,{
@@ -363,15 +360,6 @@ require_once "../sidebar/sidebar.php";
             $("#comentario").removeAttribute('readOnly');
             
           }
-
-          // if(estado == "cancelado"){        
-          //   $("#comentario").setAttribute('disabled','true');
-          //   $("#comentario").setAttribute('readOnly','true');
-          // }
-
-           
-      
-
 
         });
 

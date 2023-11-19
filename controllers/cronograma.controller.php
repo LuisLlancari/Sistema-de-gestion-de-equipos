@@ -55,10 +55,13 @@ if(isset($_POST['operacion'])){
 
 
     case 'listar_cronograma_grafico':
-      $datosEnviar = ["fechainicio" => $_POST['fechainicio'],"fechafin" => $_POST['fechafin'] ];
+      $datosEnviar = [
+        "fechainicio" => $_POST['fechainicio'],
+        "fechafin"    => $_POST['fechafin'] ];
 
       echo json_encode($cronograma->listar_cronograma_grafico($datosEnviar));
     break;
+
 
     case '':
       # code...

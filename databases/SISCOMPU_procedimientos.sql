@@ -649,10 +649,13 @@ BEGIN
         
  
 	IF _estado = 'completado' THEN
-		BEGIN
+		
 			INSERT INTO mantenimiento (idusuario, idcronograma, descripcion)
 			VALUES (_idusuario, _idcronograma, _comentario);
-		END;
+            
+            UPDATE cronogramas SET 
+				inactive_at = now()
+					WHERE idcronograma = _idcronograma;
 	END IF;
         
 END $$
@@ -687,17 +690,23 @@ DROP PROCEDURE IF EXISTS spu_mantenimiento_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_listar()
 BEGIN
-	SELECT
-		man.idusuario,
-        usu.nombres,
-        cro.fecha_programada as 'fecha_del_mantenimiento',
-        equ.numero_serie,
-        cro.tipo_mantenimiento,
-        man.descripcion
-    FROM mantenimiento as man
-    INNER JOIN usuarios as usu on usu.idusuario = man.idusuario
-    INNER JOIN cronogramas as cro ON cro.idcronograma = man.idcronograma
-    INNER JOIN equipos as equ on equ.idequipo = cro.idequipo 
+		SELECT
+			man.idcronograma,
+			man.idusuario,
+			usu.nombres,
+            cat.categoria,
+			mar.marca,
+			equ.modelo_equipo as 'equipo',
+			cro.fecha_programada as 'fecha_del_mantenimiento',
+			equ.numero_serie,
+			cro.tipo_mantenimiento,
+			man.descripcion
+		FROM mantenimiento as man
+		INNER JOIN usuarios as usu on usu.idusuario = man.idusuario
+		INNER JOIN cronogramas as cro ON cro.idcronograma = man.idcronograma
+		INNER JOIN equipos as equ on equ.idequipo = cro.idequipo 
+		INNER JOIN marcas AS mar ON mar.idmarca = equ.idmarca
+		INNER JOIN categorias AS cat ON cat.idcategoria = equ.idcategoria
     WHERE
 		man.inactive_at IS NULL;
 END $$
@@ -812,6 +821,13 @@ CREATE PROCEDURE spu_mantenimiento_grafico
 )
 BEGIN
 	 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_mantenimiento_grafico`(
+    in _fecha_inicio 	date,
+	in _fecha_fin 	date
+)
+BEGIN
+	 
 SELECT
 count(1) as 'cantidad_tipo',
 cro.tipo_mantenimiento
@@ -819,9 +835,12 @@ FROM cronogramas as cro
 INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
 left JOIN mantenimiento as man on man.idcronograma=cro.idcronograma
 WHERE cro.inactive_at IS NULL and cro.tipo_mantenimiento!=''
--- AND man.create_at between _fecha_inicio and _fecha_fin
+ AND man.create_at between _fecha_inicio and _fecha_fin
 group by cro.tipo_mantenimiento;
      
+END$$
+DELIMITER ;
+
 END $$
 DELIMITER ;
  

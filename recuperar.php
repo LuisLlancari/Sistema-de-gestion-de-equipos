@@ -13,9 +13,12 @@
 
 </head>
 
-<body>
+<body >
+  
+    
+  
 
-    <div class="container mt-3">
+    <!-- <div class="container mt-3">
         <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
@@ -34,7 +37,30 @@
         </div>
         <div class="col-md-4"></div>
         </div>
-    </div>
+    </div> -->
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center ">Recuperar cuenta</h4>
+                        <form action="" id="form-login" autocomplete="off">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" class="form-control form-control-lg" id="email" autofocus required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-primary" id="recuperar">Siguiente</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>  
+         </div>
+      </div>
+
+
 
   <!-- Inicio de MODAL -->
 
