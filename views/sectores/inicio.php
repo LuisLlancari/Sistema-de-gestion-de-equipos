@@ -2,6 +2,7 @@
 require_once "../../views/sidebar/sidebar.php";
 ?>  
 
+<!-- TODO EL HEAD Y PARTE DEL BOY NO DEBERIA ESTAR YA QUE EXIST EN EL SIDEBAR -->
 <!doctype html>
 <html lang="en">
 
@@ -13,8 +14,6 @@ require_once "../../views/sidebar/sidebar.php";
 <div class="container">
   <div class="row">
     <div class="col-md-12 text-center">
-      <div class="btn-sidebar toggled" id="menu-toggle">
-      </div>
       <div class="m-4">
         <h1 class="fw-bolder d-inline-block"><i class="bi bi-shop-window"></i> SECTORES</h1>
         <div class="btn-container float-end">
@@ -76,6 +75,7 @@ require_once "../../views/sidebar/sidebar.php";
     </div>
   </div>
 </div>
+</main>
 
 
 

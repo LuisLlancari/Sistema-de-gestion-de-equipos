@@ -2,7 +2,7 @@
 session_start();
 
 require_once '../models/Usuario.php';
-// require_once '../test/email.php';
+require_once '../test/email.php';
 require_once '../test/filtro.php';
 
 if(isset($_POST['operacion'])){
@@ -37,6 +37,7 @@ if(isset($_POST['operacion'])){
           $_SESSION["apellidos"]  = $registro["apellidos"];
           $_SESSION["nombres"]    = $registro["nombres"]; 
           $_SESSION["avatar"]     = $registro["avatar"]; 
+          $_SESSION["email"]     = $registro["email"]; 
 
           if(password_verify($_POST['claveacceso'],$ClaveEncriptada)){
 
@@ -151,7 +152,7 @@ if(isset($_POST['operacion'])){
       echo json_encode($usuario->generar_codigo($datosEnviar));
 
       if(strval($metodo) ==  "2"){
-        // enviarMail(strval($direccion),strval($codigo));
+        enviarMail(strval($direccion),strval($codigo));
       }
     break;
 
@@ -175,9 +176,6 @@ if(isset($_POST['operacion'])){
         "claveacceso" => $claveCambiada
       ];
       echo json_encode($usuario->cambiar_contraseña($datosEnviar));
-    break;
-    
-    case '';
     break;
   }
 

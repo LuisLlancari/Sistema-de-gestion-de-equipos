@@ -1,7 +1,8 @@
 <?php
-require_once "../../views/sidebar/sidebar.php";
+require_once "../sidebar/sidebar.php";
 ?>  
 
+<!--  -->
 <!doctype html>
 <html lang="en">
 
@@ -13,8 +14,6 @@ require_once "../../views/sidebar/sidebar.php";
 <div class="container">
   <div class="row">
     <div class="col-md-12 text-center">
-      <div class="btn-sidebar toggled" id="menu-toggle">
-      </div>
       <div class="m-4">
         <h1 class="fw-bolder d-inline-block"><i class="bi bi-card-checklist"> </i><span id="sector"></span></h1>
       </div>
@@ -67,7 +66,8 @@ require_once "../../views/sidebar/sidebar.php";
     integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
   </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
+  
+  <script src="../../js/sidebar.js"></script>
   <script src="../../js/sweeAlert.js"></script>
 
   <script>

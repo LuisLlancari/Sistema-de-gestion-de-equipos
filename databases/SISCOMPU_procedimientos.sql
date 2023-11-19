@@ -3,7 +3,16 @@ USE SISCOMPU;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados USUARIOS -------------------------------
 -- -------------------------------------------------------------------------------------
-
+DROP PROCEDURE IF EXISTS spu_usuarios_recuperar;
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_recuperar(IN _email VARCHAR(60))
+BEGIN
+	SELECT * FROM usuarios 
+	WHERE 
+		email = _email AND
+		inactive_at IS NULL;
+END $$
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS spu_usuarios_generar_clave;
 DELIMITER $$
@@ -206,7 +215,7 @@ DROP PROCEDURE IF EXISTS spu_listar_detalleSectores;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_detalleSectores(IN _idsector INT)
 BEGIN
-    SELECT DET.idmantenimiento_sector,
+    SELECT DET.iddeatlle_sector,
 		SEC.sector,
         CAT.categoria,
         MAR.marca,
@@ -326,17 +335,25 @@ AS
     EQUI.modelo_equipo,
     EQUI.numero_serie,
     EQUI.imagen,
-    CASE EQUI.estado
+    SDE.idsector,
+    SEC.sector,
+	EQUI.estado,
+    /*CASE EQUI.estado
 		WHEN '0' THEN 'inactivo'
         WHEN '1' THEN 'activo'
-        WHEN '3' THEN 'mantenimiento'
-	END AS estado,
+        WHEN '2' THEN 'mantenimiento'
+	END AS estado,*/
 	USU.nombres
     FROM equipos EQUI
+    INNER JOIN sectores_detalle SDE ON SDE.idequipo = EQUI.idequipo
+    INNER JOIN sectores AS SEC ON SEC.idsector = SDE.idsector
     INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
     INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
     INNER JOIN usuarios USU ON USU.idusuario = EQUI.idusuario
-	WHERE EQUI.inactive_at IS NULL;
+	WHERE 
+		EQUI.inactive_at IS NULL AND
+        SDE.inactive_at IS NULL
+	ORDER BY EQUI.numero_serie;
     
 DROP PROCEDURE IF EXISTS spu_equipos_registrar;
 DELIMITER $$
@@ -402,7 +419,7 @@ CREATE PROCEDURE spu_equipos_modificar
     IN _idcategoria		INT,
     IN _idmarca			INT,
     IN _idusuario 		INT,
-    IN _descripcion		INT,
+    IN _descripcion		VARCHAR(45),
     IN _modelo_equipo 	VARCHAR(45),
     IN _numero_serie	VARCHAR(45),
     IN _imagen			VARCHAR(200),
@@ -844,3 +861,59 @@ DELIMITER ;
 END $$
 DELIMITER ;
  
+-- --------------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------  CONSULTAS ESTADÍSTICAS  -------------------------------------------------------
+-- --------------------------------------------------------------------------------------------------------------------------
+select * from equipos;
+-- ESTADOS DE LOS EQUPOS
+DROP PROCEDURE IF EXISTS spu_estadistica_equiposporEstado;
+DELIMITER $$
+CREATE PROCEDURE spu_estadistica_equiposporEstado()
+BEGIN
+	SELECT 
+		COUNT(*) AS 'cantidad',
+        CASE estado
+			WHEN '0' THEN 'Inactivo'
+            WHEN '1' THEN 'Activo'
+            WHEN '2' THEN 'Mantenimiento'
+		END AS estado
+    FROM equipos
+    WHERE
+		inactive_at IS NULL
+	GROUP BY estado
+	ORDER BY descripcion ASC;
+END $$
+DELIMITER ;
+
+-- CATEGORIAS POR EQUIPO
+DROP PROCEDURE IF EXISTS spu_estadistica_equiposCategoria;
+DELIMITER $$
+CREATE PROCEDURE spu_estadistica_equiposCategoria()
+BEGIN
+	SELECT COUNT(*) AS 'cantidad',
+		CAT.categoria
+    FROM equipos AS EQUI
+	INNER JOIN categorias AS CAT ON CAT.idcategoria = EQUI.idcategoria
+	WHERE
+		EQUI.inactive_at IS NULL
+	GROUP BY categoria
+	ORDER BY categoria;
+END $$
+DELIMITER ;
+
+-- EQUIPOS POR SECTORES
+SELECT * FROM SECTORES_DETALLE;
+DROP PROCEDURE IF EXISTS spu_estadistica_equiposSector;	
+DELIMITER $$
+CREATE PROCEDURE spu_estadistica_equiposSector()
+BEGIN
+	SELECT COUNT(*) AS 'equipos',
+		SEC.sector
+    FROM sectores_detalle AS SED
+    INNER JOIN sectores AS SEC ON SEC.idsector = SED.idsector
+    WHERE
+		SED.inactive_at IS NULL
+	GROUP BY SEC.sector
+	ORDER BY SEC.sector; 
+END $$
+DELIMITER ;
