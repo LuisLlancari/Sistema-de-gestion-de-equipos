@@ -810,8 +810,12 @@ DELIMITER $$
 CREATE PROCEDURE spu_estadistica_equiposporEstado()
 BEGIN
 	SELECT 
-		COUNT(*) AS 'Cantidad',
-        estado
+		COUNT(*) AS 'cantidad',
+        CASE estado
+			WHEN '0' THEN 'Inactivo'
+            WHEN '1' THEN 'Activo'
+            WHEN '2' THEN 'Mantenimiento'
+		END AS estado
     FROM equipos
     WHERE
 		inactive_at IS NULL
@@ -825,7 +829,7 @@ DROP PROCEDURE IF EXISTS spu_estadistica_equiposCategoria;
 DELIMITER $$
 CREATE PROCEDURE spu_estadistica_equiposCategoria()
 BEGIN
-	SELECT COUNT(*) AS 'Cantidad',
+	SELECT COUNT(*) AS 'cantidad',
 		CAT.categoria
     FROM equipos AS EQUI
 	INNER JOIN categorias AS CAT ON CAT.idcategoria = EQUI.idcategoria
