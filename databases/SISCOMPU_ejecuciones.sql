@@ -51,6 +51,9 @@ VALUES
     (13, 3, 5, 'Laptop HP EliteBook 4', 'EliteBook 840 G10', 'NS777777777', 'ruta/a/la/imagen77.jpg'),
     (14, 1, 3, 'PC de Escritorio Dell OptiPlex 4', 'OptiPlex 5110', 'NS888888888', 'ruta/a/la/imagen88.jpg'),
     (15, 2, 1, 'Tablet Apple iPad Pro 4', 'iPad Pro 10"', 'NS999999999', 'ruta/a/la/imagen99.jpg');
+INSERT INTO equipos (idcategoria, idmarca, idusuario, descripcion, modelo_equipo, numero_serie, imagen)
+VALUES   
+    (4, 2, 1, 'Teclado Mecánico Logitech', 'Logitech G Pro X', 'NS123789450', 'ruta/a/la/imagen14.jpg');
     
 CALL spu_equipos_registrar(1, 1, 1,'descripcion1', 'Equipo Nuevo Modelo', 'J11111112', NULL,'');
 CALL spu_equipos_modificar(1,2,2,2,'0','0','111111111');
@@ -257,3 +260,31 @@ VALUES
 -- DETALLE SECTORES 
 SELECT * FROM sectores_detalle;
 INSERT INTO sectores_detalle(idsector,idequipo,idusuario)VALUES(1,1,1),(3,3,3);
+INSERT INTO sectores_detalle (idsector, idequipo, idusuario, fecha_inicio)
+VALUES
+    (1, 1, 1, NOW()), -- Laptop HP EliteBook en Laboratorio de Informática
+    (2, 2, 1, NOW()), -- PC de Escritorio Dell OptiPlex en Biblioteca
+    (3, 3, 3, NOW()), -- Tablet Apple iPad Pro en Aula de Tecnología
+    (4, 4, 1, NOW()), -- Laptop Lenovo ThinkPad en Sala de Audiovisuales
+    (5, 5, 1, NOW()), -- PC Gamer Asus ROG en Sala de Innovación
+    (6, 6, 3, NOW()), -- Laptop Acer Aspire en Sala de Robótica
+    (7, 7, 1, NOW()), -- Surface Pro Microsoft en Centro de Recursos Digitales
+    (8, 8, 1, NOW()), -- Smartphone Samsung Galaxy S21 en Aula Virtual
+    (9, 9, 3, NOW()), -- Laptop Sony VAIO en Centro de Medios Interactivos
+    (10, 10, 3, NOW()), -- Laptop Toshiba Satellite en Espacio 
+	(1, 11, 1, NOW()), -- Laptop HP EliteBook en Laboratorio de Informática
+    (2, 12, 1, NOW()), -- PC de Escritorio Dell OptiPlex en Biblioteca
+    (3, 13, 3, NOW()), -- Tablet Apple iPad Pro en Aula de Tecnología
+    (4, 14, 1, NOW()), -- Laptop Lenovo ThinkPad en Sala de Audiovisuales
+    (5, 15, 1, NOW()), -- PC Gamer Asus ROG en Sala de Innovación
+    (6, 16, 3, NOW()), -- Laptop Acer Aspire en Sala de Robótica
+    (7, 17, 1, NOW()), -- Surface Pro Microsoft en Centro de Recursos Digitales
+    (8, 18, 1, NOW()), -- Smartphone Samsung Galaxy S21 en Aula Virtual
+    (9, 19, 3, NOW()), -- Laptop Sony VAIO en Centro de Medios Interactivos
+    (10,20, 3, NOW()), -- Laptop Toshiba Satellite en Espacio Maker
+	(1, 21, 1, NOW()), -- Laptop HP EliteBook en Laboratorio de Informática
+    (2, 22, 1, NOW()), -- PC de Escritorio Dell OptiPlex en Biblioteca
+    (3, 23, 3, NOW()), -- Tablet Apple iPad Pro en Aula de Tecnología
+    (4, 24, 1, NOW()), -- Laptop Lenovo ThinkPad en Sala de Audiovisuales
+    (6, 26, 3, NOW()), -- Laptop Acer Aspire en Sala de Robótica
+    (8, 28, 1, NOW()); -- Smartphone Samsung Galaxy S21 en Aula Virtual

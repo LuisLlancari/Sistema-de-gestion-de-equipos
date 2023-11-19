@@ -62,36 +62,54 @@ require_once "../sidebar/sidebar.php";
 
                 <div class="row">
                     <div class="col-md-4 m-4">
-                        <label for="categoriaFiltro" class="form-label">Categorias</label>
+                        <label for="categoriaFiltro" class="form-label">Categorías:</label>
                         <select class="form-select" name="categoriaFiltro" id="categoria">
                             <option value="0">Todos</option>
                         </select>
-                        <div class="mt-2">
-                          <button type="button" id="registrarEquipo" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalId">Nuevo equipo</button>
-                        </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="mt-4">
+                          <label for="" name="total" class="form-label">Total:</label>
+                          <input type="text" id="total" class="form-control" readonly>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mt-4">
+                        <form action="" id="form-busqueda">
+                          <label for="busqueda" name="busqueda" class="form-label">Buscar:</label>
+                            <div class="input-group">
+                              <input type="text" id="numserie" class="form-control" placeholder="Buscar por número de serie" required>
+                              <button type="submit" id="buscar" class="btn btn-success">Buscar</button>
+                            </div>
+                        </form>
+                      </div>
                     </div>
                 </div>
 
                 <div class="mt-4">
-                    <table class="table table-striped" id="tabla-equipos">
+                    <table class="table table-striped" id="tabla-Equipos">
                         <colgroup>
                             <col width="5%">
                             <col width="10%">
                             <col width="10%">
-                            <col width="15%%">
                             <col width="10%">
-                            <col width="15%">
-                            <col width="15%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
                             <col width="20%">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Categoria</th>
+                                <th>Descripcion</th>
                                 <th>Marca</th>
                                 <th>Modelo</th>
                                 <th>Nº serie</th>
                                 <th>Imagen</th>
+                                <th>Estado</th>
                                 <th>Usuario</th>
                                 <th>Operaciones</th>
                             </tr>
@@ -103,9 +121,15 @@ require_once "../sidebar/sidebar.php";
                 </div>
             </div>
         </div>
-
-    </div>
-    <!-- MODAL-EQUIPOS -->
+      </div>
+  </main>
+      <div class="my-modal" id="modal-visor">
+        <span class="close" id="cerrar-imagen">&times;</span>
+        <!-- <span class="close">&times;</span> -->
+        <img id ="imagen-visor" class="modal-content" src="" alt="">
+        <div id="texto"></div>
+      </div>
+    <!-- MODAL-Equipos -->
 
     <!-- Button trigger modal -->
     
@@ -114,14 +138,14 @@ require_once "../sidebar/sidebar.php";
       <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitleId">Modal title</h5>
+                <h5 class="modal-title" id="modalTitleId"></h5>
                       <button type="button" id="cerrar-modal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
           <div class="modal-body">
             <form action="" id="formulario-equipo">
               <div class="container-fluid">
                 <div class="mb-2">
-                  <label for="categoria" class="form-label">Categoria</label>
+                  <label for="categoria" class="form-label">Categoría</label>
                   <select class="form-select" name="categoria" id="categoriaEdit">
                     <option value="">Seleccione</option>
                   </select>
@@ -132,13 +156,10 @@ require_once "../sidebar/sidebar.php";
                     <option value="">Seleccione</option>
                   </select>
                 </div>
-
-<!--                 ESTE LABEL SOLO ES DE PRUEBA YA QUE EL USUARIO SE DEBE DE GUARDAR DE FORMA AUTOMÁTICA SIN ESCRIBIR
                 <div class="mb-2">
-                  <label for="usuario" class="form-label">Usuario</label>
-                  <input type="text" class="form-control" name="usuario" id="usuarioEdit">
-                </div> -->
-           
+                  <label for="descripcion" class="form-label">Descripcion</label>
+                  <input type="text" class="form-control" name="modelo" id="descripcionEdit">
+                </div>
                 <div class="mb-2">
                   <label for="modelo" class="form-label">Modelo</label>
                   <input type="text" class="form-control" name="modelo" id="modeloEdit">
@@ -151,6 +172,14 @@ require_once "../sidebar/sidebar.php";
                   <label for="imagen" class="form-label">Imagen</label>
                   <input type="file" class="form-control" name="imagen" id="imagenEdit" accept=".jpg">
                 </div>
+                <div class="mb-2">
+                  <label for="estado" class="form-label">Estado</label>
+                  <select class="form-select" name="estado" id="estadoEdit">
+                    <option value="0">Inactivo</option>
+                    <option value="1">Activo</option>
+                    <option value="2">Matenimiento</option>
+                  </select>
+                </div>
               </div>
               <div class="modal-footer">
                 <button type="submit" id="guardar-datos"class="btn btn-primary">Guardar</button>
@@ -159,8 +188,8 @@ require_once "../sidebar/sidebar.php";
         </div>
       </div>
     </div>
-    
-  </main>
+
+
 
   <footer>
     <!-- place footer here -->
@@ -189,14 +218,107 @@ require_once "../sidebar/sidebar.php";
 
             let categorias = null;
 
-            let equipos = null;
+            let Equipos = null;
 
             let equipoId = null;
 
             let varBandera = false;
 
+            //Generamos una tabla a partir de un array
+            function generarTablaArray(equipos){
+              if(equipos){
 
-            function getInfo(equiposARR){
+                const tabla = $("#tabla-Equipos tbody");
+
+                tabla.innerHTML = "";
+
+                let numFila = 1;
+
+                Equipos.forEach(element => {
+
+                    const img   = element.imagen ? `
+                      <a href="#" data-descripcion="${element.descripcion}" data-img="${element.imagen}" class="btn btn-info imagen"><i class="fa-regular fa-eye"></i></a>
+                    `: "no hay imagen";
+
+                    const estado =  element.estado == 0 ? "Inactivo"
+                                  : element.estado == 1 ? "Activo"
+                                  : "Mantenimiento"
+
+                    let newTabla = ``;
+
+                    newTabla = `
+                    <td>${numFila}</td>
+                    <td>${element.categoria}</td>
+                    <td>${element.descripcion}</td>
+                    <td>${element.marca}</td>
+                    <td>${element.modelo_equipo}</td>
+                    <td>${element.numero_serie}</td>
+                    <td> ${img}</td>
+                    <td> ${estado}</td>
+                    <td>${element.nombres}</td>
+                    <td>
+                        <a type="button" class="btn btn-info editar" data-id="${element.idequipo}" data-bs-toggle="modal" data-bs-target="#modalId">Editar</a>
+                        <a type="button" class="btn btn-danger eliminar" data-id="${element.idequipo}">Eliminar</a>
+                    </td>
+                    `;
+                    numFila ++;
+                tabla.innerHTML += newTabla;
+                });
+              }else{
+                alertError("No se encuentran registros","Hemos tenido problemas con el servidor","Intentalo más tarde");
+              }
+            }
+
+            //Generamos una tabla a partir de un ojeto en especifico(numero de serie)
+            function buscarEquipoTabla(numserie){
+
+              const tabla = $("#tabla-Equipos tbody");
+
+              tabla.innerHTML = "";
+
+              let numFila = 1;
+              Equipos.forEach(element => {
+
+                if(element){
+                  
+                  if(element.numero_serie == numserie){
+                    
+                    const img   = element.imagen ? `
+                    <a href="#" data-descripcion="${element.descripcion}" data-img="${element.imagen}" class="btn btn-info imagen"><i class="fa-regular fa-eye"></i></a>`: "no hay imagen";
+    
+                    const estado =  element.estado == 0 ? "Inactivo"
+                                  : element.estado == 1 ? "Activo"
+                                  : "Mantenimiento"
+    
+                    let newTabla = ``;
+    
+                    newTabla = `
+                    <td>${numFila}</td>
+                    <td>${element.categoria}</td>
+                    <td>${element.descripcion}</td>
+                    <td>${element.marca}</td>
+                    <td>${element.modelo_equipo}</td>
+                    <td>${element.numero_serie}</td>
+                    <td> ${img}</td>
+                    <td> ${estado}</td>
+                    <td>${element.nombres}</td>
+                    <td>
+                      <a type="button" class="btn btn-info editar" data-id="${element.idequipo}" data-bs-toggle="modal" data-bs-target="#modalId">Editar</a>
+                      <a type="button" class="btn btn-danger eliminar" data-id="${element.idequipo}">Eliminar</a>
+                  </td>
+                  `;
+                  numFila ++;
+                  tabla.innerHTML += newTabla;
+                  }
+                  
+                }else{
+                  alertError("No se encuentran registros","Has ingresado un numero de serie incorrecto","Verifica los datos");
+                }
+              });
+              
+            }
+
+            function obtenerInfo(equiposARR){
 
               const Categorias  = new Set(equiposARR.map(contador => contador.categoria));
               const Modelos     = new Set(equiposARR.map(contador => contador.modelo_equipo));
@@ -205,9 +327,11 @@ require_once "../sidebar/sidebar.php";
               const cantidadModelo      = Modelos.size;
               const cantidadCategorias  = Categorias.size;
               const cantidadMarcas      = Marcas.size;
+              const cantidadEquipos     = equiposARR.length;
 
               console.log("la cantidad de modelos son :", cantidadModelo);
               console.log("y estos son los modelos :", Modelos);
+              console.log("El total de Equipos es :",cantidadEquipos);
 
               console.log("la cantidad de categorias son :", cantidadCategorias);
               console.log("y estos son las categorias :", Categorias);
@@ -218,6 +342,7 @@ require_once "../sidebar/sidebar.php";
               $("#cantidadModelos").innerHTML     = cantidadModelo;
               $("#cantidadMarcas").innerHTML      = cantidadMarcas;
               $("#cantidadCategorias").innerHTML  = cantidadCategorias;
+              $("#total").value  = cantidadEquipos;
             }
 
             function cardInfoLimpiar(){
@@ -226,8 +351,7 @@ require_once "../sidebar/sidebar.php";
               $("#cantidadModelos").innerHTML ="";
             }
 
-
-            function getCategorias(){
+            function obtenerCategorias(){
 
                 const parametros = new FormData();
 
@@ -258,7 +382,7 @@ require_once "../sidebar/sidebar.php";
                     });
             }
 
-            function getCategoriasModal(){
+            function obtenerCategoriasModal(){
 
                 const parametros = new FormData();
 
@@ -289,8 +413,7 @@ require_once "../sidebar/sidebar.php";
                     });
             }
 
-
-            function getMarcas(){
+            function obtenerMarcas(){
 
               const parametros = new FormData();
 
@@ -319,12 +442,11 @@ require_once "../sidebar/sidebar.php";
               });
             }
 
-
-            function getEquipos(){
+            function obtenerEquipos(){
 
                 const parametros = new FormData();
 
-                parametros.append("operacion","getEquipoCat");
+                parametros.append("operacion","otenerEquipoCat");
                 parametros.append("idcategoria",$("#categoria").value);
 
 
@@ -336,64 +458,22 @@ require_once "../sidebar/sidebar.php";
                     .then(data =>{
                         console.log(data);
 
-                        equipos = data;
+                        Equipos = data;
 
                         cardInfoLimpiar();
-                        getInfo(equipos);
+                        obtenerInfo(Equipos);
+                        generarTablaArray(Equipos);
+                        generarTablaArray(Equipos);
 
-                        if(equipos){
-
-                            const tabla = $("#tabla-equipos tbody");
-
-                            tabla.innerHTML = "";
-
-                            let numFila = 1;
-
-                            equipos.forEach(element => {
-                                let newTabla = ``;
-
-                                newTabla = `
-                                <td>${numFila}</td>
-                                <td>${element.categoria}</td>
-                                <td>${element.marca}</td>
-                                <td>${element.modelo_equipo}</td>
-                                <td>${element.numero_serie}</td>
-                                <td>
-                                <a href="#" data-id="${element.idequipo} data-img="${element.imagen}">Ver Imagen</a>
-                                </td>
-                                <td>${element.nombres}</td>
-                                <td>
-                                    <a type="button" class="btn btn-info editar" data-id="${element.idequipo}" data-bs-toggle="modal" data-bs-target="#modalId">Editar</a>
-                                    <a type="button" class="btn btn-danger eliminar" data-id="${element.idequipo}">Eliminar</a>
-                                </td>
-                                `;
-                                numFila ++;
-                            tabla.innerHTML += newTabla;
-                            });
-                        }
                     })
                     .catch(e => {
                         console.error(e);
                     });
             }
 
-            function reinciciarModal(){
-
-              varBandera = false;
-
-              $("#categoriaEdit").value = "";
-              $("#marcaEdit").value     = "";
-              $("#modeloEdit").value    = "";
-              $("#serieEdit").value     = "";
-              $("#imagenEdit").value    = "";
-              $("#cerrar-modal").click();
-
-              console.log(varBandera);
-            }
-
             function iniciarModal(){
-              getCategoriasModal();
-              getMarcas();
+              obtenerCategoriasModal();
+              obtenerMarcas();
             }
 
             function actualizarDatos(idEquipo){
@@ -401,18 +481,16 @@ require_once "../sidebar/sidebar.php";
               const parametros = new FormData();
 
               
+              parametros.append("operacion","modificar");
+              parametros.append("idequipo",idEquipo);
               parametros.append("idcategoria",$("#categoriaEdit").value);
-              parametros.append("idmarca",$("#categoriaEdit").value);
+              parametros.append("idmarca",$("#marcaEdit").value);
+              parametros.append("descripcion",$("#descripcionEdit").value);
               parametros.append("modelo_equipo",$("#modeloEdit").value);
               parametros.append("numero_serie",$("#serieEdit").value);
               parametros.append("imagen",$("#imagenEdit").files[0]);
-              
-              if(varBandera){
-                parametros.append("operacion","modificar");
-                parametros.append("idequipo",idEquipo);
-              }else{
-                parametros.append("operacion","registrar");
-              }
+              parametros.append("estado",$("#estadoEdit").value);
+  
               fetch(`../../controllers/equipo.controller.php`,{
                 method : "POST",
                 body :parametros
@@ -420,8 +498,9 @@ require_once "../sidebar/sidebar.php";
                 .then(result => result.json())
                 .then(data => {
                   toast("Se actualizó con exito");
-                  reinciciarModal();
-                  getEquipos();
+                  $("#formulario-equipo").reset();
+                  $("#cerrar-modal").click();
+                  obtenerEquipos();
                 })
                 .catch(e => {
                   console.error(e),
@@ -431,16 +510,19 @@ require_once "../sidebar/sidebar.php";
 
             function filtrarDatos(idEquipo){
 
-              equipos.forEach(element => {
+              Equipos.forEach(element => {
                 if(element.idequipo == idEquipo){
                   $("#categoriaEdit").value = element.idcategoria;
                   $("#marcaEdit").value     = element.idmarca;
+                  $("#descripcionEdit").value     = element.descripcion;
                   $("#modeloEdit").value    = element.modelo_equipo;
                   $("#serieEdit").value     = element.numero_serie;
                   $("#imagenEdit").files[0];
+                  $("#estadoEdit").value    = element.estado;
                 }
               });
             }
+
             function eliminarEquipo(idEquipo){
 
               const parametros = new FormData();
@@ -463,27 +545,73 @@ require_once "../sidebar/sidebar.php";
                 });
             }
 
+            function buscarEquipo(numserie){
 
-            $("#categoria").addEventListener("change", getEquipos);
+                Equipos.forEach(element => {
+                    
+                    if(element.numero_serie == numserie){
 
-            $("#registrarEquipo").addEventListener("click",() =>{
+                      const img   = element.imagen ? `
+                      <a href="#" data-decripcion="${element.descripcion}" data-img="${element.imagen}" class="btn btn-info imagen"><i class="fa-regular fa-eye"></i></a>
+                      `: "no hay imagen";
 
-              $("#modalTitleId").innerText = "Formulario de registro";
-              reinciciarModal();
-            });
+                      const estado =  element.estado == 0 ? "Inactivo"
+                                    : element.estado == 1 ? "Activo"
+                                    : "Mantenimiento"
 
-            $("#tabla-equipos tbody").addEventListener("click",(event) => {
+                      let newTabla = ``;
+
+                      newTabla = `
+                        <td>${numFila}</td>
+                        <td>${element.descripcion}</td>
+                        <td>${element.categoria}</td>
+                        <td>${element.marca}</td>
+                        <td>${element.modelo_equipo}</td>
+                        <td>${element.numero_serie}</td>
+                        <td> ${img}</td>
+                        <td> ${estado}</td>
+                        <td>${element.nombres}</td>
+                        <td>
+                          <a type="button" class="btn btn-info editar" data-id="${element.idequipo}" data-bs-toggle="modal" data-bs-target="#modalId">Editar</a>
+                          <a type="button" class="btn btn-danger eliminar" data-id="${element.idequipo}">Eliminar</a>
+                        </td>
+                      `;
+                      numFila ++;
+                      tabla.innerHTML += newTabla;
+                    }else{
+                      alertError("No hay información","el número de serie ingresado no existe","Verifique los datos")
+                    }
+              });
+            }
+
+            function abrirImagen(urlimagen,texto){
+                
+              $("#modal-visor").setAttribute("style","display: block;");
+              $("#imagen-visor").setAttribute("src","../../images/"+urlimagen);
+              $("#imagen-visor").setAttribute("alt",texto);
+              $("#texto").innerText = texto;
+
+            }
+
+            $("#categoria").addEventListener("change", obtenerEquipos);
+
+            $("#tabla-Equipos tbody").addEventListener("click",(event) => {
 
               equipoId = event.target.dataset.id;
 
-              varBandera = true;
+              if(event.target.classList.contains("imagen")){
 
-              console.log(varBandera);
-              if(event.target.classList.contains("editar")){
+                const imagen = event.target.dataset.img;
+                const descripcion = event.target.dataset.descripcion;
+  
+                abrirImagen(imagen,descripcion);
+
+              }else if(event.target.classList.contains("editar")){
 
 
                 console.log(equipoId);
-
+                
+                $("#modalTitleId").innerText = "Actualizar registro";
                 filtrarDatos(equipoId);
 
               }else if(event.target.classList.contains("eliminar")){
@@ -497,10 +625,21 @@ require_once "../sidebar/sidebar.php";
               event.preventDefault();
               actualizarDatos(equipoId);
             });
+            
+            $("#cerrar-imagen").addEventListener("click", () =>{
+              $("#modal-visor").setAttribute("style","display: none;");
+            });
+
+            $("#form-busqueda").addEventListener("submit", () => {
+              event.preventDefault();
+              const numeroSerie = $("#numserie").value;
+              
+              buscarEquipoTabla(numeroSerie);  
+            });
 
             iniciarModal();
-            getEquipos();
-            getCategorias();
+            obtenerEquipos();
+            obtenerCategorias();
         });
     </script>
 </body>

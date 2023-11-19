@@ -65,7 +65,7 @@ if(isset($_POST['operacion'])){
                 "modelo_equipo" => filtrar($_POST['modelo_equipo']),
                 "numero_serie"  => filtrar($_POST['numero_serie']),
                 "imagen"        =>  $nombreImagen, 
-                "estado"        =>  $_['estado'] 
+                "estado"        =>  $_POST['estado'] 
             ];
 
             

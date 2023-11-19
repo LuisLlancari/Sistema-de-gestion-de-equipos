@@ -13,7 +13,7 @@ require_once "../sidebar/sidebar.php";
             <div class="col-md-4 mt-2" style="margin-left: 2rem;">    
               <form id="form-busqueda">
                 <div class="input-group">
-                  <input type="text" id="busqueda" class="form-control" placeholder="Busqueda" required>
+                  <input type="text" id="busqueda" class="form-control" placeholder="Buscar por número de serie" required>
                   <button type="submit" class="btn btn-success">Buscar</button>
                 </div>
               </form>
@@ -119,6 +119,8 @@ require_once "../sidebar/sidebar.php";
         $("#marcasCal").value     = cantidadMarca;
         $("#modelosCal").value    = cantidadModelos;
         $("#categoriasCal").value = cantidadCategorias;
+
+        generarCardsArray(equipos);
       }
 
       function obtenerMarcas(){
@@ -150,15 +152,16 @@ require_once "../sidebar/sidebar.php";
           });
       }
 
-      function generarCards(varibeRender){
+      //Generamos cards a partir de un conjunto de datos
+      function generarCardsArray(varibleRender){
         
-        if(varibeRender){
+        if(varibleRender){
 
           cardEquipo.innerHTML ="";
  
-          varibeRender.forEach(element => {
+          varibleRender.forEach(element => {
 
-            url = varibeRender.imagen ? varibeRender.image : "noImage.jpg";
+            url = varibleRender.imagen ? varibleRender.imagen : "noImage.jpg";
 
             let newCard = ``;
 
@@ -182,8 +185,9 @@ require_once "../sidebar/sidebar.php";
                       <strong>Nº serie : </strong>${element.numero_serie}
                     </div>
                   </div>
-                  <div class="card-footer">
+                  <div class="card-footer text-end">
                     <a href="../datasheet/datasheet.php?obtener=${element.idequipo}" type="button" class="btn btn-success">Ver más ..</a>
+                    <a href="../sectores/detalle_sector.php?sector=${element.idsector}&nombre=${element.sector}" type="button" class="btn btn-info">Ir ..</a>
                   </div>
                 </div>
               </div>
@@ -194,7 +198,7 @@ require_once "../sidebar/sidebar.php";
           let cardError= ``;
           
           cardError = `
-            <div class="alert alert-primary" role="alert">
+            <div class="alert alert-danger" role="alert">
               <h4 class="alert-heading">Tenemos problemas</h4>
                 <p>Intentalo más tarde</p>
                 <hr>
@@ -250,7 +254,7 @@ require_once "../sidebar/sidebar.php";
 
             calcularCantidad(Equipos);            
 
-            generarCards(Equipos);
+            generarCardsArray(Equipos);
             
           })
           .catch(e =>{
@@ -274,7 +278,7 @@ require_once "../sidebar/sidebar.php";
         EqCategoriaF = Equipos.filter(equipo =>equipo.idcategoria == idcategoriaIN);
 
         console.log(EqCategoriaF);
-        calcularCantidad(EqMarcasF);
+        calcularCantidad(EqCategoriaF);
       }
 
       function filtroDoble(listaFiltrada,idcategoriaIN){
@@ -283,7 +287,7 @@ require_once "../sidebar/sidebar.php";
           listarEquipos();
         }else{
 
-          if($("#marcaFiltro").value == 0){
+          if($("#marcaFiltro").value == 0 ){
             filtrarPorCategoria(idcategoriaIN);
           }else{
             EqCategoriaF = listaFiltrada.filter(lista => lista.idcategoria == idcategoriaIN);
@@ -299,19 +303,74 @@ require_once "../sidebar/sidebar.php";
 
       }
 
-      function buscarEquipo(numserie){
+      //Generamos un card a partir de un objeto en específico
+      function buscarEquipoCard(numserie){
 
+        cardEquipo.innerHTML ="";
         Equipos.forEach(element => {
-          if(element.numero_serie == numserie){
-          console.log(element);
-        }
+        
+          if(element.numero_serie == numserie ){
+            if(element.estado == 1){
+
+              //LIMPIAMOS LOS CONTADORES
+              $("#marcasCal").value     = "";
+              $("#modelosCal").value    = "";
+              $("#categoriasCal").value = "";
+
+              console.log(element);
+              url = element.imagen ? element.imagen : "noImage.jpg";
+
+              let newCard = ``;
+
+              newCard = `
+                <div class="col-md-3 m-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <strong>Marca : </strong>${element.marca}
+                    </div>
+                    <div class="card-body">
+                      <div>
+                        <img src="../../images/${url}" style="height: 10rem; width: 12rem;" alt="${element.modelo_equipo}">
+                      </div>
+                      <div>
+                        <strong>Categoría : </strong>${element.categoria}
+                        <br>
+                        <strong>Descripción : </strong>${element.descripcion}
+                        <br>
+                        <strong>Modelo : </strong>${element.modelo_equipo}
+                        <br>
+                        <strong>Nº serie : </strong>${element.numero_serie}
+                      </div>
+                    </div>
+                    <div class="card-footer text-end">
+                      <a href="../datasheet/datasheet.php?obtener=${element.idequipo}" type="button" class="btn btn-success">Ver más ..</a>
+                      <a href="../sectores/detalle_sector.php?sector=${element.idsector}&nombre=${element.sector}" type="button" class="btn btn-info">Ir ..</a>
+                      </div>
+                  </div>
+                </div>
+              `;
+              cardEquipo.innerHTML += newCard;
+            }else{
+              let cardError= ``;
+          
+              cardError = `
+                <div class="alert alert-danger" role="alert">
+                  <h4 class="alert-heading">Tenemos problemas</h4>
+                    <p>Intentalo más tarde</p>
+                    <hr>
+                  <p class="mb-0">Ocurrió un error al cargar los datos</p>
+                </div>
+              `;
+              cardEquipo.innerHTML =cardError;
+            }
+          }
         });
       }
       
       $("#form-busqueda").addEventListener("submit",(event) => {
         event.preventDefault();
         const numeroSerie = $("#busqueda").value;
-        buscarEquipo(numeroSerie);
+        buscarEquipoCard(numeroSerie);
 
        });
 

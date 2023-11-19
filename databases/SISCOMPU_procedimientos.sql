@@ -335,17 +335,25 @@ AS
     EQUI.modelo_equipo,
     EQUI.numero_serie,
     EQUI.imagen,
-    CASE EQUI.estado
+    SDE.idsector,
+    SEC.sector,
+	EQUI.estado,
+    /*CASE EQUI.estado
 		WHEN '0' THEN 'inactivo'
         WHEN '1' THEN 'activo'
         WHEN '2' THEN 'mantenimiento'
-	END AS estado,
+	END AS estado,*/
 	USU.nombres
     FROM equipos EQUI
+    INNER JOIN sectores_detalle SDE ON SDE.idequipo = EQUI.idequipo
+    INNER JOIN sectores AS SEC ON SEC.idsector = SDE.idsector
     INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
     INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
     INNER JOIN usuarios USU ON USU.idusuario = EQUI.idusuario
-	WHERE EQUI.inactive_at IS NULL;
+	WHERE 
+		EQUI.inactive_at IS NULL AND
+        SDE.inactive_at IS NULL
+	ORDER BY EQUI.numero_serie;
     
 DROP PROCEDURE IF EXISTS spu_equipos_registrar;
 DELIMITER $$
@@ -411,7 +419,7 @@ CREATE PROCEDURE spu_equipos_modificar
     IN _idcategoria		INT,
     IN _idmarca			INT,
     IN _idusuario 		INT,
-    IN _descripcion		INT,
+    IN _descripcion		VARCHAR(45),
     IN _modelo_equipo 	VARCHAR(45),
     IN _numero_serie	VARCHAR(45),
     IN _imagen			VARCHAR(200),

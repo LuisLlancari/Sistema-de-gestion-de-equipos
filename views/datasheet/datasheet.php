@@ -288,15 +288,6 @@ require_once "../sidebar/sidebar.php";
 
         }
 
-        function reiniciarModal(){
-            varBandera = false;
-            $("#clave").value = "";
-            $("#valor").value = "";
-            $("#cerrar-modal").click();
-
-            console.log(varBandera);
-        }
-
         function actualizarDatasheet(iddatasheet){
             
             const parametros = new FormData();
@@ -321,9 +312,14 @@ require_once "../sidebar/sidebar.php";
             })
                 .then(result => result.json())
                 .then(data => {
+
                     toast("Se actualizó con exito");
-                    obtenerDatasheet(idEquipoObt);
-                    reiniciarModal();
+                    obtenerDatasheet(idEquipoObt); // Funcion para volver a listar
+                    $("#datasheet-form").reset();   // funcion para reinicar modal, en tu caso seria algo como: $("#micaja").reset();
+                    //y aqui harias lo que te digo para cerrar el modal algo como:
+                    $("#cerrar-modal").click();//$("boton-cerrar").click();
+
+                    varBandera = false;
 
                 })
                 .catch(e => {
@@ -406,7 +402,6 @@ require_once "../sidebar/sidebar.php";
             
             varBandera = true;
 
-            console.log(varBandera);
             if(event.target.classList.contains("editar")){
 
                 console.log(dataid);

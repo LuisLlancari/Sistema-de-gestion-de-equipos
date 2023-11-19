@@ -36,7 +36,7 @@ class Equipo extends Conexion{
      */
     public function registrar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_equipos_registrar(?,?,?,?,?,?)");
+            $consulta = $this->conexion->prepare("CALL spu_equipos_registrar(?,?,?,?,?,?,?,?)");
             $consulta->execute(
                 array(
                     $datos['idcategoria'],
@@ -62,7 +62,7 @@ class Equipo extends Conexion{
      */
     public function modificar($datos = []){
         try{
-        $consulta = $this->conexion->prepare("CALL spu_equipos_modificar(?,?,?,?,?,?,?)");
+        $consulta = $this->conexion->prepare("CALL spu_equipos_modificar(?,?,?,?,?,?,?,?,?)");
         $consulta->execute(
             array(
                 $datos['idequipo'],
