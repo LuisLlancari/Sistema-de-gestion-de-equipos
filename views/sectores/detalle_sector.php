@@ -14,7 +14,6 @@ require_once "../../views/sidebar/sidebar.php";
   <div class="row">
     <div class="col-md-12 text-center">
       <div class="btn-sidebar toggled" id="menu-toggle">
-        <span class="fas fa-bars"></span>
       </div>
       <div class="m-4">
         <h1 class="fw-bolder d-inline-block"><i class="bi bi-card-checklist"> </i><span id="sector"></span></h1>
@@ -82,7 +81,10 @@ require_once "../../views/sidebar/sidebar.php";
       const tabla = document.querySelector("#tabla-detalle-sector tbody");
       const nombreSectorElemento = document.getElementById("sector");
       const sectorId = new URLSearchParams(window.location.search).get('sector');
-      nombreSectorElemento.innerText = sectorId;
+      const nombreSector = new URLSearchParams(window.location.search).get('nombre');
+
+      console.log(nombreSector);
+      nombreSectorElemento.innerText = nombreSector;
 
       function listarDetalles(){
         const parametros = new FormData();
@@ -96,8 +98,7 @@ require_once "../../views/sidebar/sidebar.php";
           .then(respuesta => respuesta.json())
           .then(datosRecibidos => {
             if (datosRecibidos.length > 0) {
-                nombreSectorElemento.innerText = datosRecibidos[0].sector;
-                
+
                 let numFila = 1;
                 tabla.innerHTML = '';
                 datosRecibidos.forEach(registro => {

@@ -14,7 +14,6 @@ require_once "../../views/sidebar/sidebar.php";
   <div class="row">
     <div class="col-md-12 text-center">
       <div class="btn-sidebar toggled" id="menu-toggle">
-        <span class="fas fa-bars"></span>
       </div>
       <div class="m-4">
         <h1 class="fw-bolder d-inline-block"><i class="bi bi-shop-window"></i> SECTORES</h1>
@@ -118,7 +117,7 @@ require_once "../../views/sidebar/sidebar.php";
               // Renderizado
               const nuevoItem =`
                 <div class="col-md-4 mb-4">
-                  <a href="../../views/sector/detalle_sector.php?sector=${element.idsector}" data-sector="${element.idsector}" class="card text-center border-yellow" style="width: 100%; cursor: pointer; text-decoration: none; color: black;">
+                  <a href="../../views/sectores/detalle_sector.php?sector=${element.idsector}&nombre=${element.Nombre_Sector}" data-sector="${element.idsector}" class="card text-center border-yellow" style="width: 100%; cursor: pointer; text-decoration: none; color: black;">
                     <img src="../../test/sector.jpg" class="card-img-top" alt="${element.Nombre_Sector}" style="width: 100%; height: 200px;">
                     <div class="card-body">
                       <h3 class="card-title">${element.Nombre_Sector}</h3>
