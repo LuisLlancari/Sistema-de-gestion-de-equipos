@@ -51,6 +51,7 @@ class Mantenimiento extends Conexion{
                     $datos ['descripcion']
                 )
             );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());
