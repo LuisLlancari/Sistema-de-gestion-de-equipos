@@ -3,7 +3,8 @@ session_start();
 date_default_timezone_set("America/Lima");
 
 require_once "../models/Equipo.php";
-require_once '../test/filtro.php';
+require_once "../test/filtro.php";
+require_once "../pdf/estadosEquipos.php";
 
 if(isset($_POST['operacion'])){
 
@@ -105,6 +106,18 @@ if(isset($_POST['operacion'])){
         case 'categoriasEquiposGR':
             echo json_encode($equipo->categoriasEquiposGR());
             
+            break;
+
+        case 'sectoresEquiposGR':
+            echo json_encode($equipo->sectoresEquiposGR());
+            break;
+
+        case 'generarPDF':
+            $datosEnviar = [
+                "datos" => $_POST["datos"]
+            ];
+            
+            echo json_encode(generarPDF($datosEnviar));
             break;
     }
 }

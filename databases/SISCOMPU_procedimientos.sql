@@ -824,7 +824,7 @@ BEGIN
 END $$
 DELIMITER ;
 
--- CATEGORIAS POR QUIPO
+-- CATEGORIAS POR EQUIPO
 DROP PROCEDURE IF EXISTS spu_estadistica_equiposCategoria;
 DELIMITER $$
 CREATE PROCEDURE spu_estadistica_equiposCategoria()
@@ -837,5 +837,22 @@ BEGIN
 		EQUI.inactive_at IS NULL
 	GROUP BY categoria
 	ORDER BY categoria;
+END $$
+DELIMITER ;
+
+-- EQUIPOS POR SECTORES
+SELECT * FROM SECTORES_DETALLE;
+DROP PROCEDURE IF EXISTS spu_estadistica_equiposSector;	
+DELIMITER $$
+CREATE PROCEDURE spu_estadistica_equiposSector()
+BEGIN
+	SELECT COUNT(*) AS 'equipos',
+		SEC.sector
+    FROM sectores_detalle AS SED
+    INNER JOIN sectores AS SEC ON SEC.idsector = SED.idsector
+    WHERE
+		SED.inactive_at IS NULL
+	GROUP BY SEC.sector
+	ORDER BY SEC.sector; 
 END $$
 DELIMITER ;

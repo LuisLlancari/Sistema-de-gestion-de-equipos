@@ -155,4 +155,20 @@ class Equipo extends Conexion{
             die($e->getMessage());
         }
     }
+
+    /**
+     * Método par generar un gráfico de la cantidad de equipos a partir de los sectores
+     */
+
+     public function sectoresEquiposGR(){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_estadistica_equiposSector()");
+            $consulta->execute();
+
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+     }
 }

@@ -7,7 +7,7 @@ require_once "../sidebar/sidebar.php";
       <div class="row">
         <div class="row bg-secondary text-center">
             <div class="col-md-1">
-              <button type="button" class="btn btn-success m-2" id="informe-categoriasEqui"><i class="fa-regular fa-file-pdf"></i></button>
+              <button  type="button" class="btn btn-success m-2" id="informe-categoriasEqui"><i class="fa-regular fa-file-pdf"></i></button>
             </div>
             <div class="col-md-11">
               <div class="text-light">
@@ -44,7 +44,10 @@ require_once "../sidebar/sidebar.php";
                 <h1 class="">Equipos por sectores</h1>
               </div>
             </div>
-        </div>
+          </div>
+          <div style="height: 40rem; margin-left:25%">
+            <canvas id="sectoresEquipo"></canvas>
+          </div>
       </div>
       <div class="m-2">
         <div class="row bg-secondary text-center">
@@ -103,8 +106,9 @@ require_once "../sidebar/sidebar.php";
         return document.querySelector(id);
       }
 
-      const graficoDona   = $("#cateogoriasEquipos");
-      const graficoBarras = $("#estadosEquipos");
+      const grDona   = $("#cateogoriasEquipos");
+      const grBarras = $("#estadosEquipos");
+      const grDonaSector = $("#sectoresEquipo");
 
       const coloresBarras = [
         "rgba(32, 223, 29,0.5)",
@@ -112,9 +116,11 @@ require_once "../sidebar/sidebar.php";
         "rgba(230, 27, 17, 0.5)"
       ];
 
-      function generarGraficoDona(datos){
+      let datosEquipos = null;
 
-        new Chart(graficoDona, {
+      function generarGrDona(datos){
+
+        new Chart(grDona, {
           type: 'doughnut',
           data: {
             labels: datos.map(contador => contador.categoria),
@@ -124,19 +130,12 @@ require_once "../sidebar/sidebar.php";
               borderWidth: 1
             }]
           },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true
-              }
-            }
-          }
         });
       }
 
-      function generarGraficoBarras(datos){
+      function generarGrBarras(datos){
       
-        new Chart(graficoBarras, {
+        new Chart(grBarras, {
           type: 'bar',
           data: {
             labels: datos.map(contador => contador.estado),
@@ -157,6 +156,20 @@ require_once "../sidebar/sidebar.php";
         });
       }
       
+      function generarGrDonaSector(datos){
+        new Chart(grDonaSector, {
+          type: 'doughnut',
+          data: {
+            labels: datos.map(contador => contador.sector),
+            datasets: [{
+              label: 'Cantidad de equipos',
+              data: datos.map(contador => contador.equipos),
+              borderWidth: 1
+            }]
+          },
+        });
+      }
+
       function obtenerCategoriasEquipos(){
 
         const parametros = new FormData();
@@ -169,7 +182,7 @@ require_once "../sidebar/sidebar.php";
           .then(result => result.json())
           .then(data => {
             console.log(data);
-            generarGraficoDona(data);
+            generarGrDona(data);
           })
           .catch(e => {
             console.error(e)
@@ -189,14 +202,65 @@ require_once "../sidebar/sidebar.php";
           .then(data => {
             console.log(data);
 
-            generarGraficoBarras(data);
+            datosEquipos = data;
+
+            generarGrBarras(datosEquipos);
           })
-          .catch();
+          .catch(e => {
+            console.error(e);
+          });
       }
-  
-  
+
+      function obtenerSectoresEquipos(){
+        const parametros = new FormData();
+        parametros.append("operacion","sectoresEquiposGR");
+
+        fetch(`../../controllers/equipo.controller.php`,{
+          method : "POST",
+          body: parametros
+        })
+          .then(result => result.json())
+          .then(data => {
+            console.log(data);
+
+            datosEquipos = data;
+
+            generarGrDonaSector(datosEquipos);
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+      
+      function generarPDF(datos){
+        const parametros = new FormData();
+        parametros.append("operacion","generarPDF");
+        parametros.append("datos",datos);
+
+        fetch(`../../controllers/equipo.controller.php`,{
+          method:"POST",
+          body: parametros
+        }) 
+          .then(result => result.blob())
+          .then(data => {
+            const fileURL = URL.createObjectURL(data);
+            window.open(fileURL); 
+          })
+          .catch(e => {
+            console.error(e)
+          });
+      }
+      $("#informe-categoriasEqui").addEventListener("click", () =>{
+        console.log(datosEquipos);
+        generarPDF(datosEquipos);
+      });
+
+
       obtenerCategoriasEquipos();
       obtenerEstadosequipos();
+      obtenerSectoresEquipos();
+
+
 
 });
 </script>
