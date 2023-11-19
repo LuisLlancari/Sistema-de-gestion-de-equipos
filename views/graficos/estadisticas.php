@@ -15,7 +15,7 @@ require_once "../sidebar/sidebar.php";
               </div>
             </div>
         </div>
-        <div style="height: 30rem; margin-left:15%">
+        <div style="height: 40rem; margin-left:25%">
           <canvas id="cateogoriasEquipos"></canvas>
         </div>
       </div>
@@ -96,46 +96,108 @@ require_once "../sidebar/sidebar.php";
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-    const ctx = document.getElementById('cateogoriasEquipos');
+    document.addEventListener("DOMContentLoaded", () =>{
 
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
+
+      function $(id){
+        return document.querySelector(id);
       }
-    }
-  });
 
-  const ctx2 = document.getElementById('estadosEquipos');
+      const graficoDona   = $("#cateogoriasEquipos");
+      const graficoBarras = $("#estadosEquipos");
 
-new Chart(ctx2, {
-  type: 'bar',
-  data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      borderWidth: 1
-    }]
-  },
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true
+      const coloresBarras = [
+        "rgba(32, 223, 29,0.5)",
+        "rgba(17, 101, 230,0.5)",
+        "rgba(230, 27, 17, 0.5)"
+      ];
+
+      function generarGraficoDona(datos){
+
+        new Chart(graficoDona, {
+          type: 'doughnut',
+          data: {
+            labels: datos.map(contador => contador.categoria),
+            datasets: [{
+              label: 'Cantidad de equipos',
+              data: datos.map(contador => contador.cantidad),
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
       }
-    }
-  }
+
+      function generarGraficoBarras(datos){
+      
+        new Chart(graficoBarras, {
+          type: 'bar',
+          data: {
+            labels: datos.map(contador => contador.estado),
+            datasets: [{
+              label: 'Estados',
+              data: datos.map(contador => contador.cantidad),
+              backgroundColor: coloresBarras,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      }
+      
+      function obtenerCategoriasEquipos(){
+
+        const parametros = new FormData();
+        parametros.append("operacion","categoriasEquiposGR");
+
+        fetch(`../../controllers/equipo.controller.php`,{
+          method: "POST",
+          body: parametros
+        })
+          .then(result => result.json())
+          .then(data => {
+            console.log(data);
+            generarGraficoDona(data);
+          })
+          .catch(e => {
+            console.error(e)
+          });
+      }
+
+      function obtenerEstadosequipos(){
+
+        const parametros = new FormData();
+        parametros.append("operacion","estadosequiposGR");
+
+        fetch(`../../controllers/equipo.controller.php`,{
+          method : "POST",
+          body: parametros
+        })
+          .then(result => result.json())
+          .then(data => {
+            console.log(data);
+
+            generarGraficoBarras(data);
+          })
+          .catch();
+      }
+  
+  
+      obtenerCategoriasEquipos();
+      obtenerEstadosequipos();
+
 });
 </script>
 </body>

@@ -133,6 +133,8 @@ class Equipo extends Conexion{
         try{
             $consulta = $this->conexion->prepare("CALL spu_estadistica_equiposporEstado()");
             $consulta->execute();
+
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());
@@ -146,6 +148,8 @@ class Equipo extends Conexion{
         try{
             $consulta = $this->conexion->prepare("CALL spu_estadistica_equiposCategoria()");
             $consulta->execute();
+
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());
