@@ -425,7 +425,7 @@ require_once "../sidebar/sidebar.php";
 
         $("#registrarData").addEventListener("click", () =>{
             $("#modalTitleId").innerText = "Registrar datos";
-            reiniciarModal();
+            $("#datasheet-form").reset();
         });
 
         listar_cronograma(idEquipoObt);

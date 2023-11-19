@@ -7,11 +7,11 @@ if (isset($_POST['operacion'])){
     $mantenimiento = new Mantenimiento();
 
     switch ($_POST['operacion']){
-        case 'listar':
+        case 'listar_mantenimiento':
             echo json_encode($mantenimiento->listar());
         break;
 
-        case 'listarPorID':
+        case 'listar_mantenimiento_id':
             $datosEnviar = [
                 'idmantenimiento' => $_POST['idmantenimiento']
             ];
@@ -19,7 +19,7 @@ if (isset($_POST['operacion'])){
         break;
         
 
-        case 'registrar':
+        case 'registrar_mantenimiento':
             $datosEnviar = [
                 'idusuario' => $_POST['idusuario'],
                 'idcronograma' => $_POST['idcronograma'],
@@ -29,7 +29,7 @@ if (isset($_POST['operacion'])){
             echo json_encode($mantenimiento->registrar($datosEnviar));
         break;
 
-        case 'modificar';
+        case 'modificar_mantenimiento';
             $datosEnviar = [
                 "idmantenimiento"      => $_POST['idmantenimiento'],
                 "idusuario"            => $_POST['idusuario'],

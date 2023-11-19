@@ -8,25 +8,25 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 $iconos = [
 
     "Gráficos" => "fa-chart-bar",
-    "Cronográmas" => "fa-calendar",
-    "Equípos" => "fa-desktop",
+    "Cronograma" => "fa-calendar",
+    "Equipos" => "fa-desktop",
     "Usuarios" => "fa-user",
     "Sectores" => "fa-building"
 
 ];
 
 $accesos = [
-    "ADMIN" =>[
-        "Sectores"      => ["inicio"],
-        "Cronográmas"    => [],
-        "Equípos"       => ["catalogo","panel"],
-        "Usuarios"       => ["usuario"],
-        "Gráficos"      => ["index"],
+    "ADMINISTRADOR" =>[
+        "Sectores"      => ["Inicio"],
+        "Cronograma"    => ["Cronograma"],
+        "Equipos"       => ["Catálogo","Panel"],
+        "Usuarios"       => ["Usuario"],
+        "Gráficos"      => ["index","Estadísticas"],
     ],
-    "ASIST" =>[
+    "ASISTENTE" =>[
         "Gráficos"      => ["index"],
-        "Cronográmas"    => [],
-        "Equípos"       => ["catalogo"]
+        "Cronograma"    => [],
+        "Equipos"       => ["Catálogo"]
         ]
     ];
 
@@ -51,6 +51,7 @@ $accesos = [
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link rel="stylesheet" href="../../css/style.css">
+    <link href="/website/css/uicons-outline-rounded.css"rel="stylesheet">
 
     <!-- Font Awesome icons (free version)-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -63,7 +64,7 @@ $accesos = [
         <a href='#' class='nav_link cat'>SISCOMPU</a>
         <header class="header"id="header">
             <div class="centered-span">
-                <span class="text-uppercase"><?=$_SESSION["apellidos"]?> - </span><span class="center-span"><?=$_SESSION["nombres"]?> - </span> <span id="rolObt"><?=$_SESSION["rol"]?></span> 
+                <span class="text-uppercase"><?=$_SESSION["apellidos"]?> - </span><span class="center-span"><?=$_SESSION["nombres"]?> , </span> <span id="rolObt"><?=$_SESSION["rol"]?></span> 
             </div>
             <div class="header_img centered-img"> 
                 
@@ -84,13 +85,13 @@ $accesos = [
                         $icono = $iconos[$categoria];
                         $cadena = reemplazarCadena(strtolower($categoria));
             
-                        if($categoria != "Equípos" && $categoria != "Gráficos" && $categoria != "Usuarios" && $categoria != "Sectores" && $categoria != "Cronográmas"){
+                        if($categoria != "Equipos" && $categoria != "Gráficos" && $categoria != "Usuarios" && $categoria != "Sectores" && $categoria ){
                             echo "
                                 <a href='../{$cadena}/{$cadena}.php' class='nav_link cat'></span>{$categoria}</a>
                             "; 
                         }
 
-                        if($categoria == "Equípos" || $categoria == "Gráficos" || $categoria == "Usuarios" || $categoria == "Sectores" || $categoria != "Cronográmas"){
+                        if($categoria == "Equipos" || $categoria == "Gráficos" || $categoria == "Usuarios" || $categoria == "Sectores" || $categoria == "Cronograma"){
                             echo "
                                 <a type ='button' href='#' class='dropdown-btn'><i class='fas {$icono}'></i> $categoria<i class='fa fa-caret-down'></i></span></a>
                             ";
@@ -102,10 +103,10 @@ $accesos = [
                             <div class='dropdown-container'>
                             ";
                             foreach ($subcategoria as $item) {
-                    
+                                $cadenaSub = reemplazarCadena(strtolower($item));
                                 echo "
                                 <li>
-                                    <a href='../{$cadena}/{$item}.php' class='nav_link'><span class='nav_name'>{$item}</span></a> 
+                                    <a href='../{$cadena}/{$cadenaSub}.php' class='nav_link'><span class='nav_name'>{$item}</span></a> 
                                 </li>
                                 ";
                             }

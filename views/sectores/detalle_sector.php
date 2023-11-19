@@ -81,8 +81,10 @@ require_once "../sidebar/sidebar.php";
       const tabla = document.querySelector("#tabla-detalle-sector tbody");
       const nombreSectorElemento = document.getElementById("sector");
       const sectorId = new URLSearchParams(window.location.search).get('sector');
-      const nombre = new URLSearchParams(window.location.search).get('nombre');
-      nombreSectorElemento.innerText = nombre;
+      const nombreSector = new URLSearchParams(window.location.search).get('nombre');
+
+      console.log(nombreSector);
+      nombreSectorElemento.innerText = nombreSector;
 
       function listarDetalles(){
         const parametros = new FormData();
@@ -96,8 +98,7 @@ require_once "../sidebar/sidebar.php";
           .then(respuesta => respuesta.json())
           .then(datosRecibidos => {
             if (datosRecibidos.length > 0) {
-                nombreSectorElemento.innerText = datosRecibidos[0].sector;
-                
+
                 let numFila = 1;
                 tabla.innerHTML = '';
                 datosRecibidos.forEach(registro => {
