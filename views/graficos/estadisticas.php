@@ -4,26 +4,73 @@ require_once "../sidebar/sidebar.php";
 ?>  
     <div class="height-100 bg-light">
 
-      <div class="m-2">
-        <h1 class="bg-secondary text-light text-center">Categoría de los equipos</h1>
+      <div class="row">
+        <div class="row bg-secondary text-center">
+            <div class="col-md-1">
+              <button type="button" class="btn btn-success m-2" id="informe-categoriasEqui"><i class="fa-regular fa-file-pdf"></i></button>
+            </div>
+            <div class="col-md-11">
+              <div class="text-light">
+                <h1 class="">Categoría de los equipos</h1>
+              </div>
+            </div>
+        </div>
         <div style="height: 30rem; margin-left:15%">
           <canvas id="cateogoriasEquipos"></canvas>
         </div>
       </div>
-      <div class="m-2">
-        <h1 class="bg-secondary text-light text-center">Estado de los equipos</h1>
+      <div class="m-2">     
+        <div class="row bg-secondary text-center">
+            <div class="col-md-1">
+            <button type="button" class="btn btn-success m-2" id="informe-estadosEqui"><i class="fa-regular fa-file-pdf"></i></button>
+            </div>
+            <div class="col-md-11">
+              <div class="text-light">
+                <h1 class="">Estado de los equipos</h1>
+              </div>
+            </div>
+        </div>
         <div style="height: 30rem; margin-left:15%">
           <canvas id="estadosEquipos"></canvas>
         </div>
       </div>
       <div class="m-2">
-        <h1 class="bg-secondary text-light text-center">Equipos por sectores</h1>
+        <div class="row bg-secondary text-center">
+          <div class="col-md-1">
+            <button type="button" class="btn btn-success m-2" id="informe-sectoresEqui"><i class="fa-regular fa-file-pdf"></i></button>
+            </div>
+            <div class="col-md-11">
+              <div class="text-light">
+                <h1 class="">Equipos por sectores</h1>
+              </div>
+            </div>
+        </div>
       </div>
       <div class="m-2">
-        <h1 class="bg-secondary text-light text-center">Estado de los cronogramas</h1>
+        <div class="row bg-secondary text-center">
+          <div class="col-md-1">
+            <button type="button" class="btn btn-success m-2" id="informe-estadosCro"><i class="fa-regular fa-file-pdf"></i></button>
+            </div>
+            <div class="col-md-11">
+              <div class="text-light">
+                <h1 class="">Estado de los cronogramas</h1>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="m-2">
-        <h1 class="bg-secondary text-light text-center">Estado de los mantemietos</h1>
+      <div class="row bg-secondary text-center">
+          <div class="col-md-1">
+            <button type="button" class="btn btn-success m-2" id="informe-estadosMan"><i class="fa-regular fa-file-pdf"></i></button>
+            </div>
+            <div class="col-md-11">
+              <div class="text-light">
+                <h1 class="">Estado de los matenimientos</h1>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -52,7 +99,7 @@ require_once "../sidebar/sidebar.php";
     const ctx = document.getElementById('cateogoriasEquipos');
 
   new Chart(ctx, {
-    type: 'bar',
+    type: 'doughnut',
     data: {
       labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
       datasets: [{
