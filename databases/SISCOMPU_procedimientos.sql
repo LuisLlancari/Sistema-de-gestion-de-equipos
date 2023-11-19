@@ -798,3 +798,30 @@ BEGIN
     WHERE MANSEC.inactive_at IS NULL;
 END $$
 DELIMITER ;
+
+
+-- GRAFICOS
+
+
+DROP PROCEDURE IF EXISTS spu_mantenimiento_grafico;
+DELIMITER $$
+CREATE PROCEDURE spu_mantenimiento_grafico
+(
+    in _fecha_inicio 	date,
+	in _fecha_fin 	date
+)
+BEGIN
+	 
+SELECT
+count(1) as 'cantidad_tipo',
+cro.tipo_mantenimiento
+FROM cronogramas as cro
+INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+left JOIN mantenimiento as man on man.idcronograma=cro.idcronograma
+WHERE cro.inactive_at IS NULL and cro.tipo_mantenimiento!=''
+-- AND man.create_at between _fecha_inicio and _fecha_fin
+group by cro.tipo_mantenimiento;
+     
+END $$
+DELIMITER ;
+ 

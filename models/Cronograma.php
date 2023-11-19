@@ -95,7 +95,20 @@ class Cronograma extends Conexion{
   }
 
 
+  
+  public function listar_cronograma_grafico($datos = []){
+    try {
+      $consulta = $this->conexion->prepare("CALL spu_mantenimiento_grafico(?,?)");
+      $consulta->execute(array(
+        $datos['fechainicio'],
+        $datos['fechafin']
+      ));
 
+      return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
   
 
 }
