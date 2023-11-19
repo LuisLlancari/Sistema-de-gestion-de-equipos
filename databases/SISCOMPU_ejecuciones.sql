@@ -239,3 +239,21 @@ CALL spu_listar_mantenimiento_porID(1);
 CALL spu_obtenerCNsectores();
 CALL spu_listar_detalleSectores(4);
 CALL spu_insertar_sector("Aula Zoom");
+
+-- SECTORES
+SELECT * FROM sectores;
+INSERT INTO sectores (sector, create_at)
+VALUES
+    ('Laboratorio de Informática', NOW()),
+    ('Biblioteca', NOW()),
+    ('Aula de Tecnología', NOW()),
+    ('Sala de Audiovisuales', NOW()),
+    ('Sala de Innovación', NOW()),
+    ('Sala de Robótica', NOW()),
+    ('Centro de Recursos Digitales', NOW()),
+    ('Aula Virtual', NOW()),
+    ('Centro de Medios Interactivos', NOW()),
+    ('Espacio Maker', NOW());
+-- DETALLE SECTORES 
+SELECT * FROM sectores_detalle;
+INSERT INTO sectores_detalle(idsector,idequipo,idusuario)VALUES(1,1,1),(3,3,3);

@@ -87,11 +87,11 @@ CREATE TABLE sectores
 DROP TABLE IF EXISTS sectores_detalle;
 CREATE TABLE sectores_detalle
 (
-	idmantenimiento_sector			INT PRIMARY KEY AUTO_INCREMENT,
+	iddeatlle_sector				INT PRIMARY KEY AUTO_INCREMENT,
     idsector						INT 	NOT NULL,
     idequipo						INT 	NOT NULL,
     idusuario						INT		NOT NULL,
-    fecha_inicio					DATE	NOT NULL,
+    fecha_inicio					DATE	NOT NULL DEFAULT NOW(),
     fecha_fin						DATE 	NULL,
 	create_at						DATE	NOT NULL DEFAULT NOW(),
 	update_at						DATE	NULL,
@@ -130,7 +130,7 @@ CREATE TABLE mantenimiento
     CONSTRAINT uk_idcronogram_man UNIQUE(idusuario,idcronograma)
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS sectores;
+/*DROP TABLE IF EXISTS sectores;
 CREATE TABLE sectores
 (
 	idsector			INT PRIMARY KEY AUTO_INCREMENT,
@@ -156,7 +156,7 @@ CREATE TABLE sectores_detalle
 	CONSTRAINT fk_idequipo_sect 	FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo),
 	CONSTRAINT fk_idusuario_sect FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
-
+*/
 
 /*
 DROP TABLE IF EXISTS ;

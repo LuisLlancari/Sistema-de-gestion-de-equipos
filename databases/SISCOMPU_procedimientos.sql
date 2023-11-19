@@ -215,7 +215,7 @@ DROP PROCEDURE IF EXISTS spu_listar_detalleSectores;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_detalleSectores(IN _idsector INT)
 BEGIN
-    SELECT DET.idmantenimiento_sector,
+    SELECT DET.iddeatlle_sector,
 		SEC.sector,
         CAT.categoria,
         MAR.marca,

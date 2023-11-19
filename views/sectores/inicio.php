@@ -2,6 +2,7 @@
 require_once "../../views/sidebar/sidebar.php";
 ?>  
 
+<!-- TODO EL HEAD Y PARTE DEL BOY NO DEBERIA ESTAR YA QUE EXIST EN EL SIDEBAR -->
 <!doctype html>
 <html lang="en">
 
@@ -74,6 +75,7 @@ require_once "../../views/sidebar/sidebar.php";
     </div>
   </div>
 </div>
+</main>
 
 
 

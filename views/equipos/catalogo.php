@@ -11,9 +11,9 @@ require_once "../sidebar/sidebar.php";
           <!-- FILTROS -->
           <div class="row">
             <div class="col-md-4 mt-2" style="margin-left: 2rem;">    
-              <form action="" id="form-busqueda">
+              <form id="form-busqueda">
                 <div class="input-group">
-                  <input type="text" id="busqueda" class="form-control" placeholder="Busqueda">
+                  <input type="text" id="busqueda" class="form-control" placeholder="Busqueda" required>
                   <button type="submit" class="btn btn-success">Buscar</button>
                 </div>
               </form>
@@ -108,9 +108,9 @@ require_once "../sidebar/sidebar.php";
 
       function calcularCantidad(equipos){
 
-        const Marcas      = new Set(equipos.map(equipo => equipo.marca));
+        const Marcas      = new Set(equipos.map(equipo => equipo.idmarca));
         const Modelos     = new Set(equipos.map(equipo => equipo.modelo_equipo));
-        const Categorias  = new Set(equipos.map(equipo => equipo.categoria));
+        const Categorias  = new Set(equipos.map(equipo => equipo.idcategoria));
 
         const cantidadMarca       = Marcas.size;
         const cantidadModelos     = Modelos.size;
@@ -148,6 +148,62 @@ require_once "../sidebar/sidebar.php";
           .catch(e => {
             console.error(e);
           });
+      }
+
+      function generarCards(varibeRender){
+        
+        if(varibeRender){
+
+          cardEquipo.innerHTML ="";
+ 
+          varibeRender.forEach(element => {
+
+            url = varibeRender.imagen ? varibeRender.image : "noImage.jpg";
+
+            let newCard = ``;
+
+            newCard = `
+              <div class="col-md-3 m-4">
+                <div class="card">
+                  <div class="card-header">
+                    <strong>Marca : </strong>${element.marca}
+                  </div>
+                  <div class="card-body">
+                    <div>
+                      <img src="../../images/${url}" style="height: 10rem; width: 12rem;" alt="${element.modelo_equipo}">
+                    </div>
+                    <div>
+                      <strong>Categoría : </strong>${element.categoria}
+                      <br>
+                      <strong>Descripción : </strong>${element.descripcion}
+                      <br>
+                      <strong>Modelo : </strong>${element.modelo_equipo}
+                      <br>
+                      <strong>Nº serie : </strong>${element.numero_serie}
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="../datasheet/datasheet.php?obtener=${element.idequipo}" type="button" class="btn btn-success">Ver más ..</a>
+                  </div>
+                </div>
+              </div>
+            `;
+            cardEquipo.innerHTML += newCard;
+          });
+        }else{
+          let cardError= ``;
+          
+          cardError = `
+            <div class="alert alert-primary" role="alert">
+              <h4 class="alert-heading">Tenemos problemas</h4>
+                <p>Intentalo más tarde</p>
+                <hr>
+            <p class="mb-0">Ocurrió un error al cargar los datos</p>
+          </div>
+          `;
+          cardEquipo.innerHTML =cardError;
+        }
+
       }
 
       function obtenerCategorias(){
@@ -192,60 +248,10 @@ require_once "../sidebar/sidebar.php";
 
             Equipos = data;
 
-            calcularCantidad(Equipos);
+            calcularCantidad(Equipos);            
 
-            if(Equipos){
-
-              cardEquipo.innerHTML ="";
-
-              data.forEach(element => {
-
-                const url = data.imagen ? data.image : "noImage.jpg";
-
-                let newCard = ``;
-
-                newCard = `
-                <div class="col-md-3 m-4">
-                    <div class="card">
-                      <div class="card-header">
-                        <strong>Marca : </strong>${element.marca}
-                      </div>
-                      <div class="card-body">
-                        <div>
-                          <img src="../../images/${url}" style="height: 10rem; width: 12rem;" alt="${element.modelo_equipo}">
-                        </div>
-                        <div>
-                          <strong>Categoría : </strong>${element.categoria}
-                          <br>
-                          <strong>Descripción : </strong>${element.descripcion}
-                          <br>
-                          <strong>Modelo : </strong>${element.modelo_equipo}
-                          <br>
-                          <strong>Nº serie : </strong>${element.numero_serie}
-                        </div>
-                      </div>
-                      <div class="card-footer">
-                        <a href="../datasheet/datasheet.php?obtener=${element.idequipo}" type="button" class="btn btn-success">Ver más ..</a>
-                      </div>
-                    </div>
-                </div>
-                `;
-                cardEquipo.innerHTML += newCard;
-              });
-
-            }else{
-              let cardError= ``;
-              
-              cardError = `
-                <div class="alert alert-primary" role="alert">
-                  <h4 class="alert-heading">Tenemos problemas</h4>
-                    <p>Intentalo más tarde</p>
-                    <hr>
-                <p class="mb-0">Ocurrió un error al cargar los datos</p>
-              </div>
-              `;
-              cardEquipo.innerHTML =cardError;
-            }
+            generarCards(Equipos);
+            
           })
           .catch(e =>{
             console.error(e)
@@ -278,7 +284,7 @@ require_once "../sidebar/sidebar.php";
         }else{
 
           if($("#marcaFiltro").value == 0){
-            filtrarPorCategoria(idcategoriaIN)
+            filtrarPorCategoria(idcategoriaIN);
           }else{
             EqCategoriaF = listaFiltrada.filter(lista => lista.idcategoria == idcategoriaIN);
     
@@ -292,16 +298,21 @@ require_once "../sidebar/sidebar.php";
         }
 
       }
+
+      function buscarEquipo(numserie){
+
+        Equipos.forEach(element => {
+          if(element.numero_serie == numserie){
+          console.log(element);
+        }
+        });
+      }
       
       $("#form-busqueda").addEventListener("submit",(event) => {
         event.preventDefault();
-        console.log("se clickeo")
-        if(Equipos.numero_serie == $("#busqueda").value){
-          listarEquipos();
-          console.log("si hay");
-        }else{
-          console.log("no hay")
-        }
+        const numeroSerie = $("#busqueda").value;
+        buscarEquipo(numeroSerie);
+
        });
 
       $("#marcaFiltro").addEventListener("change",() =>{
