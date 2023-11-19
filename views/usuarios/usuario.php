@@ -273,7 +273,7 @@ require_once "../sidebar/sidebar.php";
         
         
         // FUNCION QUE LISTA A LOS USUARIOS
-        // listar_usuarios();
+        listar_usuarios();
 
 
         //ESTO LEE EL EVENTO CLICK DEL BOTON EDITAR O ELIMINAR

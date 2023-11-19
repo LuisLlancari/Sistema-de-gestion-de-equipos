@@ -23,8 +23,7 @@ if(isset($_POST['operacion'])){
         $datosEnviar = [
           "equipo"              => $_POST['equipo'],
           "tipo_mantenimiento"    => $_POST['tipo_mantenimiento'],
-          "estado"                => $_POST['estado'],
-          "fecha_programada"      => $_POST['fecha_programada'],
+          "fecha_programada"      => $_POST['fecha_programada']
         ];
 
         echo json_encode($cronograma->registrar_cronograma($datosEnviar));
@@ -37,8 +36,12 @@ if(isset($_POST['operacion'])){
           "tipo_mantenimiento"    => $_POST['tipo_mantenimiento'],
           "estado"                => $_POST['estado'],
           "fecha_programada"      => $_POST['fecha_programada'],
+          "comentario"            => $_POST['comentario'],
+          "idusuario"             => $_POST['idusuario']
         ];
 
+
+        
         echo json_encode($cronograma->modificar_cronograma($datosEnviar));
       break;
         

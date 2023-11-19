@@ -577,13 +577,14 @@ BEGIN
         cro.fecha_programada
     FROM cronogramas cro
     INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+  
     WHERE
 		equ.idequipo = _idequipo AND cro.inactive_at IS NULL;
 END $$
 DELIMITER ;
 
 
-
+ 
 DROP PROCEDURE IF EXISTS spu_cronogramas_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_cronogramas_listar()
@@ -594,11 +595,16 @@ BEGIN
         equ.numero_serie,
         cro.tipo_mantenimiento,
         cro.estado,
-        cro.fecha_programada
+        cro.fecha_programada,
+        man.descripcion
     FROM cronogramas as cro
     INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+	left JOIN mantenimiento as man on man.idcronograma=cro.idcronograma
+
     WHERE
 		cro.inactive_at IS NULL;
+        
+        
 END $$
 DELIMITER ;
 
@@ -608,16 +614,15 @@ CREATE PROCEDURE spu_cronogramas_registrar
 (
 	in _numero_serie		VARCHAR(45),
     in _tipo_mantenimiento 	VARCHAR(45),
-    in _estado				VARCHAR(10),
     in _fecha_programada 	DATETIME
 )
 BEGIN
 	SELECT idequipo INTO @equipoid from equipos Where numero_serie = _numero_serie;
 	
 	INSERT INTO cronogramas
-		(idequipo,tipo_mantenimiento,estado,fecha_programada)
+		(idequipo,tipo_mantenimiento,fecha_programada)
 		VALUES
-        (@equipoid,_tipo_mantenimiento,_estado,_fecha_programada);
+        (@equipoid,_tipo_mantenimiento,_fecha_programada);
         
         SELECT @@last_insert_id 'idcronograma';
 END $$
@@ -630,7 +635,9 @@ CREATE PROCEDURE spu_cronogramas_modificar
 	in _idcronograma		INT,
     in _tipo_mantenimiento 	VARCHAR(45),
     in _estado				VARCHAR(10),
-    in _fecha_programada 	DATETIME
+    in _fecha_programada 	DATETIME,
+	in _comentario			VARCHAR(300),
+    in _idusuario 			INT
 )
 BEGIN
 	UPDATE cronogramas SET
@@ -639,6 +646,15 @@ BEGIN
 		fecha_programada 	=_fecha_programada
 	WHERE
 		idcronograma = _idcronograma;
+        
+ 
+	IF _estado = 'completado' THEN
+		BEGIN
+			INSERT INTO mantenimiento (idusuario, idcronograma, descripcion)
+			VALUES (_idusuario, _idcronograma, _comentario);
+		END;
+	END IF;
+        
 END $$
 DELIMITER ;
 

@@ -37,11 +37,10 @@ class Cronograma extends Conexion{
 
   public function registrar_cronograma($datos = []){
     try {
-      $consulta = $this->conexion->prepare("CALL spu_cronogramas_registrar(?,?,?,?)");
+      $consulta = $this->conexion->prepare("CALL spu_cronogramas_registrar(?,?,?)");
       $consulta->execute(array(
         $datos['equipo'],  //<--- se refiere al numero deserie de equipo
         $datos['tipo_mantenimiento'],
-        $datos['estado'],
         $datos['fecha_programada']
       ));
       return $consulta->fetch(PDO::FETCH_ASSOC);
@@ -53,12 +52,14 @@ class Cronograma extends Conexion{
   
   public function modificar_cronograma($datos = []){
     try {
-      $consulta = $this->conexion->prepare("CALL spu_cronogramas_modificar(?,?,?,?)");
+      $consulta = $this->conexion->prepare("CALL spu_cronogramas_modificar(?,?,?,?,?,?)");
       $consulta->execute(array(
         $datos['idcronograma'],
         $datos['tipo_mantenimiento'],
         $datos['estado'],
-        $datos['fecha_programada']
+        $datos['fecha_programada'],
+        $datos['comentario'],
+        $datos['idusuario']
       ));
       return $consulta->fetch(PDO::FETCH_ASSOC);
 
@@ -93,6 +94,9 @@ class Cronograma extends Conexion{
     }
   }
 
+
+
+  
 
 }
 ?>
