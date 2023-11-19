@@ -176,9 +176,6 @@ if(isset($_POST['operacion'])){
       ];
       echo json_encode($usuario->cambiar_contraseña($datosEnviar));
     break;
-    
-    case '';
-    break;
   }
 
 }

@@ -691,8 +691,9 @@ BEGIN
 	SELECT
 		man.idusuario,
         usu.nombres,
-        cro.tipo_mantenimiento,
+        cro.fecha_programada as 'fecha_del_mantenimiento',
         equ.numero_serie,
+        cro.tipo_mantenimiento,
         man.descripcion
     FROM mantenimiento as man
     INNER JOIN usuarios as usu on usu.idusuario = man.idusuario
@@ -733,6 +734,8 @@ BEGIN
 		(idusuario,idcronograma,descripcion)
         VALUES
         (_idusuario,_idcronograma,_descripcion);
+        
+	SELECT @@last_insert_id 'idmantenimiento';
 END $$
 DELIMITER ;
 
@@ -794,5 +797,41 @@ BEGIN
 	INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
 	INNER JOIN usuarios USU ON USU.idusuario = MANSEC.idusuario
     WHERE MANSEC.inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+-- --------------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------  CONSULTAS ESTADÍSTICAS  -------------------------------------------------------
+-- --------------------------------------------------------------------------------------------------------------------------
+select * from equipos;
+-- ESTADOS DE LOS EQUPOS
+DROP PROCEDURE IF EXISTS spu_estadistica_equiposporEstado;
+DELIMITER $$
+CREATE PROCEDURE spu_estadistica_equiposporEstado()
+BEGIN
+	SELECT 
+		COUNT(*) AS 'Cantidad',
+        estado
+    FROM equipos
+    WHERE
+		inactive_at IS NULL
+	GROUP BY estado
+	ORDER BY descripcion ASC;
+END $$
+DELIMITER ;
+
+-- CATEGORIAS POR QUIPO
+DROP PROCEDURE IF EXISTS spu_estadistica_equiposCategoria;
+DELIMITER $$
+CREATE PROCEDURE spu_estadistica_equiposCategoria()
+BEGIN
+	SELECT COUNT(*) AS 'Cantidad',
+		CAT.categoria
+    FROM equipos AS EQUI
+	INNER JOIN categorias AS CAT ON CAT.idcategoria = EQUI.idcategoria
+	WHERE
+		EQUI.inactive_at IS NULL
+	GROUP BY categoria
+	ORDER BY categoria;
 END $$
 DELIMITER ;

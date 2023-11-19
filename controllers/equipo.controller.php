@@ -95,6 +95,16 @@ if(isset($_POST['operacion'])){
             $datosEnviar = ["idequipo" => $_POST['idequipo']];
             echo json_encode($equipo->eliminar($datosEnviar));
 
-            break; 
+            break;
+            
+        case 'estadosequiposGR':
+            echo json_encode($equipo->estadosequiposGR());
+
+            break;
+  
+        case 'categoriasEquiposGR':
+            echo json_encode($equipo->categoriasEquiposGR());
+            
+            break;
     }
 }

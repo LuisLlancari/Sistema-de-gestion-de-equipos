@@ -125,5 +125,30 @@ class Equipo extends Conexion{
             die($e->getMessage());
         }
     }
-    
+
+    /**
+     * Método para generar un gráfico a partir de los estados de los equipos
+     */
+    public function estadosequiposGR(){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_estadistica_equiposporEstado()");
+            $consulta->execute();
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     *Método para generar un gráfico a paratir de las categrías de los equipos
+     */    
+    public function categoriasEquiposGR(){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_estadistica_equiposCategoria()");
+            $consulta->execute();
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
 }
