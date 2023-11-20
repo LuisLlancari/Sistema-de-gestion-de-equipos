@@ -88,10 +88,10 @@ require_once "../sidebar/sidebar.php";
                   <input type="password" class="form-control" id="contraseña" required>
                 </div>
 
-                <d class="md-3">
+                <div class="md-3">
                   <label for="fotografia" class="form-label">Fotografia</label>
                   <input type="file" class="form-control" id="avatar" accept=".jpg">
-              </d iv>
+              </div>
           </form>
         </div>
         <div class="modal-footer">
@@ -273,7 +273,7 @@ require_once "../sidebar/sidebar.php";
         
         
         // FUNCION QUE LISTA A LOS USUARIOS
-        // listar_usuarios();
+        listar_usuarios();
 
 
         //ESTO LEE EL EVENTO CLICK DEL BOTON EDITAR O ELIMINAR

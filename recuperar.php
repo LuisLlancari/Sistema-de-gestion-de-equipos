@@ -13,33 +13,41 @@
 
 </head>
 
-<body>
+<body >
+  
+ 
 
-    <div class="container mt-3">
-        <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <h4>Recuperar cuenta</h4>
-            <form action="" id="form-login" autocomplete="off">
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control form-control-lg" id="email" autofocus required>
-            </div>
-            <div>
-                <div class="d-grid">
-                <button type="button" class="btn btn-primary" id="recuperar">Siguiente</button>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card">
+                  <div class="card-header text-center"><h4>Recuperar cuenta</h4></div>
+                    <div class="card-body">
+                        <form action="" id="form-login" autocomplete="off">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" class="form-control form-control-lg" id="email" autofocus required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-primary" id="recuperar">Siguiente</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            </form>
-        </div>
-        <div class="col-md-4"></div>
-        </div>
-    </div>
+            </div>  
+         </div>
+      </div>
+  
+
+  
+
+
+
 
   <!-- Inicio de MODAL -->
 
   <div class="modal" tabindex="-1" id="modal-seleccion">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">Envio de codigo</h5>
@@ -63,7 +71,7 @@
 
   <!-- MODAL VERIFICACION -->
   <div class="modal" tabindex="-1" id="modal-verificar">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Verificar codigo</h5>

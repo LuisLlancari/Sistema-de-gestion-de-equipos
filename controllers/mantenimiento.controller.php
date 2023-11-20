@@ -40,6 +40,15 @@ if (isset($_POST['operacion'])){
             echo json_encode($mantenimiento->modificar($datosEnviar));
 
         break;
+
+        case 'listar_mantenimiento_grafico':
+            $datosEnviar = [
+                "fechainicio" => $_POST['fechainicio'],
+                "fechafin"    => $_POST['fechafin'] 
+            ];
+      
+            echo json_encode($mantenimiento->listar_mantenimiento_grafico($datosEnviar));
+          break;
         
     }
 }

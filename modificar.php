@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Title</title>
+  <title>modificar cambiar_contraseña</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,35 +14,46 @@
 </head>
 
 <body>
- 
-<div class="container mt-3">
-    <form action="" autocomplete="off" id="form-producto">
+ <div class="row mt-5">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+
+
+
+
+    
+    <div class="container mt-3">
+      <form action="" autocomplete="off" id="form-producto">
     <div class="card">
       <div class="card-header bg-primary text-light">
        Cambiar contraseña
       </div>
       <div class="card-body">
-         
+        
           <div class="mb-3">
-            <label for="contraseña" class="form-label">contraseña</label>
-            <input type="text" class="form-control" id="contraseña" required>
+            <label for="contraseña" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="contraseña" required>
           </div>
 
           <div class="mb-3">
             <label for="rep_contraseña" class="form-label">Vuelva escribir la contraseña</label>
-            <input type="text" class="form-control" id="rep_contraseña" required>
+            <input type="password" class="form-control" id="rep_contraseña" required>
           </div>
            
       </div>
       <div class="card-footer text-muted">
-        <button class="btn btn-primary" type="button" id="guardar_contraseña">cambiar contraseña</button>
+        <button class="btn btn-primary" type="button" id="guardar_contraseña">Cambiar contraseña</button>
       </div>
     </div>
    </form>
   </div> <!-- container -->
 
+        </div>
 
+        <div class="col-md-4"></div>
+        </div>
 
+  
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
     integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
   </script>
@@ -87,7 +98,7 @@
               cambiar_contraseña();
               window.location.href = `./index.php`;
             }else{
-              console.log("datos incorrectos");
+              console.log("Las contraseñas no coinciden");
               
             }
 

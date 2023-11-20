@@ -51,7 +51,7 @@ CREATE TABLE equipos
         numero_serie 		VARCHAR(45) 	NOT NULL,
         imagen				VARCHAR(200)	NULL,
         estado				CHAR(1)			NOT NULL DEFAULT '1',
-		create_at			DATE			NOT NULL DEFAULT NOW(),
+		create_at			DATE			NOT NULL DEFAULT (NOW()),
 		update_at			DATE			NULL,
 		inactive_at			DATE			NULL,
         CONSTRAINT fk_idcategoria_prd	FOREIGN KEY(idcategoria) REFERENCES categorias(idcategoria),
@@ -67,7 +67,7 @@ CREATE TABLE datasheet
 	idequipo 			INT 		NOT NULL,
     clave		 		VARCHAR(45) NOT NULL,
     valor				VARCHAR(300) NOT  NULL,
-	create_at			DATE			NOT NULL DEFAULT NOW(),
+	create_at			DATE			NOT NULL DEFAULT (NOW()),
 	update_at			DATE			NULL,
 	inactive_at			DATE			NULL,
     CONSTRAINT fk_idequipo_dat 	FOREIGN KEY(idequipo)  REFERENCES equipos(idequipo),
@@ -79,7 +79,7 @@ CREATE TABLE sectores
 (
 	idsector			INT PRIMARY KEY AUTO_INCREMENT,
 	sector				VARCHAR(45)		NOT NULL,
-	create_at			DATE			NOT NULL DEFAULT NOW(),
+	create_at			DATE			NOT NULL DEFAULT (NOW()),
 	update_at			DATE			NULL,
 	inactive_at			DATE			NULL
 )ENGINE = INNODB;
@@ -93,7 +93,7 @@ CREATE TABLE sectores_detalle
     idusuario						INT		NOT NULL,
     fecha_inicio					DATE	NOT NULL DEFAULT NOW(),
     fecha_fin						DATE 	NULL,
-	create_at						DATE	NOT NULL DEFAULT NOW(),
+	create_at						DATE	NOT NULL DEFAULT (NOW()),
 	update_at						DATE	NULL,
 	inactive_at						DATE	NULL,
 	CONSTRAINT fk_idsector_sect FOREIGN KEY(idsector)  REFERENCES sectores(idsector),
@@ -107,9 +107,9 @@ CREATE TABLE cronogramas
 	idcronograma		INT PRIMARY KEY AUTO_INCREMENT,
     idequipo			INT 	NOT NULL,
     tipo_mantenimiento	VARCHAR(45) 	NOT NULL,
-    estado				VARCHAR(10) 	NOT NULL,
+    estado				VARCHAR(10) 	NOT NULL DEFAULT 'pendiente',
     fecha_programada	DATETIME		NOT NULL,
-	create_at			DATE			NOT NULL DEFAULT NOW(),
+	create_at			DATE			NOT NULL DEFAULT (NOW()),
 	update_at			DATE			NULL,
 	inactive_at			DATE			NULL,
     CONSTRAINT 	fk_idequipo_cro FOREIGN KEY(idequipo) REFERENCES equipos(idequipo)
@@ -122,7 +122,7 @@ CREATE TABLE mantenimiento
 	idusuario				INT		NOT NULL,
     idcronograma	 	  	INT 	NOT NULL,
     descripcion	 			VARCHAR(300) 	NOT NULL,
-	create_at			DATE			NOT NULL DEFAULT NOW(),
+	create_at			DATE			NOT NULL DEFAULT (NOW()),
 	update_at			DATE			NULL,
 	inactive_at			DATE			NULL,
 	CONSTRAINT fk_idusuario_man FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario),
@@ -134,8 +134,8 @@ CREATE TABLE mantenimiento
 CREATE TABLE sectores
 (
 	idsector			INT PRIMARY KEY AUTO_INCREMENT,
-	sector				VARCHAR(45)		NOT NULL,
-	create_at			DATE			NOT NULL DEFAULT NOW(),
+     sector				VARCHAR(45)		NOT NULL,
+	create_at			DATE			NOT NULL DEFAULT (NOW()),
 	update_at			DATE			NULL,
 	inactive_at			DATE			NULL
 )ENGINE = INNODB;
@@ -147,9 +147,9 @@ CREATE TABLE sectores_detalle
     idsector						INT 	NOT NULL,
     idequipo						INT 	NOT NULL,
     idusuario						INT		NOT NULL,
-    fecha_inicio					DATE	NOT NULL,
+    fecha_inicio					DATE	NOT NULL DEFAULT (NOW()),
     fecha_fin						DATE 	NULL,
-	create_at						DATE	NOT NULL DEFAULT NOW(),
+	create_at						DATE	NOT NULL DEFAULT (NOW()),
 	update_at						DATE	NULL,
 	inactive_at						DATE	NULL,
 	CONSTRAINT fk_idsector_sect 	FOREIGN KEY(idsector)  REFERENCES sectores(idsector),

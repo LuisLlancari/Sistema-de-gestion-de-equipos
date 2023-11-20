@@ -3,8 +3,7 @@
 require_once "../sidebar/sidebar.php";
 ?>  
   <head>
-<link href="/website/css/uicons-bold-rounded.css"
-rel="stylesheet">
+    <!-- <link href="/website/css/uicons-bold-rounded.css"rel="stylesheet"> -->
 </head>
 
     <div class=" bg-light">
@@ -30,12 +29,12 @@ rel="stylesheet">
             <form action="" autocomplete="off" id="form-cronograma">
             <div class="row">
               <div class="col-md-6 mb-3">
-                  <label for="equipo" class="form-label">equipo</label>
+                  <label for="equipo" class="form-label">Equipo - N°serie:</label>
                   <input type="text" class="form-control" id="equipo" required>
                 </div>
                       
                 <div class="col-md-6 mb-3">
-                  <label for="T-mantenimiento" class="form-label">tipo mantenimiento</label>
+                  <label for="T-mantenimiento" class="form-label">Tipo mantenimiento:</label>
                   <select name="" id="T-mantenimiento" class="form-select" required>
                   <option value="">Seleccion:</option>
                   <option value="reparacion">Reparación</option>
@@ -47,62 +46,37 @@ rel="stylesheet">
 
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="fecha" class="form-label">fecha programada</label>
+                <label for="fecha" class="form-label">Fecha programada:</label>
                 <input type="date" class="form-control" id="fecha" required>
               </div>
               
               <div class="col-md-6 mb-3">
-                <label for="hora" class="form-label">hora programada</label>
+                <label for="hora" class="form-label">Hora programada:</label>
                 <input type="time" class="form-control" id="hora" required>
               </div>
             </div>
             
             <div class="mb-3">
-              <label for="estado" class="form-label">estado</label>
+              <label for="estado" class="form-label">Estado:</label>
               <select name="" id="estado" class="form-select" required>
               <option value="">Seleccion:</option>
-              <option value="pendiente">pendiente</option>
+              <option value="completado">completado</option>
+              <option value="pausado">Pausado</option>
               <option value="cancelado">cancelado</option>
              </select>     
             </div>
             
-          <div id="nuevos-elementos"></div>
+            <div class="mb-3">
+              <label for="comentario" class="form-label">Comentario</label>
+              <textarea class="form-control" id="comentario" rows="3" required ></textarea>
+              <div class="invalid-feedback"> Ingresar comentario. </div>
+            </div>
 
           </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-success" id="agregar"><i class="fi-sr-eye"></i>Enviar</button>
-            <button type="button" class="btn btn-success" id="agregar"><i class="fi-sr-eye"></i>hecho</button>
-            <button type="button" class="btn btn-danger"  id="borrar">Borrar</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="modal-mantenimiento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header text-center">
-            <h1 class="modal-title fs-5" id="titulo-modalM"></h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div id="descripcion"> </div>
-            <form action="" autocomplete="off" id="form-mantenimiento">
-          
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="algo" class="form-label">fecha programada</label>
-              <input type="date" class="form-control" id="algo" required>
-            </div>
-
-          </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success" id="agregar">Enviar</button>
-            <button type="button" class="btn btn-danger"  id="borrar">Borrar</button>
+             <button type="button" class="btn btn-danger"  id="borrar">Borrar</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
@@ -110,9 +84,6 @@ rel="stylesheet">
     </div>
 
 
-
-
- 
   <!-- Bootstrap JavaScript Libraries -->
 
 
@@ -134,9 +105,8 @@ rel="stylesheet">
       function $(id){return document.querySelector(id)};
 
       var modalregistro = new bootstrap.Modal($('#modal-cronograma'));
-      var modalmantenimiento = new bootstrap.Modal($('#modal-mantenimiento'));
-      var bandera = true;
 
+      var bandera = true;
 
       function calendario(datos){
 
@@ -156,7 +126,8 @@ rel="stylesheet">
             title: evento.modelo_equipo,
             start: evento.fecha_programada,
             description: evento.tipo_mantenimiento,
-            estado: evento.estado
+            estado: evento.estado,
+            comentario: evento.descripcion
             // Agrega más propiedades si es necesario
           })),
           color:"green",
@@ -164,39 +135,112 @@ rel="stylesheet">
         }],
         
         dateClick: function(info) {
-          $('#form-cronograma').reset();
-          $("#titulo-modalC").innerText = "Agregar Cronograma";
-          $('#fecha').value = info.dateStr;
-          modalregistro.show();
+          bandera = true;
+          preparar_formulario(info);
+         
         },
         eventClick: function(info ) {
           bandera = false;
-       
-          var fechaObj = new Date(info.event.start);
+          preparar_formulario(info);
 
-          // Obtener la fecha en formato "YYYY-MM-DD"
-          var fechaFormateada = fechaObj.toISOString().split('T')[0];
-          // Obtener la hora en formato "HH:mm:ss"
-          var horaFormateada = fechaObj.toTimeString().split(' ')[0];
-
-          $("#titulo-modalC").innerText = "Editar Cronograma";
-          $('#equipo').value = info.event.title;
-          $('#T-mantenimiento').value =info.event._def.extendedProps.description;
-          $('#fecha').value = fechaFormateada;
-          $('#hora').value =  horaFormateada;
-          $('#estado').value =info.event._def.extendedProps.estado;
-          $('#agregar').setAttribute('cronogramaid',info.event.id);
-          $('#borrar').setAttribute('cronogramaid',info.event.id);
-
-          modalregistro.show();
-          
-          
-          
           // change the border color just for fun
-          info.el.style.borderColor = 'red';
+          // info.el.style.borderColor = 'red';
         }
         });
         calendar.render();
+      }
+
+      function customReset() {
+
+        $('#agregar').style.display = "block";
+                $('#borrar').style.display = "block";
+          $("#equipo").removeAttribute('disabled');
+          $("#estado").removeAttribute('disabled');
+          $("#comentario").removeAttribute('disabled');
+          $('#T-mantenimiento').removeAttribute('disabled');
+          $('#fecha').removeAttribute('disabled');
+
+    
+          $("#hora").removeAttribute('disabled');
+
+
+          $('#agregar').removeAttribute('disabled');
+               $('#borrar').removeAttribute('disabled');
+
+      }
+      
+      function preparar_formulario(info){
+        $('#form-cronograma').reset();
+        customReset();
+          if(bandera){
+
+           
+            $("#equipo").removeAttribute('disabled');
+            $("#equipo").removeAttribute('readOnly');
+            $("#comentario").setAttribute('disabled','true');
+            $("#estado").setAttribute('disabled','true');
+            $("#comentario").setAttribute('readOnly','true');
+            $("#titulo-modalC").innerText = "Agregar Cronograma";
+            $('#fecha').value = info.dateStr;
+            modalregistro.show();
+
+          }else{
+
+            
+ 
+
+            //modalregistro.show();
+            $("#equipo").setAttribute('disabled','true');
+            $("#equipo").setAttribute('readOnly','true');
+            $("#estado").removeAttribute('disabled');
+            $("#comentario").setAttribute('disabled','true');
+            $("#comentario").setAttribute('readOnly','true');
+            
+            var fechaObj = new Date(info.event.start);
+
+            // Obtener la fecha en formato "YYYY-MM-DD"
+            var fechaFormateada = fechaObj.toISOString().split('T')[0];
+            // Obtener la hora en formato "HH:mm:ss"
+            var horaFormateada = fechaObj.toTimeString().split(' ')[0];
+
+            $("#titulo-modalC").innerText = "Editar Cronograma";
+            $('#equipo').value = info.event.title;
+            $('#T-mantenimiento').value =info.event._def.extendedProps.description;
+            $('#fecha').value = fechaFormateada;
+            $('#hora').value =  horaFormateada;
+            $('#estado').value =info.event._def.extendedProps.estado;
+            $('#agregar').setAttribute('cronogramaid',info.event.id);
+            $('#borrar').setAttribute('cronogramaid',info.event.id);
+
+
+
+            if(info.event._def.extendedProps.estado=="completado"){
+               
+               $("#equipo").setAttribute('disabled','true');
+               $("#estado").setAttribute('disabled','true');
+               $("#comentario").setAttribute('disabled','true');
+               $('#T-mantenimiento').setAttribute('disabled','true');
+               $('#fecha').setAttribute('disabled','true');
+               $("#hora").setAttribute('disabled','true');
+               $("#comentario").value =info.event._def.extendedProps.comentario;
+ 
+
+            
+                $('#agregar').style.display = "none";
+                $('#borrar').style.display = "none";
+
+
+
+             }
+ 
+
+
+
+
+            modalregistro.show();
+
+          }
+          
       }
 
 
@@ -217,33 +261,46 @@ rel="stylesheet">
           });               
       }
       
+
       function registrar_cronograma(){
+
+ 
+        var comentarioFormulario  = $('#comentario').value;
+        if(comentarioFormulario.trim().length==0 && $("#estado").value=="completado"){
+          $('#comentario').classList.add("is-invalid");
+          console.log("comentarioFormulario => ",comentarioFormulario)
+          return;
+        }
+
+
         //   En esta variable se concatena la fecha y la hora para enviarlos a 
         //   la base de datos como Datetime
         var  idcronograma  = $('#agregar').getAttribute('cronogramaid');
         var fechaHora = $("#fecha").value+" "+$("#hora").value;
 
         const parametros = new FormData();
-        parametros.append("tipo_mantenimiento",$("#T-mantenimiento").value);
-        parametros.append("estado"            ,$("#estado").value);
-        parametros.append("fecha_programada"  ,fechaHora);
-
+        parametros.append("tipo_mantenimiento"  ,$("#T-mantenimiento").value);
+        parametros.append("fecha_programada"    , fechaHora);
+ 
         if(bandera){
           parametros.append("operacion"         ,"registrar_cronograma");
           parametros.append("equipo"            ,$("#equipo").value);
+        }
+        else{
+          parametros.append("operacion",       "modificar_cronograma");
+          parametros.append("estado",          $("#estado").value);
+          parametros.append("idcronograma",    idcronograma);
+          parametros.append("comentario",      $('#comentario').value);
+          parametros.append("idusuario",       1);
 
-        }else{
-          parametros.append("operacion","modificar_cronograma");
-          parametros.append("idcronograma" ,idcronograma);
         } 
-
-
         fetch(`../../controllers/cronograma.controller.php`,{
           method: "POST",
           body : parametros
         })
           .then(respuesta => respuesta.json())
           .then(datos => {
+            $('#comentario').classList.remove("is-invalid");
             $('#form-cronograma').reset();
             modalregistro.hide();
             listar_cronogramas();
@@ -253,6 +310,7 @@ rel="stylesheet">
             console.error(e);
           });               
       }
+
 
       function eliminar_cronogramas(){
 
@@ -268,6 +326,8 @@ rel="stylesheet">
           .then(respuesta => respuesta.json())
           .then(datos => {
             $('#form-cronograma').reset();
+            modalregistro.hide();
+            listar_cronogramas();
 
           })
           .catch(e =>  {
@@ -276,45 +336,32 @@ rel="stylesheet">
       }
 
 
-      function agregarNuevoElemento() {
-        // Crea un nuevo div para el par label e input
-        var nuevoElemento = document.createElement('div');
-        nuevoElemento.classList.add('row', 'mb-3');
-
-        // Crea el label
-        var nuevoLabel = document.createElement('label');
-        nuevoLabel.classList.add('form-label');
-        nuevoLabel.innerText = 'Nuevo Elemento';
-
-        // Crea el input
-        var nuevoInput = document.createElement('input');
-        nuevoInput.classList.add('form-control');
-        nuevoInput.type = 'text';
-
-        // Agrega el label e input al nuevo div
-        nuevoElemento.appendChild(nuevoLabel);
-        nuevoElemento.appendChild(nuevoInput);
-
-        // Agrega el nuevo div al contenedor
-        var contenedor = document.getElementById('nuevos-elementos');
-        contenedor.appendChild(nuevoElemento);
-      }
-
-
       listar_cronogramas();
      
 
       $('#agregar').addEventListener('click', function(){
-          // registrar_cronograma();
-          modalregistro.hide();
+          registrar_cronograma();
         });
      
 
       $('#borrar').addEventListener('click', function(){
-        agregarNuevoElemento();
-        // eliminar_cronogramas();    
-        });
+        eliminar_cronogramas();    
+      });
+      
+      $("#estado").addEventListener("change" , (event) =>{
 
+          let estado = $('#estado').value ;
+          $("#comentario").setAttribute('disabled','true');
+          $("#comentario").setAttribute('readOnly','true');
+         
+
+          if( estado == "completado"){
+            $("#comentario").removeAttribute('disabled');
+            $("#comentario").removeAttribute('readOnly');
+            
+          }
+
+        });
 
     });
       

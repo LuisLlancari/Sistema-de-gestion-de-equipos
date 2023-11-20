@@ -66,11 +66,50 @@ class Sector extends Conexion{
                     $datos ['sector']
                 )
             );
+            return $consulta->fetch(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());
         }
     }
+
+
+//FUNCION PARA ELIMINAR SECTOR
+    public function eliminar($datos = []){
+        try {
+        $consulta = $this->conexion->prepare("CALL spu_sector_eliminar(?)");
+        $consulta->execute(array($datos['idsector']));
+        return $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    //FUNCION PARA REGISTRAR EQUIPOS A SECTORES
+    public function registrarEquipos_Sector($datos = []){
+        try {
+        $consulta = $this->conexion->prepare("CALL spu_equipos_registrar_sector(?,?,?,?,?,?,?,?)");
+        $consulta->execute(
+            array(
+              $datos['idcategoria'],  
+              $datos['idmarca'],  
+              $datos['idusuario'],  
+              $datos['descripcion'],
+              $datos['modelo_equipo'], 
+              $datos['numero_serie'], 
+              $datos['imagen'],
+              $datos['idsector']  
+              )
+            );
+        return $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+
 }
 
 ?>

@@ -9,6 +9,8 @@
  * @author    Laurent MINGUET <webmaster@html2pdf.fr>
  * @copyright 2023 Laurent MINGUET
  */
+
+//1.-Componente COMPOSER
 require_once '../vendor/autoload.php';
 require_once '../models/Equipo.php';
 

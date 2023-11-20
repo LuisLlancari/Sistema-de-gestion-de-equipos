@@ -165,6 +165,7 @@ BEGIN
     FROM categorias
     WHERE inactive_at IS NULL;
 END $$
+
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS spu_categorias_registrar;
@@ -232,7 +233,7 @@ BEGIN
 	INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
     INNER JOIN usuarios USU ON USU.idusuario = DET.idusuario
     WHERE DET.inactive_at IS NULL
-      AND DET.idsector = _idsector;
+      AND DET.idsector = 7;
 END $$
 DELIMITER ;
 
@@ -241,74 +242,40 @@ DROP PROCEDURE IF EXISTS spu_insertar_sector;
 DELIMITER $$
 CREATE PROCEDURE spu_insertar_sector
 (
-    IN _idsector	INT,
     IN _sector		VARCHAR(45)
 )
 BEGIN
 	INSERT INTO sectores
-    (idsector,sector)
+    (sector)
     VALUES 
-    (_idsector,_sector);
-END $$
-DELIMITER ;
-/*DROP PROCEDURE IF EXISTS spu_insertar_sectores;
-DELIMITER $$
-CREATE PROCEDURE spu_insertar_sectores
-(
-    IN _i	INT,
-    IN _idusuario	INT,
-    IN _nombre		VARCHAR(45)
-)
-BEGIN
-	INSERT INTO sectores(sector)
-    VALUES(_sector);
+    (_sector);
 	SELECT @@last_insert_id 'idsector';
 END $$
 DELIMITER ;
-*/
-DROP PROCEDURE IF EXISTS spu_MANsector_eliminar;
+
+DROP PROCEDURE IF EXISTS spu_sector_eliminar;
 DELIMITER $$
-CREATE PROCEDURE spu_sector_eliminar(IN _idmantenimiento_sector INT)
+CREATE PROCEDURE spu_sector_eliminar(IN _idsector INT)
 BEGIN 
-	UPDATE MAN_sectores
+	UPDATE sectores
     SET inactive_at = NOW()
-		WHERE idmantenimiento_sector = _idmantenimiento_sector;
+		WHERE idsector = _idsector;
 END $$
 DELIMITER ;
 
-/*DELIMITER $$
-CREATE PROCEDURE spu_obtenerporID(IN id_sector INT)
-BEGIN
-    SELECT DET.idmantenimiento_sector,
-    SEC.sector,
-	CAT.categoria,
-    MAR.marca,
-	EQUI.modelo_equipo,
-    EQUI.numero_serie,
-    DET.fecha_inicio,
-	DET.fecha_fin
-    FROM sectores_detalle DET
-    INNER JOIN sectores SEC ON SEC.idsector = DET.idsector
-	INNER JOIN equipos EQUI ON EQUI.idequipo = DET.idequipo
-	INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
-    INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
-    WHERE DET.inactive_at IS NULL;
-END $$
-DELIMITER ;*/
-
+DROP PROCEDURE IF EXISTS spu_obtenerCNsectores
 DELIMITER $$
 CREATE PROCEDURE spu_obtenerCNsectores()
 BEGIN
-	-- Selecciona los nombre y los cuenta
     SELECT 
-		s.idsector,
+        s.idsector,
         s.sector AS Nombre_Sector,
         COUNT(sd.idsector) AS Cantidad_Guardados
     FROM
         sectores s
-	-- Con detalle sectores estoy haciendo el conteo
     LEFT JOIN
-        sectores_detalle sd ON s.idsector = sd.idsector
+        sectores_detalle sd ON s.idsector = sd.idsector AND sd.fecha_fin IS NULL
+    WHERE s.inactive_at IS NULL
     GROUP BY
         s.idsector;
 END $$
@@ -316,7 +283,57 @@ DELIMITER ;
 
 
 
+DROP PROCEDURE IF EXISTS spu_equipos_registrar_sector;
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_registrar_sector
+(
+	IN _idcategoria		INT,
+    IN _idmarca			INT,
+    IN _idusuario 		INT,
+    IN _descripcion		VARCHAR(45),
+    IN _modelo_equipo 	VARCHAR(45),
+    IN _numero_serie	VARCHAR(45),
+    IN _imagen			VARCHAR(200),
+    IN _idsector       	INT
+)
+BEGIN
+	INSERT INTO equipos
+    (idcategoria, idmarca, idusuario, descripcion, modelo_equipo, numero_serie, imagen)
+    VALUES
+    (_idcategoria, _idmarca, _idusuario, _descripcion, _modelo_equipo, _numero_serie, NULLIF(_imagen, ''));
+    
+	SELECT @@last_insert_id 'idequipo' INTO @equipoid;
+    
+    INSERT INTO sectores_detalle(idsector, idequipo, idusuario)
+	VALUES(_idsector, @equipoid, _idusuario);
+    
+	SELECT @@last_insert_id 'idmantenimiento_sector';
+    
+END $$
+DELIMITER ;
 
+
+DELIMITER $$
+CREATE PROCEDURE spu_mover_equipo(
+IN _iddetalle_sector INT,
+IN _idsector 		INT,
+IN _idusuario       INT
+)
+BEGIN
+	SELECT idequipo INTO @equipoid from sectores_detalle 
+	where idmantenimiento_sector = _iddetalle_sector;
+    
+	INSERT INTO sectores_detalle(idsector,idequipo,idusuario)
+	VALUES (_idsector ,@equipoid,_idusuario);
+    
+	UPDATE sectores_detalle 
+	SET inactive_at = now(),
+		fecha_fin = now()
+        Where idmantenimiento_sector = _iddetalle_sector;
+	
+	SELECT @@last_insert_id 'idmantenimiento_sector';
+END $$
+DELIMITER ;
 
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados EQUIPOS -----------------------------
@@ -594,13 +611,14 @@ BEGIN
         cro.fecha_programada
     FROM cronogramas cro
     INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+  
     WHERE
 		equ.idequipo = _idequipo AND cro.inactive_at IS NULL;
 END $$
 DELIMITER ;
 
 
-
+ 
 DROP PROCEDURE IF EXISTS spu_cronogramas_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_cronogramas_listar()
@@ -611,11 +629,16 @@ BEGIN
         equ.numero_serie,
         cro.tipo_mantenimiento,
         cro.estado,
-        cro.fecha_programada
+        cro.fecha_programada,
+        man.descripcion
     FROM cronogramas as cro
     INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+	left JOIN mantenimiento as man on man.idcronograma=cro.idcronograma
+
     WHERE
 		cro.inactive_at IS NULL;
+        
+        
 END $$
 DELIMITER ;
 
@@ -625,16 +648,15 @@ CREATE PROCEDURE spu_cronogramas_registrar
 (
 	in _numero_serie		VARCHAR(45),
     in _tipo_mantenimiento 	VARCHAR(45),
-    in _estado				VARCHAR(10),
     in _fecha_programada 	DATETIME
 )
 BEGIN
 	SELECT idequipo INTO @equipoid from equipos Where numero_serie = _numero_serie;
 	
 	INSERT INTO cronogramas
-		(idequipo,tipo_mantenimiento,estado,fecha_programada)
+		(idequipo,tipo_mantenimiento,fecha_programada)
 		VALUES
-        (@equipoid,_tipo_mantenimiento,_estado,_fecha_programada);
+        (@equipoid,_tipo_mantenimiento,_fecha_programada);
         
         SELECT @@last_insert_id 'idcronograma';
 END $$
@@ -647,7 +669,9 @@ CREATE PROCEDURE spu_cronogramas_modificar
 	in _idcronograma		INT,
     in _tipo_mantenimiento 	VARCHAR(45),
     in _estado				VARCHAR(10),
-    in _fecha_programada 	DATETIME
+    in _fecha_programada 	DATETIME,
+	in _comentario			VARCHAR(300),
+    in _idusuario 			INT
 )
 BEGIN
 	UPDATE cronogramas SET
@@ -656,6 +680,18 @@ BEGIN
 		fecha_programada 	=_fecha_programada
 	WHERE
 		idcronograma = _idcronograma;
+        
+ 
+	IF _estado = 'completado' THEN
+		
+			INSERT INTO mantenimiento (idusuario, idcronograma, descripcion)
+			VALUES (_idusuario, _idcronograma, _comentario);
+            
+            UPDATE cronogramas SET 
+				inactive_at = now()
+					WHERE idcronograma = _idcronograma;
+	END IF;
+        
 END $$
 DELIMITER ;
 
@@ -688,17 +724,23 @@ DROP PROCEDURE IF EXISTS spu_mantenimiento_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_listar()
 BEGIN
-	SELECT
-		man.idusuario,
-        usu.nombres,
-        cro.fecha_programada as 'fecha_del_mantenimiento',
-        equ.numero_serie,
-        cro.tipo_mantenimiento,
-        man.descripcion
-    FROM mantenimiento as man
-    INNER JOIN usuarios as usu on usu.idusuario = man.idusuario
-    INNER JOIN cronogramas as cro ON cro.idcronograma = man.idcronograma
-    INNER JOIN equipos as equ on equ.idequipo = cro.idequipo 
+		SELECT
+			man.idcronograma,
+			man.idusuario,
+			usu.nombres,
+            cat.categoria,
+			mar.marca,
+			equ.modelo_equipo as 'equipo',
+			cro.fecha_programada as 'fecha_del_mantenimiento',
+			equ.numero_serie,
+			cro.tipo_mantenimiento,
+			man.descripcion
+		FROM mantenimiento as man
+		INNER JOIN usuarios as usu on usu.idusuario = man.idusuario
+		INNER JOIN cronogramas as cro ON cro.idcronograma = man.idcronograma
+		INNER JOIN equipos as equ on equ.idequipo = cro.idequipo 
+		INNER JOIN marcas AS mar ON mar.idmarca = equ.idmarca
+		INNER JOIN categorias AS cat ON cat.idcategoria = equ.idcategoria
     WHERE
 		man.inactive_at IS NULL;
 END $$
@@ -800,6 +842,55 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+-- GRAFICOS
+
+
+DROP PROCEDURE IF EXISTS spu_mantenimiento_grafico;
+DELIMITER $$
+CREATE PROCEDURE spu_mantenimiento_grafico
+(
+    in _fecha_inicio 	date,
+	in _fecha_fin 	date
+)
+BEGIN
+SELECT
+count(1) as 'cantidad_tipo',
+cro.tipo_mantenimiento
+FROM cronogramas as cro
+INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+left JOIN mantenimiento as man on man.idcronograma=cro.idcronograma
+WHERE cro.inactive_at IS NULL and cro.tipo_mantenimiento!=''
+ AND man.create_at between _fecha_inicio and _fecha_fin
+group by cro.tipo_mantenimiento;
+     
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spu_cronograma_grafico;
+DELIMITER $$
+CREATE PROCEDURE spu_cronograma_grafico
+(
+    in _fecha_inicio 	date,
+	in _fecha_fin 	date
+)
+BEGIN
+	 
+SELECT
+count(1) as 'cantidad_tipo',
+cro.estado
+FROM cronogramas as cro
+INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+left JOIN mantenimiento as man on man.idcronograma=cro.idcronograma
+WHERE cro.inactive_at IS NULL and cro.estado!=''
+AND cro.create_at between _fecha_inicio and _fecha_fin
+group by cro.estado;
+     
+END $$
+DELIMITER ;
+
+
+ 
 -- --------------------------------------------------------------------------------------------------------------------------
 -- -----------------------------------------  CONSULTAS ESTADÍSTICAS  -------------------------------------------------------
 -- --------------------------------------------------------------------------------------------------------------------------

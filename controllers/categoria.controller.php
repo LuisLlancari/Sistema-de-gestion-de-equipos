@@ -17,6 +17,8 @@ if (isset($_POST['operacion'])){
             ];
             $categoria->registrar($datosEnviar);
         break;
+
+        
         
     }
 }
