@@ -106,6 +106,10 @@ require_once "../sidebar/sidebar.php";
         return document.querySelector(id);
       }
 
+      let estadosEquipos = null;
+      let categoriasEquipos = null;
+      let sectoresEquipos = null;
+
       const grDona   = $("#cateogoriasEquipos");
       const grBarras = $("#estadosEquipos");
       const grDonaSector = $("#sectoresEquipo");
@@ -115,8 +119,6 @@ require_once "../sidebar/sidebar.php";
         "rgba(17, 101, 230,0.5)",
         "rgba(230, 27, 17, 0.5)"
       ];
-
-      let datosEquipos = null;
 
       function generarGrDona(datos){
 
@@ -182,7 +184,9 @@ require_once "../sidebar/sidebar.php";
           .then(result => result.json())
           .then(data => {
             console.log(data);
-            generarGrDona(data);
+
+            categoriasEquipos = data;
+            generarGrDona(categoriasEquipos);
           })
           .catch(e => {
             console.error(e)
@@ -202,9 +206,9 @@ require_once "../sidebar/sidebar.php";
           .then(data => {
             console.log(data);
 
-            datosEquipos = data;
+            estadosEquipos = data;
 
-            generarGrBarras(datosEquipos);
+            generarGrBarras(estadosEquipos);
           })
           .catch(e => {
             console.error(e);
@@ -223,9 +227,9 @@ require_once "../sidebar/sidebar.php";
           .then(data => {
             console.log(data);
 
-            datosEquipos = data;
+            sectoresEquipos = data;
 
-            generarGrDonaSector(datosEquipos);
+            generarGrDonaSector(sectoresEquipos);
           })
           .catch(e => {
             console.error(e);
@@ -234,10 +238,9 @@ require_once "../sidebar/sidebar.php";
       
       function generarPDF(datos){
         const parametros = new FormData();
-        parametros.append("operacion","generarPDF");
-        parametros.append("datos",datos);
+        parametros.append("operacion","pdf1");
 
-        fetch(`../../controllers/equipo.controller.php`,{
+        fetch(`../../pdf/estadosEquipos.php`,{
           method:"POST",
           body: parametros
         }) 
@@ -251,8 +254,8 @@ require_once "../sidebar/sidebar.php";
           });
       }
       $("#informe-categoriasEqui").addEventListener("click", () =>{
-        console.log(datosEquipos);
-        generarPDF(datosEquipos);
+        console.log(categoriasEquipos);
+        generarPDF(categoriasEquipos);
       });
 
 

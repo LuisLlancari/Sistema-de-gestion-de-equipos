@@ -111,13 +111,5 @@ if(isset($_POST['operacion'])){
         case 'sectoresEquiposGR':
             echo json_encode($equipo->sectoresEquiposGR());
             break;
-
-        case 'generarPDF':
-            $datosEnviar = [
-                "datos" => $_POST["datos"]
-            ];
-            
-            echo json_encode(generarPDF($datosEnviar));
-            break;
     }
 }
