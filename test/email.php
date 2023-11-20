@@ -27,7 +27,7 @@ function enviarMail($emailDestino="", $mensaje=""){
       $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
   
       //Recipients
-      $mail->setFrom('sistemas@gmail.com', 'Admin');
+      $mail->setFrom('sistemas@gmail.com', 'Administrador');
       // $mail->addAddress('1393241@senati.pe', 'Joe User');     //Add a recipient
       $mail->addAddress($emailDestino);               //Name is optional
       // $mail->addReplyTo('info@example.com', 'Information'); //Respuesta
@@ -40,8 +40,11 @@ function enviarMail($emailDestino="", $mensaje=""){
   
       //Content
       $mail->isHTML(true);                                  //Set email format to HTML
-      $mail->Subject ='Ejemplo de correo';
-      $mail->Body    = $mensaje;
+      $mail->Subject ='SISTEMA COMPUTARIZADO DE GESTION DE MANTENIMIENTO';
+      $mail->Body    = "
+          <h3>Buen día: </h3> 
+          <p> <strong>$mensaje</strong> es tu código de verificación, úsalo para el cambio de contraseña.</p>";
+      ;
       $mail->AltBody = 'Tu correo no soporta HTML, por favor comunicarse...';
   
       $mail->send();

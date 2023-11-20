@@ -198,7 +198,7 @@ require_once "../sidebar/sidebar.php";
                   </div>
                   <div class="card-footer text-end">
                     <a href="../datasheet/datasheet.php?obtener=${element.idequipo}" type="button" class="btn btn-success">Ver más ..</a>
-                    <a href="../sectores/detalle_sector.php?sector=${element.idsector}&nombre=${element.sector}" type="button" class="btn btn-info">Ir ..</a>
+                    <a href="../sectores/detalle_sector.php?sector=${element.idsector}&nombre=${element.sector}" type="button" class="btn rounded-circle"><i class="bi bi-geo-alt-fill bi-2x"></i></a>
                   </div>
                 </div>
               </div>
