@@ -232,7 +232,7 @@ BEGIN
     INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
 	INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
     INNER JOIN usuarios USU ON USU.idusuario = DET.idusuario
-    WHERE DET.inactive_at IS NULL
+    WHERE DET.inactive_at IS NULL;
       AND DET.idsector = 7;
 END $$
 DELIMITER ;

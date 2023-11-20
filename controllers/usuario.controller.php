@@ -11,8 +11,6 @@ if(isset($_POST['operacion'])){
 
   switch ($_POST['operacion']) {
 
-
-
     case 'login_usuario':
       $datosEnviar = [
         "email" => $_POST['email']

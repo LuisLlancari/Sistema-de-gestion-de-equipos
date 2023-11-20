@@ -85,7 +85,7 @@ $accesos = [
                         $icono = $iconos[$categoria];
                         $cadena = reemplazarCadena(strtolower($categoria));
             
-                        if($categoria != "Equipos" && $categoria != "Gráficos" && $categoria != "Usuarios" && $categoria != "Sectores" && $categoria ){
+                        if($categoria != "Equipos" && $categoria != "Gráficos" && $categoria != "Usuarios" && $categoria != "Sectores" && $categoria){
                             echo "
                                 <a href='../{$cadena}/{$cadena}.php' class='nav_link cat'></span>{$categoria}</a>
                             "; 
