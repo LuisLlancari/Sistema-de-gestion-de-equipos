@@ -1,5 +1,6 @@
 <?php
-
+session_start();
+date_default_timezone_set("America/Lima");
 require_once '../models/Sector.php';
 
 if (isset($_POST['operacion'])){
@@ -56,7 +57,7 @@ if (isset($_POST['operacion'])){
             $datosEnviar = [
             "iddetallesector" => $_POST['iddetallesector'],
             "idsector"        => $_POST['idsector'],
-            "idusuario"       => 1  
+            "idusuario"       => $_SESSION['idusuario']
             ];
             echo json_encode($sector->modificar_equipo($datosEnviar));
         break;

@@ -205,12 +205,14 @@ require_once "../sidebar/sidebar.php";
               console.log(datos);
               if(datos.length > 0){
                 console.log("folda")
+                $("#formulario1").reset();
+                  modalcambio.hide();
+                  listarDetalles();
 
               }else{
                 console.log("ha ocurrido un error")
+        
               }
-              $("#formulario1").reset();
-              modalcambio.hide();
               listarDetalles();
 
 

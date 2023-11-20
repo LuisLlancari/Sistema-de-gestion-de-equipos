@@ -1,4 +1,8 @@
 <?php 
+
+session_start();
+date_default_timezone_set("America/Lima");
+
 require_once '../models/Cronograma.php';
 
 if(isset($_POST['operacion'])){
