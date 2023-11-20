@@ -239,7 +239,7 @@ select * from sectores;
 select * from equipos;
 select * from usuarios;
 select * from sectores_detalle;
-CALL spu_listar_categorias();
+CALL spu_listar_detalleSectores();
 CALL spu_obtenerCNsectores();
 CALL spu_listar_detalleSectores(1);
 CALL spu_mover_equipo();
@@ -250,3 +250,37 @@ CALL spu_sector_eliminar(2);
 CALL spu_mover_equipo(3,6,1);
 CALL spu_equipos_registrar_sector(1, 3, 1, 'descripcion?', 'MODE', 'SERIE00001', NULL, '1');
 CALL spu_mover_equipo(4,7,1);
+
+-- CROGRAMAS 
+-- Insertar registros de ejemplo para idequipo máximo 15
+INSERT INTO cronogramas (idequipo, tipo_mantenimiento, estado, fecha_programada)
+VALUES
+    (1, 'Mantenimiento preventivo', 'pendiente', '2023-12-05 08:00:00'),
+    (1, 'Mantenimiento correctivo', 'en proceso', '2023-12-10 10:30:00'),
+    (1, 'Mantenimiento predictivo', 'pendiente', '2023-12-15 14:45:00'),
+    (2, 'Mantenimiento correctivo', 'pendiente', '2023-12-08 09:15:00'),
+    (2, 'Mantenimiento preventivo', 'en proceso', '2023-12-12 11:00:00'),
+    (2, 'Mantenimiento predictivo', 'en proceso', '2023-12-18 16:20:00'),
+    (3, 'Mantenimiento predictivo', 'pendiente', '2023-12-06 07:45:00'),
+    (3, 'Mantenimiento preventivo', 'en proceso', '2023-12-11 10:00:00'),
+    (3, 'Mantenimiento correctivo', 'pendiente', '2023-12-16 12:30:00'),
+    (4, 'Mantenimiento correctivo', 'pendiente', '2023-12-09 08:30:00'),
+    (4, 'Mantenimiento predictivo', 'en proceso', '2023-12-13 09:45:00'),
+    (4, 'Mantenimiento preventivo', 'pendiente', '2023-12-19 11:15:00'),
+    (5, 'Mantenimiento predictivo', 'en proceso', '2023-12-07 10:00:00'),
+    (5, 'Mantenimiento correctivo', 'en proceso', '2023-12-14 12:00:00'),
+    (5, 'Mantenimiento preventivo', 'pendiente', '2023-12-17 14:00:00');
+    select *from cronogramas;
+-- MANTENIMIENTO
+INSERT INTO mantenimiento (idusuario, idcronograma, descripcion)
+VALUES
+    (1, 1, 'Reemplazo de piezas defectuosas'),
+    (1, 2, 'Limpieza y ajuste de componentes'),
+    (1, 3, 'Verificación del sistema eléctrico'),
+    (1, 4, 'Cambio de filtros y aceite'),
+    (3, 5, 'Revisión general de la maquinaria'),
+    (3, 6, 'Calibración de sensores y controles'),
+    (1, 7, 'Inspección de componentes críticos'),
+    (1, 8, 'Alineación y balanceo de equipos'),
+    (3, 9, 'Mantenimiento preventivo programado'),
+    (3, 10, 'Reparación de circuitos electrónicos');

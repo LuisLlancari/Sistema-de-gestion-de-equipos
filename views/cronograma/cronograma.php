@@ -4,12 +4,20 @@ require_once "../sidebar/sidebar.php";
 ?>  
   <head>
     <!-- <link href="/website/css/uicons-bold-rounded.css"rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 </head>
 
-    <div class=" bg-light">
-        <h1>cronograma</h1>
-        <!-- Button trigger modal -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <div class="m-4">
+          <h1 class="fw-bolder d-inline-block"><i class="bi bi-calendar-week"></i> CRONOGRAMA</h1>
+        </div>
+        <hr>
+      </div>
     </div>
+  </div>
 
       <!-- CONTENIDO DEL CALENDARIO -->
     <div style="max-width: 900px; margin:auto" id="calendar"></div>

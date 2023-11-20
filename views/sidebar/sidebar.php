@@ -64,7 +64,7 @@ $accesos = [
         <a href='#' class='nav_link cat'>SISCOMPU</a>
         <header class="header"id="header">
             <div class="centered-span">
-                <span class="text-uppercase"><?=$_SESSION["apellidos"]?> - </span><span class="center-span"><?=$_SESSION["nombres"]?> , </span> <span id="rolObt"><?=$_SESSION["rol"]?></span> 
+                <span class="text-uppercase"><?=$_SESSION["apellidos"]?><span>, <span class="center-span"><?=$_SESSION["nombres"]?> - </span> <span id="rolObt"><?=$_SESSION["rol"]?></span> 
             </div>
             <div class="header_img centered-img"> 
                 
@@ -85,7 +85,7 @@ $accesos = [
                         $icono = $iconos[$categoria];
                         $cadena = reemplazarCadena(strtolower($categoria));
             
-                        if($categoria != "Equipos" && $categoria != "Gráficos" && $categoria != "Usuarios" && $categoria != "Sectores" && $categoria ){
+                        if($categoria != "Equipos" && $categoria != "Gráficos" && $categoria != "Usuarios" && $categoria != "Sectores" && $categoria){
                             echo "
                                 <a href='../{$cadena}/{$cadena}.php' class='nav_link cat'></span>{$categoria}</a>
                             "; 

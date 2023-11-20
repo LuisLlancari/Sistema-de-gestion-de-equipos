@@ -2,23 +2,33 @@
 
 require_once "../sidebar/sidebar.php";
 ?>  
-    <div class="height-100 bg-light">
-    <div class = "container mt-3">
-    <div class="row">
-      <div class="col-md-4"></div>
-      <div class="col-md-4">
 
-          <div class="mb-3">
-          <h1>Lista de trabajdores</h1>
-          <button type="button" class="btn btn-primary" id="registro">Agregar usuario</button>
-          </div>
+<head>
+<title>Usuarios</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+  <div class="container">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <div class="m-4">
+        <h1 class="fw-bolder d-inline-block"><i class="bi bi-person-lines-fill"></i> LISTA DE ENCARGADOS</h1>
+        <div class="btn-container float-end">
+          <!-- AÑADIR USUARIO -->
+          <button type="button" class="btn btn-primary rounded-circle" id="registro">
+          <i class="bi bi-person-fill-add" style="font-size: 1.5em;"></i>
+          </button>
+        </div>
       </div>
-      <div class="col-md-4"></div>
     </div>
-  <div>
+  </div>
+</div>
 
-  <div class="container mx-3">
-    <div class="row row-cols-1 row-cols-md-3 g-4" id="contenerdor-cards">
+
+
+
+  <div class="container">
+    <div class="row row-cols-3 g-4" id="contenerdor-cards">
         
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
@@ -152,24 +162,25 @@ require_once "../sidebar/sidebar.php";
                 let nuevacard = ``;
                 // Enviar los valores obtenidos en celdas <td></td>
                 nuevacard = `
-                <div class="card mx-3" style="max-width: 540px;" id="cuepo-card">
-                  <div class="row g-0 justify-content-center">
-                      <div class="col-md-4">
+                <div class="card mx-3" style="width: 470px;" id="cuepo-card">
+                  <div class="row g-0 align-items-center">
+                    <div class="col-md-4">
                       <img src="../../images/${rutaImagen}" class="img-fluid" alt="...">
-                      </div>
-                      <div class="col-md-8">
+                    </div>
+                    <div class="col-md-8">
                       <div class="card-body">
-                          <h5 class="card-title">${element.nombres} ${element.apellidos}</h5>
-                          <p class="card-text">correo: ${element.email}</p>
-                          <p class="card-text">cargo: ${element.rol}</p>
-                          <div class="container">
-                          <button type="button" data-id="${element.idusuario}"  class="btn btn-sm btn-warning editar">Editar</button>
-                          <button type="button" data-id="${element.idusuario}"  class="eliminar btn btn-sm btn-danger ">Eliminar</button>
-                          </div>
+                        <h5 class="card-title"><strong>${element.nombres} ${element.apellidos}</strong></h5>
+                        <hr>
+                        <p class="card-text">Correo: ${element.email}</p>
+                        <p class="card-text">Cargo: ${element.rol}</p>
+                        <div class="container">
+                          <button type="button" data-id="${element.idusuario}" class="btn btn-sm btn-warning editar">Editar</button>
+                          <button type="button" data-id="${element.idusuario}" class="eliminar btn btn-sm btn-danger ">Eliminar</button>
+                        </div>
                       </div>
-                      </div>
+                    </div>
                   </div>
-              </div>  
+                </div>
                 `;
                 cuerpo.innerHTML += nuevacard;             
               });

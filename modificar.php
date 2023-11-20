@@ -14,44 +14,38 @@
 </head>
 
 <body>
- <div class="row mt-5">
-  <div class="col-md-4"></div>
-  <div class="col-md-4">
 
 
-
-
-    
-    <div class="container mt-3">
-      <form action="" autocomplete="off" id="form-producto">
-    <div class="card">
-      <div class="card-header bg-primary text-light">
-       Cambiar contraseña
+<div class="container-fluid vh-100 d-flex align-items-center">
+  <div class="card mx-auto" style="max-width: 850px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="./test/modalCONTRASEÑA.jpeg" style="width: 300%; height: 100%;" class="img-fluid" alt="...">
       </div>
-      <div class="card-body">
-        
+      <div class="col-md-8">
+        <div class="card-body">
+          <h2 class="card-title">Cambiar contraseña</h2>
+          <hr>
           <div class="mb-3">
-            <label for="contraseña" class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="contraseña" required>
+            <label for="contraseña" class="form-label">Contraseña Nueva:</label>
+            <input type="password" class="form-control" id="contraseña" required autofocus>
           </div>
 
           <div class="mb-3">
-            <label for="rep_contraseña" class="form-label">Vuelva escribir la contraseña</label>
+            <label for="rep_contraseña" class="form-label">Confirmar la contraseña nueva:</label>
             <input type="password" class="form-control" id="rep_contraseña" required>
           </div>
-           
-      </div>
-      <div class="card-footer text-muted">
-        <button class="btn btn-primary" type="button" id="guardar_contraseña">Cambiar contraseña</button>
+        </div>
+        <div class="mt-auto card-footer d-flex justify-content-end">
+        <button class="btn btn-primary" type="button" id="guardar_contraseña">Aplicar cambios</button>
+        </div>
       </div>
     </div>
-   </form>
-  </div> <!-- container -->
+  </div>
+</div>
 
-        </div>
 
-        <div class="col-md-4"></div>
-        </div>
+
 
   
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"

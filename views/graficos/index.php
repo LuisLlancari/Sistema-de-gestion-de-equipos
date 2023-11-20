@@ -89,113 +89,28 @@ require_once "../sidebar/sidebar.php";
     function $(id= ``){
       return document.querySelector(id)
     }
-    const grafCronograma = $("#grafCronograma");
-    const grafMantenimiento = $("#grafMantenimiento");
 
 
-     //datos del gráfico de cronograma
-    let graficoCronogramaData = {
-        labels: [],
-        datasets: [
-        {
-            data: [],
-            backgroundColor: [ "#FF6384","#09e644","#84FF63","#8463FF","#6384FF"],
-            borderColor: "black",
-            borderWidth: 2
-        }]
-    };
+
+
       
       
-    const graficoCronograma= new Chart(grafCronograma, {  
-      type: 'doughnut',
-      data : graficoCronogramaData
-    });
+
      
 
-    //datos del gráfrico de cronograma
-    let graficoMantenimientoData =  {
-              labels: [],
-              datasets: [{
-                label: "2023 - 2024",
-                data:[],
-                borderColor: ["#09e644", "#1193b8",  "#f0d62e",  "#40E0D0"],
-                backgroundColor: ["#09e644", "#1193b8",  "#f0d62e",  "#13433e" ],
-              }]
-    }
-    let  graficoMantenimientoOptions={
-      scales:{
-        y:{ beginAtzero: true  }
-      }
-    }
- 
+
   
-    const graficoMantenimiento = new Chart(grafMantenimiento, {
-      type: 'bar',
-      data: graficoMantenimientoData,
-      options:graficoMantenimientoOptions      
-    });
 
 
-    function listarGraficoMantenimiento(){
-        const parametros = new FormData();
-        parametros.append("operacion" ,"listar_mantenimiento_grafico");
-        parametros.append("fechainicio" ,$('#fechainicio').value);
-        parametros.append("fechafin" ,$('#fechafin').value);
 
-        fetch(`../../controllers/mantenimiento.controller.php`,{
-          method: "POST",
-          body : parametros
-        })
-          .then(respuesta => respuesta.json())
-          .then(datos => {
-             
-            graficoMantenimiento.data.datasets[0].data = datos.map(item => item.cantidad_tipo);
-            graficoMantenimiento.data.labels = datos.map(item => item.tipo_mantenimiento);
-            graficoMantenimiento.update();
-
-          })
-          .catch(e =>  {
-            console.error(e);
-          });               
-    }
     
-    function listarGraficoCronograma(){
-        const parametros = new FormData();
-        parametros.append("operacion" ,"listar_cronograma_grafico");
-        parametros.append("fechainicio" ,$('#fechainiciograf').value);
-        parametros.append("fechafin" ,$('#fechafingraf').value);
-
-        fetch(`../../controllers/cronograma.controller.php`,{
-          method: "POST",
-          body : parametros
-        })
-          .then(respuesta => respuesta.json())
-          .then(datos => {
-             
-            graficoCronograma.data.datasets[0].data = datos.map(item => item.cantidad_tipo);
-            graficoCronograma.data.labels = datos.map(item => item.estado);
-            graficoCronograma.update();
-
-          })
-          .catch(e =>  {
-            console.error(e);
-          });               
-    }
 
 
 
-    listarGraficoCronograma();
-    listarGraficoMantenimiento();
 
 
-    $('#mostrar').addEventListener('click', function(){
-      listarGraficoMantenimiento();
-    });
-    
-    $('#cronogram').addEventListener('click', function(){
 
-      listarGraficoCronograma();
-    });
+
 
     </script>
 </body>

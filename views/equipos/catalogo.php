@@ -3,11 +3,22 @@
 
 require_once "../sidebar/sidebar.php";
 ?>
-    <div class="height-100 bg-light">
-      <div>
-        <div class="text-start m-4 ">
-          <h1 class>Lista de equipos</h1>
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+</head>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <div class="m-4">
+          <h1 class="fw-bolder d-inline-block"><i class="bi bi-bar-chart-steps"></i> LISTA DE EQUIPOS</h1>
         </div>
+        <hr>
+      </div>
+    </div>
+  </div>
           <!-- FILTROS -->
           <div class="row">
             <div class="col-md-4 mt-2" style="margin-left: 2rem;">    

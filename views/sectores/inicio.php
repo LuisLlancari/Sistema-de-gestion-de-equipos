@@ -37,6 +37,7 @@ $nombres = $_SESSION["nombres"];
             <i class="bi bi-trash3-fill" style="font-size: 1.5em;"></i>
           </button>
         </div>
+        <hr>
       </div>
     </div>
   </div>
