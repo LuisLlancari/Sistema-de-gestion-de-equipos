@@ -9,7 +9,7 @@ $iconos = [
 
     "Gráficos" => "fa-chart-bar",
     "Cronográmas" => "fa-calendar",
-    "Equípos" => "fa-desktop",
+    "Equipos" => "fa-desktop",
     "Usuarios" => "fa-user",
     "Sectores" => "fa-building"
 
@@ -19,14 +19,14 @@ $accesos = [
     "ADMIN" =>[
         "Sectores"      => ["inicio"],
         "Cronográmas"    => [],
-        "Equípos"       => ["catalogo","panel"],
+        "Equipos"       => ["catalogo","panel"],
         "Usuarios"       => ["usuario"],
         "Gráficos"      => ["index"],
     ],
     "ASIST" =>[
         "Gráficos"      => ["index"],
         "Cronográmas"    => [],
-        "Equípos"       => ["catalogo"]
+        "Equipos"       => ["catalogo"]
         ]
     ];
 
@@ -62,7 +62,7 @@ $accesos = [
         <a href='#' class='nav_link cat'>SISCOMPU</a>
         <header class="header"id="header">
             <div class="centered-span">
-                <span class="text-uppercase"><?=$_SESSION["apellidos"]?> - </span><span class="center-span"><?=$_SESSION["nombres"]?> - </span> <span id="rolObt"><?=$_SESSION["rol"]?></span> 
+                <span class="text-uppercase"><?=$_SESSION["apellidos"]?> , </span><span class="center-span"><?=$_SESSION["nombres"]?> - </span> <span id="rolObt"><?=$_SESSION["rol"]?></span> 
             </div>
             <div class="header_img centered-img"> 
                 
@@ -83,13 +83,13 @@ $accesos = [
                         $icono = $iconos[$categoria];
                         $cadena = reemplazarCadena(strtolower($categoria));
             
-                        if($categoria != "Equípos" && $categoria != "Gráficos" && $categoria != "Usuarios" && $categoria != "Sectores" && $categoria != "Cronográmas"){
+                        if($categoria != "Equipos" && $categoria != "Gráficos" && $categoria != "Usuarios" && $categoria != "Sectores" && $categoria != "Cronográmas"){
                             echo "
                                 <a href='../{$cadena}/{$cadena}.php' class='nav_link cat'></span>{$categoria}</a>
                             "; 
                         }
 
-                        if($categoria == "Equípos" || $categoria == "Gráficos" || $categoria == "Usuarios" || $categoria == "Sectores" || $categoria != "Cronográmas"){
+                        if($categoria == "Equipos" || $categoria == "Gráficos" || $categoria == "Usuarios" || $categoria == "Sectores" || $categoria != "Cronográmas"){
                             echo "
                                 <a type ='button' href='#' class='dropdown-btn'><i class='fas {$icono}'></i> $categoria<i class='fa fa-caret-down'></i></span></a>
                             ";

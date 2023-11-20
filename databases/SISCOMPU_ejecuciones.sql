@@ -61,7 +61,8 @@ CALL spu_listar_mantenimiento_porID(1);
 CALL spu_listar_MANsectores();
 
 INSERT INTO sectores(sector) VALUES
-("Laboratorio1");
+("jar"),
+("borrar");
 
 
 -- SECTORES 
@@ -82,8 +83,8 @@ insert into categorias(categoria) values("Pantallas"),("Ordenadores");
 
 insert into equipos(idcategoria, idmarca, idusuario, modelo_equipo, numero_serie, imagen)
 VALUES 
-	(1,2,1,'ALl ON ONE','9876521',null),
-	(1,1,2,'Monitor 4k','9876ds521',null);
+	(3,2,1,'Equipo1','je992_020_2',null),
+	(1,3,4,'EquipoNuevo','99_20sjss_200',null);
     
 insert into cronogramas(idequipo, tipo_mantenimiento, estado, fecha_programada)
 VALUES
@@ -118,16 +119,15 @@ CALL spu_listar_detalleSectores();
 select * from sectores;
 select * from equipos;
 select * from usuarios;
-
-INSERT INTO sectores_detalle(idsector, idequipo, idusuario, fecha_inicio)
-VALUES
-(4, 1, 1, '2023-10-16'),
-(4, 2, 3, '2023-11-20'),
-(4, 4, 1, '2023-09-06'),
-(3, 6, 4, '2023-01-20');
-
-CALL spu_obtenerporID(4);
-CALL spu_listar_mantenimiento_porID(1);
+select * from sectores_detalle;
+CALL spu_listar_categorias();
 CALL spu_obtenerCNsectores();
-CALL spu_listar_detalleSectores(4);
+CALL spu_listar_detalleSectores(1);
+CALL spu_mover_equipo();
+CALL spu_listar_detalleSectores(1);
 CALL spu_insertar_sector("Aula Zoom");
+CALL spu_sector_eliminar(2);
+
+CALL spu_mover_equipo(3,6,1);
+CALL spu_equipos_registrar_sector(1, 3, 1, 'descripcion?', 'MODE', 'SERIE00001', NULL, '1');
+CALL spu_mover_equipo(4,7,1);

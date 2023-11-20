@@ -156,6 +156,7 @@ BEGIN
     FROM categorias
     WHERE inactive_at IS NULL;
 END $$
+
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS spu_categorias_registrar;
@@ -223,7 +224,7 @@ BEGIN
 	INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
     INNER JOIN usuarios USU ON USU.idusuario = DET.idusuario
     WHERE DET.inactive_at IS NULL
-      AND DET.idsector = _idsector;
+      AND DET.idsector = 7;
 END $$
 DELIMITER ;
 
@@ -232,74 +233,40 @@ DROP PROCEDURE IF EXISTS spu_insertar_sector;
 DELIMITER $$
 CREATE PROCEDURE spu_insertar_sector
 (
-    IN _idsector	INT,
     IN _sector		VARCHAR(45)
 )
 BEGIN
 	INSERT INTO sectores
-    (idsector,sector)
+    (sector)
     VALUES 
-    (_idsector,_sector);
-END $$
-DELIMITER ;
-/*DROP PROCEDURE IF EXISTS spu_insertar_sectores;
-DELIMITER $$
-CREATE PROCEDURE spu_insertar_sectores
-(
-    IN _i	INT,
-    IN _idusuario	INT,
-    IN _nombre		VARCHAR(45)
-)
-BEGIN
-	INSERT INTO sectores(sector)
-    VALUES(_sector);
+    (_sector);
 	SELECT @@last_insert_id 'idsector';
 END $$
 DELIMITER ;
-*/
-DROP PROCEDURE IF EXISTS spu_MANsector_eliminar;
+
+DROP PROCEDURE IF EXISTS spu_sector_eliminar;
 DELIMITER $$
-CREATE PROCEDURE spu_sector_eliminar(IN _idmantenimiento_sector INT)
+CREATE PROCEDURE spu_sector_eliminar(IN _idsector INT)
 BEGIN 
-	UPDATE MAN_sectores
+	UPDATE sectores
     SET inactive_at = NOW()
-		WHERE idmantenimiento_sector = _idmantenimiento_sector;
+		WHERE idsector = _idsector;
 END $$
 DELIMITER ;
 
-/*DELIMITER $$
-CREATE PROCEDURE spu_obtenerporID(IN id_sector INT)
-BEGIN
-    SELECT DET.idmantenimiento_sector,
-    SEC.sector,
-	CAT.categoria,
-    MAR.marca,
-	EQUI.modelo_equipo,
-    EQUI.numero_serie,
-    DET.fecha_inicio,
-	DET.fecha_fin
-    FROM sectores_detalle DET
-    INNER JOIN sectores SEC ON SEC.idsector = DET.idsector
-	INNER JOIN equipos EQUI ON EQUI.idequipo = DET.idequipo
-	INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
-    INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
-    WHERE DET.inactive_at IS NULL;
-END $$
-DELIMITER ;*/
-
+DROP PROCEDURE IF EXISTS spu_obtenerCNsectores
 DELIMITER $$
 CREATE PROCEDURE spu_obtenerCNsectores()
 BEGIN
-	-- Selecciona los nombre y los cuenta
     SELECT 
-		s.idsector,
+        s.idsector,
         s.sector AS Nombre_Sector,
         COUNT(sd.idsector) AS Cantidad_Guardados
     FROM
         sectores s
-	-- Con detalle sectores estoy haciendo el conteo
     LEFT JOIN
-        sectores_detalle sd ON s.idsector = sd.idsector
+        sectores_detalle sd ON s.idsector = sd.idsector AND sd.fecha_fin IS NULL
+    WHERE s.inactive_at IS NULL
     GROUP BY
         s.idsector;
 END $$
@@ -307,7 +274,57 @@ DELIMITER ;
 
 
 
+DROP PROCEDURE IF EXISTS spu_equipos_registrar_sector;
+DELIMITER $$
+CREATE PROCEDURE spu_equipos_registrar_sector
+(
+	IN _idcategoria		INT,
+    IN _idmarca			INT,
+    IN _idusuario 		INT,
+    IN _descripcion		VARCHAR(45),
+    IN _modelo_equipo 	VARCHAR(45),
+    IN _numero_serie	VARCHAR(45),
+    IN _imagen			VARCHAR(200),
+    IN _idsector       	INT
+)
+BEGIN
+	INSERT INTO equipos
+    (idcategoria, idmarca, idusuario, descripcion, modelo_equipo, numero_serie, imagen)
+    VALUES
+    (_idcategoria, _idmarca, _idusuario, _descripcion, _modelo_equipo, _numero_serie, NULLIF(_imagen, ''));
+    
+	SELECT @@last_insert_id 'idequipo' INTO @equipoid;
+    
+    INSERT INTO sectores_detalle(idsector, idequipo, idusuario)
+	VALUES(_idsector, @equipoid, _idusuario);
+    
+	SELECT @@last_insert_id 'idmantenimiento_sector';
+    
+END $$
+DELIMITER ;
 
+
+DELIMITER $$
+CREATE PROCEDURE spu_mover_equipo(
+IN _iddetalle_sector INT,
+IN _idsector 		INT,
+IN _idusuario       INT
+)
+BEGIN
+	SELECT idequipo INTO @equipoid from sectores_detalle 
+	where idmantenimiento_sector = _iddetalle_sector;
+    
+	INSERT INTO sectores_detalle(idsector,idequipo,idusuario)
+	VALUES (_idsector ,@equipoid,_idusuario);
+    
+	UPDATE sectores_detalle 
+	SET inactive_at = now(),
+		fecha_fin = now()
+        Where idmantenimiento_sector = _iddetalle_sector;
+	
+	SELECT @@last_insert_id 'idmantenimiento_sector';
+END $$
+DELIMITER ;
 
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados EQUIPOS -----------------------------

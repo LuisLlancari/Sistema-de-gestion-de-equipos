@@ -67,16 +67,17 @@ require_once "../../views/sidebar/sidebar.php";
     integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
   </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
+  
+  <script src="../../js/sidebar.js"></script>
   <script src="../../js/sweeAlert.js"></script>
 
   <script>
 
-    function $(id){
+    document.addEventListener("DOMContentLoaded", () => {
+
+      function $(id){
       return document.querySelector(id);
     }
-
-    document.addEventListener("DOMContentLoaded", () => {
 
       const tabla = document.querySelector("#tabla-detalle-sector tbody");
       const nombreSectorElemento = document.getElementById("sector");
@@ -129,6 +130,7 @@ require_once "../../views/sidebar/sidebar.php";
             console.error(e)
           })
       }
+
 
       listarDetalles();
 
