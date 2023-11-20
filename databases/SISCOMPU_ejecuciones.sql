@@ -239,7 +239,7 @@ select * from sectores;
 select * from equipos;
 select * from usuarios;
 select * from sectores_detalle;
-CALL spu_listar_categorias();
+CALL spu_listar_detalleSectores();
 CALL spu_obtenerCNsectores();
 CALL spu_listar_detalleSectores(1);
 CALL spu_mover_equipo();

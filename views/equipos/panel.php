@@ -2,6 +2,24 @@
 
 require_once "../sidebar/sidebar.php";
 ?>  
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+</head>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <div class="m-4">
+          <h1 class="fw-bolder d-inline-block"><i class="bi bi-gear-wide-connected"></i> EQUIPOS</h1>
+        </div>
+        <hr>
+      </div>
+    </div>
+  </div>
+
+
     <div class="height-100 bg-light">
 
         <div class="m-4">
@@ -236,9 +254,9 @@ require_once "../sidebar/sidebar.php";
 
                 Equipos.forEach(element => {
 
-                    const img   = element.imagen ? `
-                      <a href="#" data-descripcion="${element.descripcion}" data-img="${element.imagen}" class="btn btn-info imagen"><i class="fa-regular fa-eye"></i></a>
-                    `: "no hay imagen";
+                    const img   = element.imagen 
+                    ? `<a href="#" data-descripcion="${element.descripcion}" data-img="${element.imagen}" class="btn btn-outline-info btn-sm imagen"><i class="fa-regular fa-eye"></i></a>`
+                    : `<button class="btn btn-outline-secondary btn-sm" disabled><i class="bi bi-eye-slash-fill"></i></button>`;
 
                     const estado =  element.estado == 0 ? "Inactivo"
                                   : element.estado == 1 ? "Activo"
@@ -257,8 +275,8 @@ require_once "../sidebar/sidebar.php";
                     <td> ${estado}</td>
                     <td>${element.nombres}</td>
                     <td>
-                        <a type="button" class="btn btn-info editar" data-id="${element.idequipo}" data-bs-toggle="modal" data-bs-target="#modalId">Editar</a>
-                        <a type="button" class="btn btn-danger eliminar" data-id="${element.idequipo}">Eliminar</a>
+                        <a type="button" class="btn btn-outline-success editar btn-sm" data-id="${element.idequipo}" data-bs-toggle="modal" data-bs-target="#modalId"><i class="bi bi-pencil-square"></i></a>
+                        <a type="button" class="btn btn-outline-danger eliminar btn-sm" data-id="${element.idequipo}"><i class="bi bi-trash-fill"></i></a>
                     </td>
                     `;
                     numFila ++;

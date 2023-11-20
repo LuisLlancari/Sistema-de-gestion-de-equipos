@@ -10,38 +10,40 @@
   <!-- Bootstrap CSS v5.2.1 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 
 <body >
   
- 
-
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card">
-                  <div class="card-header text-center"><h4>Recuperar cuenta</h4></div>
-                    <div class="card-body">
-                        <form action="" id="form-login" autocomplete="off">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email:</label>
-                                <input type="email" class="form-control form-control-lg" id="email" autofocus required>
-                            </div>
-                            <div class="d-grid">
-                                <button type="button" class="btn btn-primary" id="recuperar">Siguiente</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>  
-         </div>
+<div class="container-fluid vh-100 d-flex align-items-center">
+  <div class="card mx-auto" style="max-width: 850px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="./test/modalCONTRASEÑA.jpeg" style="width: 300%; height: 100%;" class="img-fluid" alt="...">
       </div>
-  
+      <div class="col-md-8">
+        <div class="card-body">
+          <h2 class="card-title">Recuperar Contraseña</h2>
+          <hr>
+          <p class="card-text">Ingrese su correo electrónico, así ubicaremos su registro y enviaremos el código de recuperación.</p>
+          <div class="col-auto">
+            <label class="visually-hidden" for="autoSizingInputGroup"></label>
+            <div class="input-group">
+              <div class="input-group-text">@</div>
+              <input type="email" id="email" class="form-control" id="autoSizingInputGroup" placeholder="Correo Electrónico" autofocus required>
+            </div>
+          </div>
+        </div>
+        <div class="mt-auto card-footer d-flex justify-content-end">
+          <button type="button" class="btn btn-primary float-end" id="recuperar">Siguiente</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  
 
-
+ 
 
 
   <!-- Inicio de MODAL -->
@@ -50,19 +52,21 @@
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title">Envio de codigo</h5>
+            <h5 class="modal-title"><i class="bi bi-shield-lock-fill"></i> Enviar código de recuperación</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
                 
             <div class="d-grid gap-2">
             <!-- <button class="btn btn-secondary btn-lg" data-metodo = "1" type="button"  id="Telefono">Enviar codigo al telefono</button> -->
-            <button class="btn btn-secondary btn-lg" data-metodo = "2" type="button" id="Correo">Enviar codigo al correo    </button>
+            <button class="btn btn-primary btn-lg text-light" data-metodo = "2" type="button" id="Correo">Enviar código</button>
+            <p id="mensaje-enviando" class="d-none"><i class="bi bi-hourglass"></i> Estamos enviando el código...</p>
+            <p><i class="bi bi-hand-index-thumb"></i>  Luego de enviar el código, porfavor revise la bandeja de entrada y la carpeta Spam de su correo electrónico.</p>
             </div>
         
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">cerrar</button>
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
             <!-- <button type="button" class="btn btn-primary">Enviar codigo</button> -->
         </div>
         </div>
@@ -70,27 +74,27 @@
   </div>
 
   <!-- MODAL VERIFICACION -->
-  <div class="modal" tabindex="-1" id="modal-verificar">
-  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+  <div class="modal" tabindex="-1" id="modal-verificar" >
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Verificar codigo</h5>
+      <div class="modal-header"  style="background-color: #4285f4;">
+        <h5 class="modal-title  text-light">Verificar código</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
          <form action="">
            <div class="mb-3">
-             <label for="email" class="form-label">Codigo verificacion</label>
-             <input type="text" class="form-control form-control-lg" maxlength="6" id="in_codigo" autofocus required>
+             <label for="email" class="form-label">Ingrese el código envíado a su correo electrónico:</label>
+             <input type="text" class="form-control form-control-lg" placeholder="_ _ _ _ _ _" maxlength="6" id="in_codigo" autofocus required>
             </div>
           </form>     
             
       </div>
       <div class="modal-footer">
         <!-- <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">cerrar</button> -->
-        <button type="button" class="btn btn-primary" id="reenvio">reenviar el codigo</button>
-        <button type="button" class="btn btn-primary" id="validar">Validar</button>
+        <button type="button" class="btn btn-success" id="validar">Validar Código</button>
+        <button type="button" class="btn btn-secondary" id="reenvio">Reenviar código</button>
       </div>
     </div>
   </div>
@@ -112,6 +116,7 @@
         var modalVerificar = new bootstrap.Modal($('#modal-verificar'));
 
 
+        
         function traer_usuario(){
             const parametros= new FormData();
             parametros.append("operacion" ,"recuperar_usuario");          
