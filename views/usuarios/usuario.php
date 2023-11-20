@@ -72,8 +72,8 @@ require_once "../sidebar/sidebar.php";
                   <label for="rol" class="form-label">Seleccione su rol</label>
                   <select name="" id="rol" class="form-select" required>
                   <option value="">Seleccion:</option>
-                  <option value="ADMIN">Administrador</option>
-                  <option value="ASIST">Asistente</option>
+                  <option value="ADMINISTRADOR">Administrador</option>
+                  <option value="ASISTENTE">Asistente</option>
                 </select>
                 </div>
               
