@@ -19,6 +19,8 @@ require_once "../sidebar/sidebar.php";
           <canvas id="cateogoriasEquipos"></canvas>
         </div>
       </div>
+
+
       <div class="m-2">     
         <div class="row bg-secondary text-center">
             <div class="col-md-1">
@@ -34,6 +36,8 @@ require_once "../sidebar/sidebar.php";
           <canvas id="estadosEquipos"></canvas>
         </div>
       </div>
+
+
       <div class="m-2">
         <div class="row bg-secondary text-center">
           <div class="col-md-1">
@@ -49,6 +53,8 @@ require_once "../sidebar/sidebar.php";
             <canvas id="sectoresEquipo"></canvas>
           </div>
       </div>
+
+
       <div class="m-2">
         <div class="row bg-secondary text-center">
           <div class="col-md-1">
@@ -58,10 +64,31 @@ require_once "../sidebar/sidebar.php";
               <div class="text-light">
                 <h1 class="">Estado de los cronogramas</h1>
               </div>
+              
+              
             </div>
           </div>
-        </div>
-      </div>
+          <div style="width: 50%;"> 
+            <canvas id="grafCronograma"></canvas>
+
+            <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="fecha" class="form-label">Fecha Inicio:</label>
+                    <input type="date" class="form-control" id="fechainiciograf" required value="2023-01-01">
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="fecha" class="form-label">Fecha Fin:</label>
+                    <input type="date" class="form-control" id="fechafingraf" required value="2023-12-31">
+                  </div>
+                </div>
+                <button type='button' class="btn btn-sm bg-success" id='cronogram'>Mostrar datos</button>
+              </div>
+            </div> 
+         </div>
+       </div>
+
+
       <div class="m-2">
       <div class="row bg-secondary text-center">
           <div class="col-md-1">
@@ -73,7 +100,31 @@ require_once "../sidebar/sidebar.php";
               </div>
             </div>
           </div>
+
+          
+              <div style="width: 50%;">
+              <canvas id="grafMantenimiento"></canvas>
+              
+              
+              <div style="width: 50%;">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="fecha" class="form-label">Fecha Inicio:</label>
+                    <input type="date" class="form-control" id="fechainicio" required value="2023-01-01">
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="fecha" class="form-label">Fecha Fin:</label>
+                    <input type="date" class="form-control" id="fechafin" required value="2023-12-31">
+                  </div>
+                </div>
+                <button type='button' class="btn btn-sm btn-success" id='mostrar'>Mostrar datos</button>
+              </div>
+
+
+        </div> 
         </div>
+
       </div>
 
     </div>
@@ -106,6 +157,8 @@ require_once "../sidebar/sidebar.php";
         return document.querySelector(id);
       }
 
+      const grafCronograma = $("#grafCronograma");
+      const grafMantenimiento = $("#grafMantenimiento");
       const grDona   = $("#cateogoriasEquipos");
       const grBarras = $("#estadosEquipos");
       const grDonaSector = $("#sectoresEquipo");
@@ -118,7 +171,74 @@ require_once "../sidebar/sidebar.php";
 
       let datosEquipos = null;
 
-      function generarGrDona(datos){
+      let graficoCronogramaData = {
+        labels: [],
+        datasets: [
+        {
+            data: [],
+            backgroundColor: [ "#FF6384","#09e644","#84FF63","#8463FF","#6384FF"],
+            borderColor: "black",
+            borderWidth: 2
+        }]
+     };
+
+
+      const graficoCronograma= new Chart(grafCronograma,{  
+        type: 'doughnut',
+        data : graficoCronogramaData
+      });
+
+
+      let graficoMantenimientoData =  {
+              labels: [],
+              datasets: [{
+                label: "2023 - 2024",
+                data:[],
+                borderColor: ["#09e644", "#1193b8",  "#f0d62e",  "#40E0D0"],
+                backgroundColor: ["#09e644", "#1193b8",  "#f0d62e",  "#13433e" ],
+        }]
+      }
+
+      let  graficoMantenimientoOptions={
+        scales:{
+        y:{ beginAtzero: true  }
+        }
+      }
+
+      const graficoMantenimiento = new Chart(grafMantenimiento, {
+          type: 'bar',
+          data: graficoMantenimientoData,
+          options:graficoMantenimientoOptions      
+      });
+
+
+     
+      function listarGraficoMantenimiento(){
+        const parametros = new FormData();
+        parametros.append("operacion" ,"listar_mantenimiento_grafico");
+        parametros.append("fechainicio" ,$('#fechainicio').value);
+        parametros.append("fechafin" ,$('#fechafin').value);
+
+        fetch(`../../controllers/mantenimiento.controller.php`,{
+          method: "POST",
+          body : parametros
+        })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+             
+            graficoMantenimiento.data.datasets[0].data = datos.map(item => item.cantidad_tipo);
+            graficoMantenimiento.data.labels = datos.map(item => item.tipo_mantenimiento);
+            graficoMantenimiento.update();
+
+          })
+          .catch(e =>  {
+            console.error(e);
+          });               
+        }
+
+
+      
+        function generarGrDona(datos){
 
         new Chart(grDona, {
           type: 'doughnut',
@@ -131,6 +251,29 @@ require_once "../sidebar/sidebar.php";
             }]
           },
         });
+      }
+
+      function listarGraficoCronograma(){
+        const parametros = new FormData();
+        parametros.append("operacion" ,"listar_cronograma_grafico");
+        parametros.append("fechainicio" ,$('#fechainiciograf').value);
+        parametros.append("fechafin" ,$('#fechafingraf').value);
+
+        fetch(`../../controllers/cronograma.controller.php`,{
+          method: "POST",
+          body : parametros
+        })
+          .then(respuesta => respuesta.json())
+          .then(datos => {
+             
+            graficoCronograma.data.datasets[0].data = datos.map(item => item.cantidad_tipo);
+            graficoCronograma.data.labels = datos.map(item => item.estado);
+            graficoCronograma.update();
+
+          })
+          .catch(e =>  {
+            console.error(e);
+          });               
       }
 
       function generarGrBarras(datos){
@@ -255,10 +398,21 @@ require_once "../sidebar/sidebar.php";
         generarPDF(datosEquipos);
       });
 
+      $('#mostrar').addEventListener('click', function(){
+        listarGraficoMantenimiento();
+      });
+      
+      $('#cronogram').addEventListener('click', function(){
+
+        listarGraficoCronograma();
+      });
+
 
       obtenerCategoriasEquipos();
       obtenerEstadosequipos();
       obtenerSectoresEquipos();
+      listarGraficoCronograma();
+      listarGraficoMantenimiento();
 
 
 

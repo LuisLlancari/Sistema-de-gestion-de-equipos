@@ -837,14 +837,6 @@ CREATE PROCEDURE spu_mantenimiento_grafico
 	in _fecha_fin 	date
 )
 BEGIN
-	 
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_mantenimiento_grafico`(
-    in _fecha_inicio 	date,
-	in _fecha_fin 	date
-)
-BEGIN
-	 
 SELECT
 count(1) as 'cantidad_tipo',
 cro.tipo_mantenimiento
@@ -858,8 +850,29 @@ group by cro.tipo_mantenimiento;
 END$$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS spu_cronograma_grafico;
+DELIMITER $$
+CREATE PROCEDURE spu_cronograma_grafico
+(
+    in _fecha_inicio 	date,
+	in _fecha_fin 	date
+)
+BEGIN
+	 
+SELECT
+count(1) as 'cantidad_tipo',
+cro.estado
+FROM cronogramas as cro
+INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
+left JOIN mantenimiento as man on man.idcronograma=cro.idcronograma
+WHERE cro.inactive_at IS NULL and cro.estado!=''
+AND cro.create_at between _fecha_inicio and _fecha_fin
+group by cro.estado;
+     
 END $$
 DELIMITER ;
+
+
  
 -- --------------------------------------------------------------------------------------------------------------------------
 -- -----------------------------------------  CONSULTAS ESTADÍSTICAS  -------------------------------------------------------

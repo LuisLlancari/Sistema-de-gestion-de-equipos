@@ -43,6 +43,8 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
           <h2 class="fw-bold mb-5">INICIO DE SESIÓN</h2>
             
           <!-- INICIO DEL FORMULARIO -->
+
+
           <form action="" id="form-login">
             <div class="container">
               <div class="row justify-content-center">
@@ -76,7 +78,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
               </a>
             </div>
 
-          </form>
+          <!-- </form> -->
         </div>
       </div>
     </div>
