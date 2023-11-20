@@ -3,7 +3,7 @@
 class Conexion{
   private $servidor = "localhost";
   private $puerto = "3306";
-  private $baseDatos = "SISCOMPU2";
+  private $baseDatos = "SISCOMPU";
   private $usuario = "root";
   private $clave = "";
 

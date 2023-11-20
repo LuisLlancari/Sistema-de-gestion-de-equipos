@@ -21,11 +21,11 @@ $accesos = [
         "Cronograma"    => ["Cronograma"],
         "Equipos"       => ["Catálogo","Panel"],
         "Usuarios"       => ["Usuario"],
-        "Gráficos"      => ["index","Estadísticas"],
+        "Gráficos"      => ["Estadísticas"],
     ],
     "ASISTENTE" =>[
-        "Gráficos"      => ["index"],
-        "Cronograma"    => [],
+        "Sectores"      => ["Inicio"],
+        "Cronograma"    => ["Cronograma"],
         "Equipos"       => ["Catálogo"]
         ]
     ];

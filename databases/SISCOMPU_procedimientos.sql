@@ -1,5 +1,5 @@
 
-USE SISCOMPU2;
+USE SISCOMPU;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados USUARIOS -------------------------------
 -- -------------------------------------------------------------------------------------
@@ -194,7 +194,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_detalleSectores(IN _idsector INT)
 BEGIN
-    SELECT DET.iddeatlle_sector,
+    SELECT DET.idmantenimiento_sector,
 		SEC.sector,
         CAT.categoria,
         MAR.marca,
@@ -210,8 +210,8 @@ BEGIN
     INNER JOIN categorias CAT ON CAT.idcategoria = EQUI.idcategoria
 	INNER JOIN marcas MAR ON MAR.idmarca = EQUI.idmarca
     INNER JOIN usuarios USU ON USU.idusuario = DET.idusuario
-    WHERE DET.inactive_at IS NULL;
-      AND DET.idsector = 7;
+    WHERE DET.inactive_at IS NULL
+      AND DET.idsector = _idsector;
 END $$
 DELIMITER ;
 
@@ -282,20 +282,17 @@ BEGIN
     
 END $$
 DELIMITER ;
-<<<<<<< HEAD
-call spu_mover_equipo(1,2,1);
-=======
->>>>>>> branch-lucas
+
 
 DELIMITER $$
 CREATE PROCEDURE spu_mover_equipo(
-IN _iddetalle_sector INT,
+IN _idmantenimiento_sector INT,
 IN _idsector 		INT,
 IN _idusuario       INT
 )
 BEGIN
 	SELECT idequipo INTO @equipoid from sectores_detalle 
-	where idmantenimiento_sector = _iddetalle_sector;
+	where idmantenimiento_sector = _idmantenimiento_sector;
     
 	INSERT INTO sectores_detalle(idsector,idequipo,idusuario)
 	VALUES (_idsector ,@equipoid,_idusuario);
@@ -303,7 +300,7 @@ BEGIN
 	UPDATE sectores_detalle 
 	SET inactive_at = now(),
 		fecha_fin = now()
-        Where idmantenimiento_sector = _iddetalle_sector;
+        Where idmantenimiento_sector = _idmantenimiento_sector;
 	
 	SELECT @@last_insert_id 'idmantenimiento_sector';
 END $$

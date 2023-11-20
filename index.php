@@ -2,7 +2,7 @@
 
 if(isset($_SESSION["status"]) && $_SESSION["status"]){
 
-  header("Location:./views/graficos/index.php");
+  header("Location:./views/sectores/inicio.php");
 }
 ?>
 <!doctype html>
@@ -130,7 +130,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
           if (datos.acceso === true) {
             toast("Acceso correcto");
             setTimeout(() => { //Una pequeña pausa para que se muestre el SweetAlert
-              window.location.href = './views/graficos/index.php';
+              window.location.href = './views/sectores/inicio.php';
             }, 1000);
           } else {
             // SweetAlert

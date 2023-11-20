@@ -1,5 +1,5 @@
-CREATE DATABASE SISCOMPU2;
-USE SISCOMPU2;
+CREATE DATABASE SISCOMPU;
+USE SISCOMPU;
 
 CREATE TABLE usuarios(
 	idusuario 		INT PRIMARY KEY AUTO_INCREMENT,
@@ -79,7 +79,7 @@ CREATE TABLE sectores
 
 CREATE TABLE sectores_detalle
 (
-	iddeatlle_sector				INT PRIMARY KEY AUTO_INCREMENT,
+	idmantenimiento_sector				INT PRIMARY KEY AUTO_INCREMENT,
     idsector						INT 	NOT NULL,
     idequipo						INT 	NOT NULL,
     idusuario						INT		NOT NULL,
