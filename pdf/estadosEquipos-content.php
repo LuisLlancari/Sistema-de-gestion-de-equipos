@@ -11,13 +11,13 @@ $hora = date("H:i");
     <table cellspacing="0" style="width: 100%; margin: 3%;">
         <tr>
             <td style="width: 100%;">
-                <img style="width: 90%" src="../test/reparacionBANNER.jpeg" alt="reparacionBANNER" >
+                <img style="width: 90%" src="../images/banerRecortado.jpg" alt="reparacionBANNER" >
             </td>
         </tr>
         <tr>
             <td style="width: 100%; text-align: center; text-decoration: underline; font-weight: bold; font-size: 20pt">
                 <span style="font-size: 10pt"><br></span>
-                Listado de equipos por categorías
+                REPORTE DE EQUIPOS POR CATEGORÍAS
             </td>
         </tr>
     </table>
@@ -27,8 +27,7 @@ $hora = date("H:i");
                 <span style="font-size: 15pt; font-weight: bold;">Información<br></span>
                 <br>
                 Día : <?=$dia?><br>
-                Apellidos: <?=$_SESSION["apellidos"]?><br>
-                Nombres: <?=$_SESSION["nombres"]?><br>
+                Apellidos y nombres: <?=$_SESSION["apellidos"]?> <?=$_SESSION["nombres"]?><br>
                 Cargo : <?=$_SESSION["rol"]?><br>
                 Email : <?=$_SESSION["email"]?><br>
                 <br>
@@ -49,8 +48,8 @@ $hora = date("H:i");
             </th>
         </tr>
         <tr>
-            <th style="width: 30%; border: solid 1px #000000;">Cantidad                </th>
-            <th style="width: 70%; border: solid 1px #000000;">Categorías    </th>
+            <th style="width: 30%; border: solid 1px #000000;">Cantidad</th>
+            <th style="width: 70%; border: solid 1px #000000;">Categorías</th>
         </tr>
 
     <?php foreach ($registros as $registro):?>
@@ -71,7 +70,7 @@ $hora = date("H:i");
         </tr>
         <tr>
             <th style="width: 100%; text-align: center; border: solid 1px #000000;" colspan="3">
-                Lista general
+                Reporte general
             </th>
         </tr>
         <tr>
