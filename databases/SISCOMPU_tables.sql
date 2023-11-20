@@ -1,8 +1,6 @@
-CREATE DATABASE SISCOMPU;
--- DROP DATABASE SISCOMPU;
-USE SISCOMPU;
+CREATE DATABASE SISCOMPU2;
+USE SISCOMPU2;
 
-DROP TABLE  IF EXISTS usuarios;
 CREATE TABLE usuarios(
 	idusuario 		INT PRIMARY KEY AUTO_INCREMENT,
     nombres			VARCHAR(40) 	NOT NULL,
@@ -18,7 +16,6 @@ CREATE TABLE usuarios(
     CONSTRAINT uk_email_usu UNIQUE(email)
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS marcas; 
 CREATE TABLE marcas(
 	idmarca			INT PRIMARY KEY AUTO_INCREMENT,
     marca			VARCHAR(45) 		NOT NULL,
@@ -28,7 +25,6 @@ CREATE TABLE marcas(
     CONSTRAINT	uk_marca_marc UNIQUE(marca)
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS categorias;
 CREATE TABLE categorias
 (
 	idcategoria 		INT PRIMARY KEY AUTO_INCREMENT,
@@ -39,7 +35,6 @@ CREATE TABLE categorias
     CONSTRAINT uk_categoria_cat UNIQUE(categoria)
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS equipos; 
 CREATE TABLE equipos
 (
 		idequipo			INT PRIMARY KEY AUTO_INCREMENT,
@@ -60,7 +55,6 @@ CREATE TABLE equipos
 		CONSTRAINT	uk_numeroserie_prd UNIQUE(numero_serie)
 ) ENGINE = INNODB;
 
-DROP TABLE IF EXISTS datasheet;
 CREATE TABLE datasheet
 (
 	iddatasheet			INT PRIMARY KEY AUTO_INCREMENT,
@@ -74,7 +68,6 @@ CREATE TABLE datasheet
     CONSTRAINT uk_idequipoclave UNIQUE	(idequipo,clave)
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS sectores;
 CREATE TABLE sectores
 (
 	idsector			INT PRIMARY KEY AUTO_INCREMENT,
@@ -84,7 +77,6 @@ CREATE TABLE sectores
 	inactive_at			DATE			NULL
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS sectores_detalle;
 CREATE TABLE sectores_detalle
 (
 	iddeatlle_sector				INT PRIMARY KEY AUTO_INCREMENT,
@@ -101,7 +93,6 @@ CREATE TABLE sectores_detalle
 	CONSTRAINT fk_idusuario_sect FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS cronogramas;
 CREATE TABLE cronogramas
 (
 	idcronograma		INT PRIMARY KEY AUTO_INCREMENT,
@@ -115,7 +106,6 @@ CREATE TABLE cronogramas
     CONSTRAINT 	fk_idequipo_cro FOREIGN KEY(idequipo) REFERENCES equipos(idequipo)
 )ENGINE = INNODB;
 
-DROP TABLE IF EXISTS mantenimiento;
 CREATE TABLE mantenimiento
 (
 	idmantenimiento 		INT PRIMARY KEY AUTO_INCREMENT,
