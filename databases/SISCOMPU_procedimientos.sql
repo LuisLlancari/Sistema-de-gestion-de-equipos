@@ -1,9 +1,8 @@
 
-USE SISCOMPU;
+USE SISCOMPU2;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados USUARIOS -------------------------------
 -- -------------------------------------------------------------------------------------
-DROP PROCEDURE IF EXISTS spu_usuarios_recuperar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_recuperar(IN _email VARCHAR(60))
 BEGIN
@@ -14,7 +13,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_usuarios_generar_clave;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_generar_clave(IN _idusuario INT, IN _codigo CHAR(6))
 BEGIN
@@ -26,7 +24,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_usuarios_verificar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_verificar(IN _idusuario INT)
 BEGIN
@@ -35,7 +32,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_canbiar_contraseña;
 DELIMITER $$
 CREATE PROCEDURE spu_canbiar_contraseña(IN _idusuario INT,IN _claveacceso VARCHAR(60))
 BEGIN
@@ -48,7 +44,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_usuarios_login;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_login(IN _email VARCHAR(60))
 BEGIN
@@ -65,7 +60,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_usuarios_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_registrar
 (
@@ -85,7 +79,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_usuarios_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_listar()
 BEGIN
@@ -94,7 +87,6 @@ BEGIN
 END $$
 DELIMITER ;
 	
-DROP PROCEDURE IF EXISTS spu_usuarios_obtener_id;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_obtener_id(IN _idusuario INT)
 BEGIN
@@ -103,7 +95,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_usuarios_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuarios_eliminar(IN _idusuario INT)
 BEGIN 
@@ -113,8 +104,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-
-DROP PROCEDURE IF EXISTS spu_usuario_modificar;
 DELIMITER $$
 CREATE PROCEDURE spu_usuario_modificar
 (
@@ -142,7 +131,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_usuarios_obtener;
 DELIMITER $$
 CREATE PROCEDURE  spu_usuarios_obtener(in _idusuario INT)
 BEGIN
@@ -155,9 +143,6 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados CATEGORIAS ----------------------------
 -- -------------------------------------------------------------------------------------
-
-
-DROP PROCEDURE IF EXISTS spu_listar_categorias;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_categorias()
 BEGIN
@@ -168,7 +153,6 @@ END $$
 
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_categorias_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_categorias_registrar(
 	IN _categoria VARCHAR(45)
@@ -181,8 +165,6 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados MARCAS -----------------------------
 -- -------------------------------------------------------------------------------------
-
-DROP PROCEDURE IF EXISTS spu_listar_marca;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_marca()
 BEGIN
@@ -192,7 +174,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_insertar_marca;
 DELIMITER $$
 CREATE PROCEDURE spu_insertar_marca
 (
@@ -206,13 +187,9 @@ BEGIN
 END $$
 DELIMITER ;
 
-
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados SECTORES -----------------------------
 -- -------------------------------------------------------------------------------------
-
-
-DROP PROCEDURE IF EXISTS spu_listar_detalleSectores;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_detalleSectores(IN _idsector INT)
 BEGIN
@@ -237,8 +214,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-
-DROP PROCEDURE IF EXISTS spu_insertar_sector;
 DELIMITER $$
 CREATE PROCEDURE spu_insertar_sector
 (
@@ -253,7 +228,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_sector_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_sector_eliminar(IN _idsector INT)
 BEGIN 
@@ -263,7 +237,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_obtenerCNsectores
 DELIMITER $$
 CREATE PROCEDURE spu_obtenerCNsectores()
 BEGIN
@@ -281,9 +254,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-
-
-DROP PROCEDURE IF EXISTS spu_equipos_registrar_sector;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_registrar_sector
 (
@@ -312,7 +282,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-
 DELIMITER $$
 CREATE PROCEDURE spu_mover_equipo(
 IN _iddetalle_sector INT,
@@ -340,7 +309,6 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 
 -- VISTA EQUIPOS
-DROP VIEW IF EXISTS vws_equipos;
 CREATE VIEW vws_equipos
 AS
 	SELECT EQUI.idequipo,
@@ -355,11 +323,6 @@ AS
     SDE.idsector,
     SEC.sector,
 	EQUI.estado,
-    /*CASE EQUI.estado
-		WHEN '0' THEN 'inactivo'
-        WHEN '1' THEN 'activo'
-        WHEN '2' THEN 'mantenimiento'
-	END AS estado,*/
 	USU.nombres
     FROM equipos EQUI
     INNER JOIN sectores_detalle SDE ON SDE.idequipo = EQUI.idequipo
@@ -372,7 +335,6 @@ AS
         SDE.inactive_at IS NULL
 	ORDER BY EQUI.numero_serie;
     
-DROP PROCEDURE IF EXISTS spu_equipos_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_registrar
 (
@@ -394,8 +356,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-
-DROP PROCEDURE IF EXISTS spu_equipos_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_listar()
 BEGIN
@@ -403,7 +363,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_equipos_listar_categoria;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_listar_categoria(IN _idcategoria INT)
 BEGIN
@@ -417,8 +376,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-
-DROP PROCEDURE IF EXISTS spu_equipos_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_obtener(in _idequipo INT)
 BEGIN
@@ -428,7 +385,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_equipos_modificar;
 DELIMITER $$
 CREATE PROCEDURE spu_equipos_modificar
 (
@@ -460,14 +416,11 @@ BEGIN
 END $$
 DELIMITER ;
 
-
-
 -- -------------------------------------------------------------------------------------
 -- ------------------ Procedimientos Almacenados DATASHEET -----------------------------
 -- -------------------------------------------------------------------------------------
 
 -- VISTA DATASHEET
-DROP VIEW IF EXISTS vw_datasheet;
 CREATE VIEW vw_datasheet
 AS
 	SELECT 
@@ -482,7 +435,6 @@ AS
 	WHERE DSH.inactive_at IS NULL;
 --
 
-DROP PROCEDURE IF EXISTS spu_datasheet_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_listar(IN _idequipo INT)
 BEGIN
@@ -492,8 +444,6 @@ BEGIN
 END$$
 DELIMITER ;
 
-
-DROP PROCEDURE IF EXISTS spu_datasheet_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_registrar
 (
@@ -544,7 +494,6 @@ ELSE
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_datasheet_modificar;
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_modificar
 (
@@ -564,7 +513,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_datasheet_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_datasheet_eliminar(IN _iddatasheet INT)
 BEGIN
@@ -579,7 +527,6 @@ DELIMITER ;
 -- ---------------- Procedimientos Alamacenados CRONOGRAMAS --------------------------
 -- -------------------------------------------------------------------------------------
 
-DROP PROCEDURE IF EXISTS spu_cronogramas_listar_id;
 DELIMITER $$
 CREATE PROCEDURE spu_cronogramas_listar_id(IN _idequipo INT)
 BEGIN
@@ -597,8 +544,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_cronogramas_listar;
-DELIMITER $$
+/*DELIMITER $$
 CREATE PROCEDURE spu_cronogramas_listar_id(IN _idequipo INT)
 BEGIN
 	SELECT
@@ -615,10 +561,8 @@ BEGIN
     WHERE
 		equ.idequipo = _idequipo AND cro.inactive_at IS NULL;
 END $$
-DELIMITER ;
+DELIMITER ;*/
 
-
- 
 DROP PROCEDURE IF EXISTS spu_cronogramas_listar;
 DELIMITER $$
 CREATE PROCEDURE spu_cronogramas_listar()
@@ -637,12 +581,9 @@ BEGIN
 
     WHERE
 		cro.inactive_at IS NULL;
-        
-        
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_cronogramas_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_cronogramas_registrar
 (
@@ -662,7 +603,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_cronogramas_modificar;
 DELIMITER $$
 CREATE PROCEDURE spu_cronogramas_modificar
 (
@@ -695,8 +635,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-
-DROP PROCEDURE IF EXISTS spu_cronograma_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_cronograma_eliminar(in _idcronograma INT)
 BEGIN
@@ -705,22 +643,10 @@ BEGIN
 			where idcronograma = _idcronograma;
 END $$
 DELIMITER ;
-
-
-/*
-DROP PROCEDURE IF EXISTS;
-DELIMITER $$
-CREATE PROCEDURE()
-BEGIN
-END $$
-DELIMITER ;
-*/
-
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados MANTENIMIENTO --------------------------
 -- -------------------------------------------------------------------------------------
--- FALTA INSERTAR DATOS
-DROP PROCEDURE IF EXISTS spu_mantenimiento_listar;
+
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_listar()
 BEGIN
@@ -746,7 +672,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_listar_mantenimiento_porID;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_mantenimiento_porID(IN _idmantenimiento INT)
 BEGIN
@@ -763,7 +688,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_mantenimiento_registrar;
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_registrar
 (
@@ -781,7 +705,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_mantenimiento_modificar;
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_modificar
 (
@@ -800,7 +723,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_mantenimiento_eliminar;
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_eliminar(in _idmantenimiento INT)
 BEGIN
@@ -812,7 +734,6 @@ END $$
 -- ------------------ Procedimientos Almacenados SECTORES -----------------------------
 -- -------------------------------------------------------------------------------------
 
-DROP PROCEDURE spu_listar_sectores;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_sectores()
 BEGIN
@@ -822,7 +743,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_listar_MANsectores;
 DELIMITER $$
 CREATE PROCEDURE spu_listar_MANsectores()
 BEGIN
@@ -842,11 +762,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-
 -- GRAFICOS
-
-
-DROP PROCEDURE IF EXISTS spu_mantenimiento_grafico;
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_grafico
 (
@@ -867,7 +783,6 @@ group by cro.tipo_mantenimiento;
 END$$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS spu_cronograma_grafico;
 DELIMITER $$
 CREATE PROCEDURE spu_cronograma_grafico
 (
@@ -889,14 +804,10 @@ group by cro.estado;
 END $$
 DELIMITER ;
 
-
- 
 -- --------------------------------------------------------------------------------------------------------------------------
 -- -----------------------------------------  CONSULTAS ESTADÍSTICAS  -------------------------------------------------------
 -- --------------------------------------------------------------------------------------------------------------------------
-select * from equipos;
 -- ESTADOS DE LOS EQUPOS
-DROP PROCEDURE IF EXISTS spu_estadistica_equiposporEstado;
 DELIMITER $$
 CREATE PROCEDURE spu_estadistica_equiposporEstado()
 BEGIN
@@ -916,7 +827,6 @@ END $$
 DELIMITER ;
 
 -- CATEGORIAS POR EQUIPO
-DROP PROCEDURE IF EXISTS spu_estadistica_equiposCategoria;
 DELIMITER $$
 CREATE PROCEDURE spu_estadistica_equiposCategoria()
 BEGIN
@@ -932,8 +842,6 @@ END $$
 DELIMITER ;
 
 -- EQUIPOS POR SECTORES
-SELECT * FROM SECTORES_DETALLE;
-DROP PROCEDURE IF EXISTS spu_estadistica_equiposSector;	
 DELIMITER $$
 CREATE PROCEDURE spu_estadistica_equiposSector()
 BEGIN
