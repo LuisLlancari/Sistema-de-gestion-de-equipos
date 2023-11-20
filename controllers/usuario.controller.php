@@ -90,7 +90,7 @@ if(isset($_POST['operacion'])){
         "idusuario"     => $_POST['idusuario']
       ];
 
-      $usuario->eliminar_usuario($datosEnviar);
+      echo json_encode($usuario->eliminar_usuario($datosEnviar));
 
     break;
     

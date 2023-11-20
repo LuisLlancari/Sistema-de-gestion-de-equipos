@@ -96,7 +96,7 @@ require_once "../sidebar/sidebar.php";
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" id="cerrar" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" id="agregar" >Agregar Usuario</button>
+          <button type="button" class="btn btn-primary" id="agregar" >Guardar</button>
         </div>
       </div>
     </div>
@@ -121,6 +121,8 @@ require_once "../sidebar/sidebar.php";
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
   
   <script src="../../js/sidebar.js"></script>
+  <script src="../../js/sweeAlert.js"></script>
+
 
   <script>
     document.addEventListener("DOMContentLoaded",() => {
@@ -206,7 +208,8 @@ require_once "../sidebar/sidebar.php";
             .then(datos => {
               console.log(datos);
             if (datos.idusuario > 0){
-            alert(`Usuario registrado con ID: ${datos.idusuario}`)
+            // alert(`Usuario ID: ${datos.idusuario}`)
+            toast("Operación realizada con éxito")
             $("#form-usuario").reset();  
             modalregistro.hide();
             listar_usuarios();
@@ -230,6 +233,14 @@ require_once "../sidebar/sidebar.php";
           })
             .then(respuesta => respuesta.json())
             .then(datos => {
+              if(datos.idusuario > 0){
+                console.log(datos);
+                $("#form-usuario").reset();  
+                modalregistro.hide();
+                listar_usuarios();            
+                toast("Operación realizada con éxito");
+
+              }
 
             }
             )
@@ -287,8 +298,15 @@ require_once "../sidebar/sidebar.php";
             varBandera = false;
             recupear_usuarios_id(usuarioid);
 
-          }else if(event.target.classList.contains("eliminar")){         
-            eliminar_usuarios(usuarioid);
+          }else if(event.target.classList.contains("eliminar")){       
+
+            mostrarPregunta("Por favor confirme","¿Desea eliminar este registro?",() =>{
+                  eliminar_usuarios(usuarioid);
+                });
+
+
+            // mostrarPregunta("Por favor confirme","¿Desea eliminar este registro?",eliminar_usuarios(usuarioid))  
+            // eliminar_usuarios(usuarioid);
             // listar_usuarios();
           }
         });
@@ -305,7 +323,21 @@ require_once "../sidebar/sidebar.php";
 
         //ESTE BOTON ENVIA LOS DATOS DEL FORMULARIO, SEA LISTAR O REGISTRAR
         $('#agregar').addEventListener('click', function(){
-          registrar_usuarios();
+
+
+          if(varBandera){
+            mostrarPregunta("Por favor confirme","¿Desea Agregar este registro?",() =>{
+            registrar_usuarios()});
+
+          }else{
+            mostrarPregunta("Por favor confirme","¿Desea Editar este registro?",() =>{
+            registrar_usuarios();
+          });
+          }
+
+
+          
+          
         });
         
 

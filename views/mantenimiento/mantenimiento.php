@@ -45,19 +45,21 @@
             </div>
             <div class="col-md-2">
               <select name="marcaS" class="form-select"id="marcaS">
-                <option value="0">Marcas</option>
-                <option value="0">Marcas</option>
-                <option value="0">Marcas</option>
+              <option value="0">Seleccion:</option>
+
               </select>
             </div>
+            
             <div class="col-md-2">
               <select name="categoriasS" class="form-select" id="categoriasS">
-                <option value="0">Categorias</option>
-                <option value="0">Categorias</option>
-                <option value="0">Categorias</option>
+              <option value="0">Seleccion:</option>
+
               </select>
             </div>
-            <div class="col-md-6">
+
+         
+
+            <div class="col-md-4">
               <div class="input-group"></div>
             </div>
           </div>
@@ -108,6 +110,7 @@
           </div>
         </div>
         <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-success" data-bs-dismiss="modal" id ="enviar">Enviar</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
       </div>
@@ -130,11 +133,69 @@
         const tabla = $("#tabla-mantenimiento tbody");
 
 
+        function obtenerMarcas(){
+          const parametros = new FormData();
+          parametros.append("operacion","listar");
+
+          fetch(`../../controllers/marca.controller.php`,{
+            method: "POST",
+            body: parametros
+          })
+            .then(result => result.json())
+            .then(data => {
+
+              if(data.length > 0){
+
+                data.forEach(element => {
+                  
+                  const tagOption = document.createElement("option");
+
+                  tagOption.innerText = element.marca;
+                  tagOption.value     = element.idmarca;
+                
+                $("#marcaS").appendChild(tagOption); 
+                });
+              }
+            })
+            .catch(e => {
+              console.error(e);
+            });
+        }
+
+
+        function obtenerCategorias(){
+          const parametros = new FormData();
+          parametros.append("operacion","listar");
+
+          fetch(`../../controllers/categoria.controller.php`,{
+            method: "POST",
+            body: parametros
+          })
+            .then(result => result.json())
+            .then(data => {
+
+              if(data.length > 0){
+
+                data.forEach(element => {
+                  
+                  const tagOption = document.createElement("option");
+
+                  tagOption.innerText = element.categoria;
+                  tagOption.value     = element.idcategoria;
+                
+                $("#categoriasS").appendChild(tagOption); 
+                });
+              }
+          });  
+        }
 
         function listar_mantenimiento(idusuario){
           const parametros = new FormData();
 
           parametros.append("operacion"     ,"listar_mantenimiento");
+          parametros.append("categoria"     ,$("#categoriasS").value);
+          parametros.append("marca"     ,$("#marcaS").value);
+
 
           fetch(`../../controllers/mantenimiento.controller.php`,{
             method: "POST",
@@ -159,10 +220,10 @@
                         <td>${registro.fecha_del_mantenimiento}</td>
                         <td>${registro.tipo_mantenimiento}</td>
                         <td>
-                          <a href='#' class='comentarios' descripcion="${registro.descripcion}" datos="${registro.descripcion}">Ver</a>
+                          <a href='#' class='comentarios' descripcion="${registro.idmantenimiento}" name="${registro.descripcion}">Ver</a>
                         </td>
                         <td style='text-align: center; vertical-align: middle;'>
-                            <button class='btn btn-primary btn-sm rounded-circle editar' type='button'><i class="bi bi-arrow-left-right"></i></button>
+                            <button class='btn btn-warning editar' id="${registro.idmantenimiento}" type='button'>Edit</button>
                         </td>
                     </tr>
                     `;
@@ -180,30 +241,79 @@
             });               
         }
         
+        function editarMantenimiento(){
 
-        
+          var  mantenimientoid  = $('#enviar').getAttribute('mantenimiento-id');
+          console.log(mantenimientoid)
+          const parametros = new FormData();
+          parametros.append("operacion"     ,"modificar_mantenimiento");
+          parametros.append("idmantenimiento"     ,mantenimientoid);
+          parametros.append("descripcion"     ,$('#comentario').value);
+
+          fetch(`../../controllers/mantenimiento.controller.php`,{
+            method: "POST",
+            body : parametros
+          })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+              
+              modalcomentario.hide();
+              listar_mantenimiento();
+            })
+            .catch(e =>  {
+              console.error(e);
+            });               
+        }
+
+        obtenerCategorias();
+        obtenerMarcas();
         listar_mantenimiento();
 
         
         $("#tabla-mantenimiento tbody").addEventListener('click',(event)=>{
-          //  var cronogramaid= event.target.dataset.id;
-           console.log(event);
+          // var cronogramaid= event.target.dataset.id;
+          var mantnimientoDescripcion= event.target.name;
+          var idmantenimiento= event.target.id;
+          console.log(mantnimientoDescripcion);
+          console.log(idmantenimiento);
 
-          //  if(event.target.classList.contains("comentarios")){
-          //   console.log(event);
-          //   modalcomentario.toggle();
-          //   // modalvisor.toggle();
-          // //document.querySelector("#visor").innerHTML = "${nombre";
-          // }
+          $("#comentario").value = mantnimientoDescripcion;
+          $("#enviar").setAttribute('mantenimiento-id',idmantenimiento);
+          
+
+
+           if(event.target.classList.contains("comentarios")){
+
+            $("#comentario").setAttribute('disabled','true');
+            $("#comentario").setAttribute('readOnly','true');
+            $('#enviar').style.display = "none";
             
-          // if(event.target.classList.contains("editar")){
-          //   console.log(event);
-          //   console.log("golll");
-
+            modalcomentario.show();
+            }
             
+            if(event.target.classList.contains("editar")){
+              $('#enviar').style.display = "block";
+              $("#comentario").removeAttribute('disabled');
+              $("#comentario").removeAttribute('readOnly');
+              modalcomentario.show();
 
-          });
+            }
+
+        });
         
+        $("#categoriasS").addEventListener("change",() =>{
+          listar_mantenimiento();
+        })
+      
+        $("#marcaS").addEventListener("change",() =>{
+          listar_mantenimiento();      
+        })
+
+        $("#enviar").addEventListener("click",() =>{
+          editarMantenimiento();      
+        })
+
+
     });
   </script>
 </body>

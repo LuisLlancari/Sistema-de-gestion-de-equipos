@@ -5,7 +5,7 @@
         function toast(mensaje) {
             const Toast = Swal.mixin({
                 toast: true,
-                position: 'top-end',
+                position: 'top',
                 showConfirmButton: false,
                 timer: 1000,
                 timerProgressBar: true,

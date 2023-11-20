@@ -56,7 +56,7 @@ if (isset($_POST['operacion'])){
             $datosEnviar = [
             "iddetallesector" => $_POST['iddetallesector'],
             "idsector"        => $_POST['idsector'],
-            "idusuario"       => $_SESSION['idusuario']
+            "idusuario"       => 1  
             ];
             echo json_encode($sector->modificar_equipo($datosEnviar));
         break;

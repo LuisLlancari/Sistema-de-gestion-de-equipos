@@ -75,8 +75,8 @@ class Usuario extends Conexion {
     try {
       $consulta = $this->conexion->prepare("CALL spu_usuarios_eliminar(?)");
       $consulta->execute(array($datos['idusuario']));
-      return $consulta->fetchAll(PDO::FETCH_ASSOC);
 
+      return $consulta->fetch(PDO::FETCH_ASSOC);
     } catch (Exception $e){
         die($e->getMessage());
     }

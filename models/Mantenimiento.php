@@ -10,10 +10,15 @@ class Mantenimiento extends Conexion{
     }
 
 // FUNCION PARA LISTAR
-    public function listar(){
+    public function listar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_mantenimiento_listar()");
-            $consulta->execute();
+            $consulta = $this->conexion->prepare("CALL spu_mantenimiento_listar(?,?)");
+            $consulta->execute(
+                array(
+                    $datos ['marca'],
+                    $datos ['categoria']
+                )
+            );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
@@ -61,12 +66,10 @@ class Mantenimiento extends Conexion{
         // FUNCION PARA EDITAR
     public function modificar($datos = []){
         try {
-        $consulta = $this->conexion->prepare("CALL spu_mantenimiento_modificar(?,?,?,?)");
+        $consulta = $this->conexion->prepare("CALL spu_mantenimiento_modificar(?,?)");
         $consulta->execute(
             array(
             $datos['idmantenimiento'],
-            $datos['idusuario'],
-            $datos['idcronograma'],
             $datos['descripcion']
             )
         );

@@ -110,6 +110,7 @@ BEGIN
 	UPDATE usuarios
     SET inactive_at = NOW()
 		WHERE idusuario = _idusuario;
+   SELECT idusuario FROM usuarios WHERE idusuario = _idusuario;
 END $$
 DELIMITER ;
 
@@ -275,7 +276,7 @@ BEGIN
         sectores s
     LEFT JOIN
         sectores_detalle sd ON s.idsector = sd.idsector AND sd.fecha_fin IS NULL
-    WHERE s.inactive_at IS NULL
+    WHERE s.inactive_at IS NULL AND sd.inactive_at IS NULL
     GROUP BY
         s.idsector;
 END $$
@@ -722,9 +723,13 @@ DELIMITER ;
 -- FALTA INSERTAR DATOS
 DROP PROCEDURE IF EXISTS spu_mantenimiento_listar;
 DELIMITER $$
-CREATE PROCEDURE spu_mantenimiento_listar()
+CREATE PROCEDURE spu_mantenimiento_listar(
+in _idmarca INT,
+in _idcategoria INT
+)
 BEGIN
 		SELECT
+			man.idmantenimiento,
 			man.idcronograma,
 			man.idusuario,
 			usu.nombres,
@@ -742,7 +747,9 @@ BEGIN
 		INNER JOIN marcas AS mar ON mar.idmarca = equ.idmarca
 		INNER JOIN categorias AS cat ON cat.idcategoria = equ.idcategoria
     WHERE
-		man.inactive_at IS NULL;
+    (_idmarca =0 || mar.idmarca=_idmarca) and
+    (_idcategoria =0 || cat.idcategoria=_idcategoria) and
+	man.inactive_at IS NULL;
 END $$
 DELIMITER ;
 
@@ -785,18 +792,16 @@ DROP PROCEDURE IF EXISTS spu_mantenimiento_modificar;
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_modificar
 (
-	in _idmantenmimiento	INT,
-    in _idusuario			INT,
-    in _idcronograma        INT,
+	in _idmantenimiento	INT,
     in _descripcion			VARCHAR(300)
 )
 BEGIN
 	UPDATE mantenimiento SET
-		idusuario	 = _idusuario,
-		idcronograma =_idcronograma,
 		descripcion  =_descripcion		
 	WHERE
-		idmantenimiento = _idmantenmimiento	;
+		idmantenimiento = _idmantenimiento	;
+        
+	select idmantenimiento where idmantenimiento = _idmantenimiento;
 END $$
 DELIMITER ;
 
