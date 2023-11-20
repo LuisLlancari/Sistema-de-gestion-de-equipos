@@ -157,6 +157,10 @@ require_once "../sidebar/sidebar.php";
         return document.querySelector(id);
       }
 
+      let estadosEquipos = null;
+      let categoriasEquipos = null;
+      let sectoresEquipos = null;
+
       const grafCronograma = $("#grafCronograma");
       const grafMantenimiento = $("#grafMantenimiento");
       const grDona   = $("#cateogoriasEquipos");
@@ -169,25 +173,11 @@ require_once "../sidebar/sidebar.php";
         "rgba(230, 27, 17, 0.5)"
       ];
 
-      let datosEquipos = null;
-
-      let graficoCronogramaData = {
-        labels: [],
-        datasets: [
-        {
-            data: [],
-            backgroundColor: [ "#FF6384","#09e644","#84FF63","#8463FF","#6384FF"],
-            borderColor: "black",
-            borderWidth: 2
-        }]
-     };
-
 
       const graficoCronograma= new Chart(grafCronograma,{  
         type: 'doughnut',
         data : graficoCronogramaData
       });
-
 
       let graficoMantenimientoData =  {
               labels: [],
@@ -210,8 +200,6 @@ require_once "../sidebar/sidebar.php";
           data: graficoMantenimientoData,
           options:graficoMantenimientoOptions      
       });
-
-
      
       function listarGraficoMantenimiento(){
         const parametros = new FormData();
@@ -313,6 +301,21 @@ require_once "../sidebar/sidebar.php";
         });
       }
 
+      function generarGrDona(datos){
+        let datosEquipos = null;
+
+        let graficoCronogramaData = {
+          labels: [],
+          datasets: [
+          {
+            data: [],
+            backgroundColor: [ "#FF6384","#09e644","#84FF63","#8463FF","#6384FF"],
+            borderColor: "black",
+            borderWidth: 2
+          }]
+        };
+      }
+
       function obtenerCategoriasEquipos(){
 
         const parametros = new FormData();
@@ -325,7 +328,9 @@ require_once "../sidebar/sidebar.php";
           .then(result => result.json())
           .then(data => {
             console.log(data);
-            generarGrDona(data);
+
+            categoriasEquipos = data;
+            generarGrDona(categoriasEquipos);
           })
           .catch(e => {
             console.error(e)
@@ -345,9 +350,9 @@ require_once "../sidebar/sidebar.php";
           .then(data => {
             console.log(data);
 
-            datosEquipos = data;
+            estadosEquipos = data;
 
-            generarGrBarras(datosEquipos);
+            generarGrBarras(estadosEquipos);
           })
           .catch(e => {
             console.error(e);
@@ -366,9 +371,9 @@ require_once "../sidebar/sidebar.php";
           .then(data => {
             console.log(data);
 
-            datosEquipos = data;
+            sectoresEquipos = data;
 
-            generarGrDonaSector(datosEquipos);
+            generarGrDonaSector(sectoresEquipos);
           })
           .catch(e => {
             console.error(e);
@@ -377,10 +382,9 @@ require_once "../sidebar/sidebar.php";
       
       function generarPDF(datos){
         const parametros = new FormData();
-        parametros.append("operacion","generarPDF");
-        parametros.append("datos",datos);
+        parametros.append("operacion","pdf1");
 
-        fetch(`../../controllers/equipo.controller.php`,{
+        fetch(`../../pdf/estadosEquipos.php`,{
           method:"POST",
           body: parametros
         }) 
@@ -393,9 +397,10 @@ require_once "../sidebar/sidebar.php";
             console.error(e)
           });
       }
+
       $("#informe-categoriasEqui").addEventListener("click", () =>{
-        console.log(datosEquipos);
-        generarPDF(datosEquipos);
+        console.log(categoriasEquipos);
+        generarPDF(categoriasEquipos);
       });
 
       $('#mostrar').addEventListener('click', function(){
@@ -416,7 +421,7 @@ require_once "../sidebar/sidebar.php";
 
 
 
-});
+  });
 </script>
 </body>
 
