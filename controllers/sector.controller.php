@@ -23,6 +23,36 @@ if (isset($_POST['operacion'])){
 
             echo json_encode($sector->registrar($datosEnviar));
         break;
+
+        case 'eliminar';
+        $datosEnviar = [
+          "idsector"     => $_POST['idsector']
+        ];
+        echo json_encode($sector->eliminar($datosEnviar));
+        break;
+
+        case 'registrarEquipos_Sector':
+            $idusuario = isset($_SESSION["idusuario"]) ? $_SESSION["idusuario"] : null;
+            $datosEnviar = [
+                'idcategoria'   => $_POST['idcategoria'],
+                'idmarca'       => $_POST['idmarca'],
+                'idusuario'     => $_POST['idusuario'],
+                'descripcion'   => $_POST['descripcion'],
+                'modelo_equipo' => $_POST['modelo_equipo'],
+                'numero_serie'  => $_POST['numero_serie'],
+                'imagen'        => '',
+                'idsector'      => $_POST['idsector'],
+            ];
+
+            if (isset($_FILES['imagen'])) {
+              if (move_uploaded_file($_FILES['imagen']['tmp_name'], "../images" . $nombreArchivo)) {
+                $datosEnviar["imagen"] = $nombreArchivo;
+              } 
+            }
+            echo json_encode($sector->registrarEquipos_Sector($datosEnviar));
+        break;
+
+
         
     }
 }

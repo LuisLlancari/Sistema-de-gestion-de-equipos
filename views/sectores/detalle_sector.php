@@ -72,11 +72,11 @@ require_once "../sidebar/sidebar.php";
 
   <script>
 
-    function $(id){
+    document.addEventListener("DOMContentLoaded", () => {
+
+      function $(id){
       return document.querySelector(id);
     }
-
-    document.addEventListener("DOMContentLoaded", () => {
 
       const tabla = document.querySelector("#tabla-detalle-sector tbody");
       const nombreSectorElemento = document.getElementById("sector");
@@ -129,6 +129,7 @@ require_once "../sidebar/sidebar.php";
             console.error(e)
           })
       }
+
 
       listarDetalles();
 
