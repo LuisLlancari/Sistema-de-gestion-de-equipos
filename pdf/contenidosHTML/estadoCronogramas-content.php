@@ -17,7 +17,7 @@ $hora = date("H:i");
         <tr>
             <td style="width: 100%; text-align: center; text-decoration: underline; font-weight: bold; font-size: 20pt">
                 <span style="font-size: 10pt"><br></span>
-                REPORTE DE EQUIPOS POR CATEGORÍAS
+                REPORTE DEL ESTADO DE LOS CRONOGRAMAS
             </td>
         </tr>
     </table>
@@ -26,10 +26,10 @@ $hora = date("H:i");
             <td style="width: 100%; font-size: 12pt;">
                 <span style="font-size: 15pt; font-weight: bold;">Información<br></span>
                 <br>
-                Día : <?=$dia?><br>
-                Apellidos y nombres: <?=$_SESSION["apellidos"]?> <?=$_SESSION["nombres"]?><br>
-                Cargo : <?=$_SESSION["rol"]?><br>
-                Email : <?=$_SESSION["email"]?><br>
+                Día: <?=$dia?><br>
+                Apellidos y nombres : <?=$_SESSION["apellidos"]?>, <?=$_SESSION["nombres"]?><br>
+                Cargo: <?=$_SESSION["rol"]?><br>
+                Correo electrónico: <?=$_SESSION["email"]?><br>
                 <br>
             </td>
         </tr>
@@ -39,23 +39,23 @@ $hora = date("H:i");
     <table cellspacing="0" style="padding: 1px; width: 100%; border: solid 2px #000000; font-size: 11pt; ">
         <tr>
             <th style="width: 100%; text-align: center; border: solid 1px #000000;" colspan="2">
-                Inventariado
+                Cronograma
             </th>
         </tr>
         <tr>
             <th style="width: 100%; text-align: center; border: solid 1px #000000;" colspan="2">
-                Equipos por categorías
+                Cronograma por estado
             </th>
         </tr>
         <tr>
-            <th style="width: 30%; border: solid 1px #000000;">Cantidad</th>
-            <th style="width: 70%; border: solid 1px #000000;">Categorías</th>
+            <th style="width: 30%; border: solid 1px #000000;text-align: center;">Cantidad</th>
+            <th style="width: 70%; border: solid 1px #000000;">Estados</th>
         </tr>
 
     <?php foreach ($registros as $registro):?>
     <tr>
-        <td style="width: 30%; border: solid 1px #000000;"><?=$registro["cantidad"]?></td>
-        <td style="width: 70%; border: solid 1px #000000;"><?=$registro["categoria"]?></td>
+        <td style="width: 30%; border: solid 1px #000000; text-align: center;"><?=$registro["cantidad_tipo"]?></td>
+        <td style="width: 70%; border: solid 1px #000000;"><?=$registro["estado"]?></td>
     </tr>
     <?php endforeach;?>
 
@@ -64,33 +64,39 @@ $hora = date("H:i");
     <br>
     <table cellspacing="0" style="padding: 1px; width: 100%; border: solid 2px #000000; font-size: 11pt; ">
         <tr>
-            <th style="width: 100%; text-align: center; border: solid 1px #000000;" colspan="3">
-                Inventariado
+            <th style="width: 100%; text-align: center; border: solid 1px #000000;" colspan="5">
+                Cronograma
             </th>
         </tr>
         <tr>
-            <th style="width: 100%; text-align: center; border: solid 1px #000000;" colspan="3">
-                Reporte general
+            <th style="width: 100%; text-align: center; border: solid 1px #000000;" colspan="5">
+                Cronograma general
             </th>
         </tr>
         <tr>
-            <th style="width: 15%; border: solid 1px #000000;">Nª de serie</th>
-            <th style="width: 55%; border: solid 1px #000000;">Descripción</th>
-            <th style="width: 15%; border: solid 1px #000000;">Marca</th>
+            <th style="width: 20%; border: solid 1px #000000;">Nª de serie</th>
+            <th style="width: 20%; border: solid 1px #000000;">Descripción</th>
+            <th style="width: 25%; border: solid 1px #000000;">Categorías</th>
+            <th style="width: 15%; border: solid 1px #000000;">Estado</th>
+            <th style="width: 20%; border: solid 1px #000000;">Fecha programada</th>
         </tr>
 
 
-        <?php foreach($equipos as $parte):?>
+        <?php foreach($cronogramas as $cronograma):?>
         <tr>
-            <td style="width: 20%; border: solid 1px #000000;"><?=$parte["numero_serie"]?></td>
-            <td style="width: 55%; border: solid 1px #000000;text-align: left; word-wrap: break-word"><?=$parte["descripcion"]?></td>
-            <td style="width: 25%; border: solid 1px #000000;"><?=$parte["marca"]?> </td>
+            <td style="width: 20%; border: solid 1px #000000;"><?=$cronograma["numero_serie"]?></td>
+            <td style="width: 20%; border: solid 1px #000000;text-align: left; word-wrap: break-word"><?=$cronograma["modelo_equipo"]?></td>
+            <td style="width: 25%; border: solid 1px #000000;"><?=$cronograma["tipo_mantenimiento"]?></td>
+            <td style="width: 15%; border: solid 1px #000000;"><?=$cronograma["estado"]?></td>
+            <td style="width: 20%; border: solid 1px #000000;"><?=$cronograma["fecha_programada"]?></td>
         </tr>
         <?php endforeach;?>
         <tr>
-            <td style="width: 15%; border: solid 1px #000000;">&nbsp;</td>
-            <td style="width: 55%; border: solid 1px #000000;">&nbsp;</td>
+            <td style="width: 20%; border: solid 1px #000000;">&nbsp;</td>
+            <td style="width: 20%; border: solid 1px #000000;">&nbsp;</td>
             <td style="width: 25%; border: solid 1px #000000;">&nbsp;</td>
+            <td style="width: 15%; border: solid 1px #000000;">&nbsp;</td>
+            <td style="width: 20%; border: solid 1px #000000;">&nbsp;</td>
         </tr>
     </table>
     <br>
@@ -135,5 +141,5 @@ $hora = date("H:i");
     </table>
     <br>
     <br>
-    <span style="font-size: 13pt"><b><u>Cualquier comentario es ben recivido para nuestra mejora</u></b></span>
+    <span style="font-size: 13pt"><b><u>Cualquier comentario es bien recibido para nuestra mejora</u></b></span>
 </page>

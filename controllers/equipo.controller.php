@@ -4,7 +4,6 @@ date_default_timezone_set("America/Lima");
 
 require_once "../models/Equipo.php";
 require_once "../test/filtro.php";
-require_once "../pdf/estadosEquipos.php";
 
 if(isset($_POST['operacion'])){
 
