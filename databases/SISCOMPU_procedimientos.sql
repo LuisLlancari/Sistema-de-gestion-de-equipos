@@ -311,7 +311,7 @@ BEGIN
     
 END $$
 DELIMITER ;
-
+call spu_mover_equipo(1,2,1);
 
 DELIMITER $$
 CREATE PROCEDURE spu_mover_equipo(

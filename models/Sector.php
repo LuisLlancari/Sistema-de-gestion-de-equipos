@@ -74,7 +74,7 @@ class Sector extends Conexion{
     }
 
 
-//FUNCION PARA ELIMINAR SECTOR
+    //FUNCION PARA ELIMINAR SECTOR
     public function eliminar($datos = []){
         try {
         $consulta = $this->conexion->prepare("CALL spu_sector_eliminar(?)");
@@ -103,6 +103,22 @@ class Sector extends Conexion{
               )
             );
         return $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+
+    public function modificar_equipo($datos = []){
+        try {
+        $consulta = $this->conexion->prepare("CALL spu_mover_equipo(?,?,?)");
+        $consulta->execute(array(
+            $datos['iddetallesector'],
+            $datos['idsector'],
+            $datos['idusuario']
+        ));
+        return $consulta->fetch(PDO::FETCH_ASSOC);
 
         } catch (Exception $e){
             die($e->getMessage());

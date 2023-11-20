@@ -8,10 +8,10 @@ require_once "../sidebar/sidebar.php";
       <div class="col-md-4"></div>
       <div class="col-md-4">
 
-        <div class="mb-3">
-         <h1>Lista de trabajdores</h1>
-         <button type="button" class="btn btn-primary" id="registro">Agregar usuario</button>
-        </div>
+          <div class="mb-3">
+          <h1>Lista de trabajdores</h1>
+          <button type="button" class="btn btn-primary" id="registro">Agregar usuario</button>
+          </div>
       </div>
       <div class="col-md-4"></div>
     </div>
@@ -72,8 +72,8 @@ require_once "../sidebar/sidebar.php";
                   <label for="rol" class="form-label">Seleccione su rol</label>
                   <select name="" id="rol" class="form-select" required>
                   <option value="">Seleccion:</option>
-                  <option value="ADMIN">Administrador</option>
-                  <option value="ASIST">Asistente</option>
+                  <option value="ADMINISTRADOR">Administrador</option>
+                  <option value="ASISTENTE">Asistente</option>
                 </select>
                 </div>
               
@@ -208,8 +208,10 @@ require_once "../sidebar/sidebar.php";
             if (datos.idusuario > 0){
             alert(`Usuario registrado con ID: ${datos.idusuario}`)
             $("#form-usuario").reset();  
-            // listar_usuarios()
+            modalregistro.hide();
+            listar_usuarios();
             }
+            
             })
             .catch(e =>  {
               console.error(e);

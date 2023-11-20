@@ -25,10 +25,10 @@ if (isset($_POST['operacion'])){
         break;
 
         case 'eliminar';
-        $datosEnviar = [
-          "idsector"     => $_POST['idsector']
-        ];
-        echo json_encode($sector->eliminar($datosEnviar));
+            $datosEnviar = [
+            "idsector"     => $_POST['idsector']
+            ];
+            echo json_encode($sector->eliminar($datosEnviar));
         break;
 
         case 'registrarEquipos_Sector':
@@ -50,6 +50,15 @@ if (isset($_POST['operacion'])){
               } 
             }
             echo json_encode($sector->registrarEquipos_Sector($datosEnviar));
+        break;
+
+        case 'mover_equipo';
+            $datosEnviar = [
+            "iddetallesector" => $_POST['iddetallesector'],
+            "idsector"        => $_POST['idsector'],
+            "idusuario"       => $_SESSION['idusuario']
+            ];
+            echo json_encode($sector->modificar_equipo($datosEnviar));
         break;
 
 
