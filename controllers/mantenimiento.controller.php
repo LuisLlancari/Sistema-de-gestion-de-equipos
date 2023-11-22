@@ -10,8 +10,10 @@ if (isset($_POST['operacion'])){
     switch ($_POST['operacion']){
         case 'listar_mantenimiento':
             $datosEnviar = [
-                'categoria' => $_POST['categoria'],  
-                'marca' => $_POST['marca']
+                'categoria'     => $_POST['categoria'],  
+                'marca'         => $_POST['marca'],
+                'fechainicio'   => $_POST['fechainicio'],
+                'fechafin'      => $_POST['fechafin']
             ];
 
             echo json_encode($mantenimiento->listar($datosEnviar));

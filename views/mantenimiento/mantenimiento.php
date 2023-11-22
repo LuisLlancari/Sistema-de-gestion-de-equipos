@@ -37,12 +37,12 @@ require_once "../sidebar/sidebar.php";
 
             <div class="col-md-2 mt-3 mb-3">
               <label for="hora" class="form-label text-white">Fecha inicio</label>
-              <input type="date" class="form-control" id="fechainicio" >
+              <input type="date" class="form-control" id="fechainicio" value="">
             </div>
             
             <div class="col-md-2 mt-3 mb-3">
               <label for="hora" class="form-label text-white">Fecha fin</label>
-              <input type="date" class="form-control" id="fechafin"  >
+              <input type="date" class="form-control" id="fechafin"  value="">
             </div>
     
          </div>
@@ -184,7 +184,9 @@ require_once "../sidebar/sidebar.php";
 
           parametros.append("operacion"     ,"listar_mantenimiento");
           parametros.append("categoria"     ,$("#categoriasS").value);
-          parametros.append("marca"     ,$("#marcaS").value);
+          parametros.append("marca"         ,$("#marcaS").value);
+          parametros.append("fechainicio"   ,$("#fechainicio").value);
+          parametros.append("fechafin"      ,$("#fechafin").value);
 
 
           fetch(`../../controllers/mantenimiento.controller.php`,{
@@ -254,7 +256,7 @@ require_once "../sidebar/sidebar.php";
 
         obtenerCategorias();
         obtenerMarcas();
-        listar_mantenimiento();
+        listar_mantenimiento(); 
 
         
         $("#tabla-mantenimiento tbody").addEventListener('click',(event)=>{
@@ -293,11 +295,19 @@ require_once "../sidebar/sidebar.php";
         })
       
         $("#marcaS").addEventListener("change",() =>{
-          listar_mantenimiento();      
+          listar_mantenimiento();   
+        })
+
+        $("#fechainicio").addEventListener("change",() =>{
+          listar_mantenimiento();  
+        })
+
+        $("#fechafin").addEventListener("change",() =>{
+          listar_mantenimiento();   
         })
 
 
-        
+
         // esto ya no se utiliza
         $("#enviar").addEventListener("click",() =>{
           editarMantenimiento();      

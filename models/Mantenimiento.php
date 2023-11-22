@@ -14,11 +14,13 @@ class Mantenimiento extends Conexion{
     // FUNCION PARA LISTAR
     public function listar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_mantenimiento_listar(?,?)");
+            $consulta = $this->conexion->prepare("CALL spu_mantenimiento_listar(?,?,?,?)");
             $consulta->execute(
                 array(
                     $datos ['marca'],
-                    $datos ['categoria']
+                    $datos ['categoria'],
+                    $datos ['fechainicio'],
+                    $datos ['fechafin'],
                 )
             );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
