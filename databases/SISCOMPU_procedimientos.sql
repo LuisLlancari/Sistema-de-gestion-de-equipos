@@ -652,7 +652,9 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_listar(
 in _idmarca INT,
-in _idcategoria INT
+in _idcategoria INT,
+in _fechainicio VARCHAR(20),
+in _fechafin VARCHAR(20)
 )
 BEGIN
 		SELECT
@@ -674,8 +676,9 @@ BEGIN
 		INNER JOIN marcas AS mar ON mar.idmarca = equ.idmarca
 		INNER JOIN categorias AS cat ON cat.idcategoria = equ.idcategoria
     WHERE
-    (_idmarca =0 || mar.idmarca=_idmarca) and
-    (_idcategoria =0 || cat.idcategoria=_idcategoria) and
+    (_idmarca =0 || mar.idmarca=_idmarca) AND
+    (_idcategoria =0 || cat.idcategoria=_idcategoria)AND
+    (cro.fecha_programada BETWEEN IF(_fechainicio = '', '1000-01-01', _fechainicio) AND IF(_fechafin = '', '9999-12-31', _fechafin)) AND
 	man.inactive_at IS NULL;
 END $$
 DELIMITER ;
