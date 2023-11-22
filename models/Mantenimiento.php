@@ -11,7 +11,7 @@ class Mantenimiento extends Conexion{
         $this->conexion = parent::getConexion();
     }
 
-// FUNCION PARA LISTAR
+    // FUNCION PARA LISTAR
     public function listar($datos = []){
         try{
             $consulta = $this->conexion->prepare("CALL spu_mantenimiento_listar(?,?)");
@@ -28,7 +28,7 @@ class Mantenimiento extends Conexion{
         }
     }
 
-// FUNCION PARA LISTAR POR ID
+    // FUNCION PARA LISTAR POR ID
     public function listarPorID($datos = [])
     {
         try {
@@ -47,7 +47,7 @@ class Mantenimiento extends Conexion{
 
 
 
-// FUNCION PARA REGISTRAR
+    // FUNCION PARA REGISTRAR
     public function registrar($datos = []){
         try{
             $consulta = $this->conexion->prepare("CALL spu_mantenimiento_registrar(?,?,?)");

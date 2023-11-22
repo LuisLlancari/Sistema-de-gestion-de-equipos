@@ -6,90 +6,86 @@ require_once "../sidebar/sidebar.php";
 ?>
 
 
-
-
-<div class="text-center mt-3">
-  <h1>Panel Mantenimiento</h1>
-</div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <div class="btn-sidebar toggled" id="menu-toggle">
-        </div>
-        <div class="m-4">
-          <h1 class="fw-bolder d-inline-block"><i class="bi bi-card-checklist"> </i><span id="sector"></span></h1>
-        </div>
-      </div>
+<div class="container">
+    <div class="text-center mt-3">
+      <h1>Panel Mantenimiento</h1>
     </div>
 
-    
-
-    <div class="container">
+    <div class="container bg-dark rounded mb-3">
       <div class="container mx-3">
-      </div>
-          <!-- FILTROS -->
-          
+        
+        <!-- FILTROS -->
+        
           <div class="row mb-3">
-            <div class="col-md-2">
+            <div class="col-md-2 mt-3 mb-3 text-white">
               <h4>Filtros:</h4>
             </div>
-            <div class="col-md-2">
-              <select name="marcaS" class="form-select"id="marcaS">
-              <option value="0">Seleccion:</option>
 
+            <div class="col-md-2 mt-3 mb-3">
+              <label for="hora" class="form-label text-white">Marcas</label>
+              <select name="marcaS" class="form-select"id="marcaS">
+                <option value="0">Seleccion:</option>
               </select>
             </div>
             
-            <div class="col-md-2">
+            <div class="col-md-2 mt-3 mb-3">
+              <label for="hora" class="form-label text-white">Categoría</label>
               <select name="categoriasS" class="form-select" id="categoriasS">
-              <option value="0">Seleccion:</option>
-
+                <option value="0">Seleccion:</option>
               </select>
             </div>
 
-         
-
-            <div class="col-md-4">
-              <div class="input-group"></div>
+            <div class="col-md-2 mt-3 mb-3">
+              <label for="hora" class="form-label text-white">Fecha inicio</label>
+              <input type="date" class="form-control" id="fechainicio" >
             </div>
-          </div>
+            
+            <div class="col-md-2 mt-3 mb-3">
+              <label for="hora" class="form-label text-white">Fecha fin</label>
+              <input type="date" class="form-control" id="fechafin"  >
+            </div>
+    
+         </div>
+
+
+        </div>
   
-      </div>
-      <table class="table table-sm table-striped" id="tabla-mantenimiento">
-      <colgroup>
-      <col width="4%"> <!--Codigo -->
-          <col width="11%"> <!-- usuario -->
-          <col width="24%"> <!-- categoria -->
-          <col width="15%"> <!-- Número de Serie -->
-          <col width="15%"> <!-- F_mantenimiento -->
-          <col width="15%"> <!-- T-mantenimiento -->
-          <col width="15%"> <!-- T-mantenimiento -->
-          <col width="5%"> <!-- Edit -->
-        </colgroup>
-        <thead class="text-center">
-            <tr>
-              <th>#</th>
-              <th>Usuaio</th>
-              <th>Equipo</th>
-              <th>Número de Serie</th>
-              <th>F_mantenimiento</th>
-              <th>T-mantenimiento</th>
-              <th>Descripcion</th>
-              <th>Edit</th>
-            </tr>
-          </thead>
-        <tbody  class="text-center">
-            <!-- DATOS CARGADOS DE FORMA ASINCRONA -->
-          </tbody>
-    </table>
-  </div>
-  
+    </div>
+
+    <div class="container">
+        <table class="table table-sm table-striped" id="tabla-mantenimiento">
+        <colgroup>
+        <col width="4%"> <!--Codigo -->
+            <col width="11%"> <!-- usuario -->
+            <col width="24%"> <!-- categoria -->
+            <col width="15%"> <!-- Número de Serie -->
+            <col width="15%"> <!-- F_mantenimiento -->
+            <col width="15%"> <!-- T-mantenimiento -->
+            <col width="15%"> <!-- T-mantenimiento -->
+            <col width="5%"> <!-- Edit -->
+          </colgroup>
+          <thead class="text-center">
+              <tr>
+                <th>#</th>
+                <th>Usuario</th>
+                <th>Equipo</th>
+                <th>Número de Serie</th>
+                <th>F_mantenimiento</th>
+                <th>T-mantenimiento</th>
+                <th>Descripción</th>
+              </tr>
+            </thead>
+          <tbody  class="text-center">
+              <!-- DATOS CARGADOS DE FORMA ASINCRONA -->
+            </tbody>
+      </table>
+    </div>
+</div>
    <!-- Modal Body -->
-  <div class="modal fade" id="modal-comentario" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+<div class="modal fade" id="modal-comentario" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered " role="document">
       <div class="modal-content">
-        <div class="modal-header bg-info text-light">
+        <div class="modal-header bg-dark text-light">
           <h5 class="modal-title" id="modalTitleId">Descripción del mantenimiento</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
@@ -216,9 +212,6 @@ require_once "../sidebar/sidebar.php";
                         <td>
                           <a href='#' class='comentarios' descripcion="${registro.idmantenimiento}" name="${registro.descripcion}">Ver</a>
                         </td>
-                        <td style='text-align: center; vertical-align: middle;'>
-                            <button class='btn btn-warning editar' id="${registro.idmantenimiento}" type='button'>Edit</button>
-                        </td>
                     </tr>
                     `;
 
@@ -303,6 +296,9 @@ require_once "../sidebar/sidebar.php";
           listar_mantenimiento();      
         })
 
+
+        
+        // esto ya no se utiliza
         $("#enviar").addEventListener("click",() =>{
           editarMantenimiento();      
         })
