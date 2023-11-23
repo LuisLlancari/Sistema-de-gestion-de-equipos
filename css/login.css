@@ -1,0 +1,10 @@
+
+section {
+    margin: 0 auto;
+    max-width: 1200px; /* Ancho máximo del contenido dentro de la sección */
+  }
+
+  .container-fluid {
+    background-color: rgb(253, 247, 250); /* Color de fondo */
+    padding: 20px;
+  }

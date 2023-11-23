@@ -1,47 +1,28 @@
-document.addEventListener("DOMContentLoaded",() => {
-
+document.addEventListener('DOMContentLoaded', function() {
+    
     function $(id){
         return document.querySelector(id);
     }
+    //* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
 
-    const linkColor = document.querySelectorAll(".nav_link");
+    const dropdown = document.getElementsByClassName("dropdown-btn");
+    let i;
 
-    function showNavbar(toggleId, navId, bodyId, headerId){
+    for (i = 0; i < dropdown.length; i++) {
 
-        const toggle    = $(toggleId);
-        const nav       = $(navId);
-        const bodypd    = $(bodyId);
-        const headerpd  = $(headerId);
-        
-            //Validamos si existen las variables
-            if(toggle && nav && bodypd && headerpd){
-                toggle.addEventListener('click', ()=>{
-                    // show navbar
-                    nav.classList.toggle('show')
-                    // change icon
-                    toggle.classList.toggle('bx-x')
-                    // add padding to body
-                    bodypd.classList.toggle('body-pd')
-                    // add padding to header
-                    headerpd.classList.toggle('body-pd')
-                });
-            }
-    }
-    
-    function colorLink(){
+        dropdown[i].addEventListener("click", function() {
 
-        if(linkColor){ 
-            linkColor.forEach(l=>{
+        this.classList.toggle("active");
+        const dropdownContent = this.nextElementSibling;
 
-                l.classList.remove('active');
-                this.classList.add('active')
-            }); 
+        if (dropdownContent.style.display === "block") {
+            dropdownContent.style.display = "none";
+        } else {
+            dropdownContent.style.display = "block";
         }
+      });
     }
+  
+  });
+    
 
-    showNavbar('header-toggle','nav-bar','body-pd','header');
-
-
-    /*===== LINK ACTIVE =====*/
-    linkColor.forEach(l=> {l.addEventListener('click', colorLink)});
-});

@@ -36,15 +36,17 @@ class Equipo extends Conexion{
      */
     public function registrar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_equipos_registrar(?,?,?,?,?,?)");
+            $consulta = $this->conexion->prepare("CALL spu_equipos_registrar(?,?,?,?,?,?,?,?)");
             $consulta->execute(
                 array(
                     $datos['idcategoria'],
                     $datos['idmarca'],
                     $datos['idusuario'],
+                    $datos['descripcion'],
                     $datos['modelo_equipo'],
                     $datos['numero_serie'],
-                    $datos['imagen']
+                    $datos['imagen'],
+                    $datos['estado'],
                 )
             );
 
@@ -60,16 +62,18 @@ class Equipo extends Conexion{
      */
     public function modificar($datos = []){
         try{
-        $consulta = $this->conexion->prepare("CALL spu_equipos_modificar(?,?,?,?,?,?,?)");
+        $consulta = $this->conexion->prepare("CALL spu_equipos_modificar(?,?,?,?,?,?,?,?,?)");
         $consulta->execute(
             array(
                 $datos['idequipo'],
                 $datos['idcategoria'],
                 $datos['idmarca'],
                 $datos['idusuario'],
+                $datos['descripcion'],
                 $datos['modelo_equipo'],
                 $datos['numero_serie'],
-                $datos['imagen']
+                $datos['imagen'],
+                $datos['estado'],
             )
         );
 
@@ -121,5 +125,50 @@ class Equipo extends Conexion{
             die($e->getMessage());
         }
     }
-    
+
+    /**
+     * Método para generar un gráfico a partir de los estados de los equipos
+     */
+    public function estadosequiposGR(){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_estadistica_equiposporEstado()");
+            $consulta->execute();
+
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     *Método para generar un gráfico a paratir de las categrías de los equipos
+     */    
+    public function categoriasEquiposGR(){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_estadistica_equiposCategoria()");
+            $consulta->execute();
+
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método par generar un gráfico de la cantidad de equipos a partir de los sectores
+     */
+
+     public function sectoresEquiposGR(){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_estadistica_equiposSector()");
+            $consulta->execute();
+
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+     }
 }

@@ -1,4 +1,6 @@
 <?php
+session_start();
+date_default_timezone_set("America/Lima");
 
 require_once 'Conexion.php';
 
@@ -9,11 +11,18 @@ class Mantenimiento extends Conexion{
         $this->conexion = parent::getConexion();
     }
 
-// FUNCION PARA LISTAR
-    public function listar(){
+    // FUNCION PARA LISTAR
+    public function listar($datos = []){
         try{
-            $consulta = $this->conexion->prepare("CALL spu_mantenimiento_listar()");
-            $consulta->execute();
+            $consulta = $this->conexion->prepare("CALL spu_mantenimiento_listar(?,?,?,?)");
+            $consulta->execute(
+                array(
+                    $datos ['marca'],
+                    $datos ['categoria'],
+                    $datos ['fechainicio'],
+                    $datos ['fechafin'],
+                )
+            );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
@@ -21,7 +30,7 @@ class Mantenimiento extends Conexion{
         }
     }
 
-// FUNCION PARA LISTAR POR ID
+    // FUNCION PARA LISTAR POR ID
     public function listarPorID($datos = [])
     {
         try {
@@ -40,7 +49,7 @@ class Mantenimiento extends Conexion{
 
 
 
-// FUNCION PARA REGISTRAR
+    // FUNCION PARA REGISTRAR
     public function registrar($datos = []){
         try{
             $consulta = $this->conexion->prepare("CALL spu_mantenimiento_registrar(?,?,?)");
@@ -51,30 +60,43 @@ class Mantenimiento extends Conexion{
                     $datos ['descripcion']
                 )
             );
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());
         }
     }
 
-// FUNCION PARA EDITAR
+        // FUNCION PARA EDITAR
     public function modificar($datos = []){
-    try {
-      $consulta = $this->conexion->prepare("CALL spu_mantenimiento_modificar(?,?,?,?)");
-      $consulta->execute(
-        array(
-          $datos['idmantenimiento'],
-          $datos['idusuario'],
-          $datos['idcronograma'],
-          $datos['descripcion']
-        )
-      );
-      return $consulta->fetch(PDO::FETCH_ASSOC);
+        try {
+        $consulta = $this->conexion->prepare("CALL spu_mantenimiento_modificar(?,?)");
+        $consulta->execute(
+            array(
+            $datos['idmantenimiento'],
+            $datos['descripcion']
+            )
+        );
+        return $consulta->fetch(PDO::FETCH_ASSOC);
 
-    } catch (Exception $e){
-        die($e->getMessage());
+        } catch (Exception $e){
+            die($e->getMessage());
+        }
     }
-  }
+
+    public function listar_mantenimiento_grafico($datos = []){
+        try {
+          $consulta = $this->conexion->prepare("CALL spu_mantenimiento_grafico(?,?)");
+          $consulta->execute(array(
+            $datos['fechainicio'],
+            $datos['fechafin']
+          ));
+    
+          return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+          die($e->getMessage());
+        }
+      }
 }
 
 ?>
