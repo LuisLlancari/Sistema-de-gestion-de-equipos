@@ -97,6 +97,17 @@ class Mantenimiento extends Conexion{
           die($e->getMessage());
         }
       }
+      public function listar_estadistica(){
+        try{
+            $consulta = $this->conexion->prepare("spu_mantenimiento_listar_estadistica()");
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
 }
 
 ?>

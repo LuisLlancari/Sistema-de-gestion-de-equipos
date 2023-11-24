@@ -91,7 +91,7 @@ $accesos = [
                             "; 
                         }
 
-                        if($categoria == "Equipos" || $categoria == "Gráficos" || $categoria == "Usuarios" || $categoria == "Sectores" || $categoria == "Cronograma"){
+                        if($categoria == "Equipos" || $categoria == "Gráficos" || $categoria == "Usuarios" || $categoria == "Sectores"){
                             echo "
                                 <a type ='button' href='#' class='dropdown-btn'><i class='fas {$icono}'></i> $categoria<i class='fa fa-caret-down'></i></span></a>
                             ";

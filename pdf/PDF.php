@@ -130,7 +130,7 @@ if(isset($_POST["operacion"])){
                     "fechafin"      => $_POST["fechafin"],
                 ];
                 $registros      = $mantenimientoPDF->listar_mantenimiento_grafico($datosEnviar);
-                $mantenimientos = $mantenimientoPDF->listar(); 
+                $mantenimientos = $mantenimientoPDF->listar_estadistica(); 
                 
                 // get the HTML
                 ob_start();
