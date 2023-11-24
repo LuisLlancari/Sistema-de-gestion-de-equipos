@@ -77,3 +77,8 @@
     align-items: center;
     height: 100vh; /* Establece la altura del contenedor para centrar verticalmente */
   }
+
+  .input-group .btn {
+    position: relative;
+    z-index: 1;
+}

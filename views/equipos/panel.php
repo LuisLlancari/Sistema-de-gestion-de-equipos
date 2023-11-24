@@ -3,148 +3,144 @@
 require_once "../sidebar/sidebar.php";
 ?>  
 
-<head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <div class="height-100 bg-light">
+      <div class="m-4">
+        <div class="container">
 
-</head>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <div class="m-4">
+                <h1 class="fw-bolder d-inline-block"><i class="bi bi-gear-wide-connected"></i> EQUIPOS</h1>
+              </div>
+              <hr>
+            </div>
+          </div>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <div class="m-4">
-          <h1 class="fw-bolder d-inline-block"><i class="bi bi-gear-wide-connected"></i> EQUIPOS</h1>
         </div>
-        <hr>
+
+        <div class="m-2">
+          <div class="row">
+
+            <div class="col-md-4">
+              <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img src="../../images/sensible.png" class="img-fluid rounded-start m-2" alt="Card title">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Categorías</h5>
+                      <p class="card-text" id="cantidadCategorias">--</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img src="../../images/marca-de-verificacion.png" class="img-fluid rounded-start m-2" alt="Card title">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Marcas</h5>
+                      <p class="card-text" id="cantidadMarcas">--</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img src="../../images/computadora.png" class="img-fluid rounded-start m-2" alt="Card title">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Modelos</h5>
+                      <p class="card-text" id="cantidadModelos">--</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 m-4">
+              <label for="categoriaFiltro" class="form-label">Categorías:</label>
+                <select class="form-select" name="categoriaFiltro" id="categoria">
+                  <option value="0">Todos</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+              <div class="mt-4">
+                <label for="" name="total" class="form-label">Total:</label>
+                <input type="text" id="total" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mt-4">
+                <form action="" id="form-busqueda">
+                  <label for="busqueda" name="busqueda" class="form-label">Buscar:</label>
+                    <div class="input-group">
+                      <input type="text" id="numserie" class="form-control" placeholder="Buscar por número de serie" required>
+                      <button type="submit" id="buscar" class="btn btn-success buscar">Buscar</button>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- MENSAJE DE ERROR -->
+          <div id="divError"></div>
+
+          <div class="mt-4">
+            <table class="table table-striped" id="tabla-Equipos">
+              <colgroup>
+                <col width="5%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="20%">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Categoria</th>
+                  <th>Descripcion</th>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Nº serie</th>
+                  <th>Imagen</th>
+                  <th>Estado</th>
+                  <th>Usuario</th>
+                  <th>Operaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-
-
-    <div class="height-100 bg-light">
-
-        <div class="m-4">
-            <div class="m-2">
-                <div class="row">
-
-                    <div class="col-md-4">
-                        <div class="card mb-3" style="max-width: 540px;">
-                            <div class="row g-0">
-                              <div class="col-md-4" style="background-color:#E5CF01;">
-                                <!-- <img src="Image Source" class="img-fluid rounded-start" alt="Card title"> -->
-                              </div>
-                              <div class="col-md-8">
-                                <div class="card-body">
-                                  <h5 class="card-title">Categorias</h5>
-                                  <p class="card-text" id="cantidadCategorias">--</p>
-                                  <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                    </div>
-
-                    <di v class="col-md-4">
-                        <div class="card mb-3" style="max-width: 540px;">
-                            <div class="row g-0">
-                              <div class="col-md-4" style="background-color:#2422E5;" >
-                                <!-- <img src="" class="img-fluid rounded-start" alt="Card title"> -->
-                              </div>
-                              <div class="col-md-8">
-                                <div class="card-body">
-                                  <h5 class="card-title">Marcas</h5>
-                                  <p class="card-text" id="cantidadMarcas">--</p>
-                                  <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                    </di>
-
-                    <div class="col-md-4">
-                        <div class="card mb-3" style="max-width: 540px;">
-                            <div class="row g-0">
-                              <div class="col-md-4" style="background-color:#0FE606;" >
-                                <!-- <img src="Image Source" class="img-fluid rounded-start" alt="Card title"> -->
-                              </div>
-                              <div class="col-md-8">
-                                <div class="card-body">
-                                  <h5 class="card-title">Modelos</h5>
-                                  <p class="card-text" id="cantidadModelos">--</p>
-                                  <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4 m-4">
-                        <label for="categoriaFiltro" class="form-label">Categorías:</label>
-                        <select class="form-select" name="categoriaFiltro" id="categoria">
-                            <option value="0">Todos</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                      <div class="mt-4">
-                          <label for="" name="total" class="form-label">Total:</label>
-                          <input type="text" id="total" class="form-control" readonly>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="mt-4">
-                        <form action="" id="form-busqueda">
-                          <label for="busqueda" name="busqueda" class="form-label">Buscar:</label>
-                            <div class="input-group">
-                              <input type="text" id="numserie" class="form-control" placeholder="Buscar por número de serie" required>
-                              <button type="submit" id="buscar" class="btn btn-success">Buscar</button>
-                            </div>
-                        </form>
-                      </div>
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <table class="table table-striped" id="tabla-Equipos">
-                        <colgroup>
-                            <col width="5%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="20%">
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Categoria</th>
-                                <th>Descripcion</th>
-                                <th>Marca</th>
-                                <th>Modelo</th>
-                                <th>Nº serie</th>
-                                <th>Imagen</th>
-                                <th>Estado</th>
-                                <th>Usuario</th>
-                                <th>Operaciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-      </div>
   </main>
-      <div class="my-modal" id="modal-visor">
+
+      <div class="my-modal" class="modal" id="modal-visor">
         <span class="close" id="cerrar-imagen">&times;</span>
         <!-- <span class="close">&times;</span> -->
-        <img id ="imagen-visor" class="modal-content" src="" alt="">
+        <img id ="imagen-visor" class="modal-content" style="max-height: 35rem;" src="" alt="">
         <div id="texto"></div>
       </div>
     <!-- MODAL-Equipos -->
@@ -155,7 +151,7 @@ require_once "../sidebar/sidebar.php";
     <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-success text-light">
                 <h5 class="modal-title" id="modalTitleId"></h5>
                       <button type="button" id="cerrar-modal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
@@ -164,7 +160,7 @@ require_once "../sidebar/sidebar.php";
               <div class="container-fluid">
                 <div class="mb-2">
                   <label for="categoria" class="form-label">Categoría</label>
-                  <select class="form-select" name="categoria" id="categoriaEdit">
+                  <select class="form-select" name="categoria" id="categoriaEdit" autofocus>
                     <option value="">Seleccione</option>
                   </select>
                 </div>
@@ -242,6 +238,8 @@ require_once "../sidebar/sidebar.php";
 
             let varBandera = false;
 
+            const divError = $("#divError");
+
             //Generamos una tabla a partir de un array
             function generarTablaArray(equipos){
               if(equipos){
@@ -249,7 +247,8 @@ require_once "../sidebar/sidebar.php";
                 const tabla = $("#tabla-Equipos tbody");
 
                 tabla.innerHTML = "";
-
+                
+                divError.innerHTML = "";
                 let numFila = 1;
 
                 Equipos.forEach(element => {
@@ -282,8 +281,6 @@ require_once "../sidebar/sidebar.php";
                     numFila ++;
                 tabla.innerHTML += newTabla;
                 });
-              }else{
-                alertError("No se encuentran registros","Hemos tenido problemas con el servidor","Intentalo más tarde");
               }
             }
 
@@ -292,7 +289,10 @@ require_once "../sidebar/sidebar.php";
 
               const tabla = $("#tabla-Equipos tbody");
 
+              const equiposEnconstrados = false;
+
               tabla.innerHTML = "";
+              divError.innerHTML = ``;
 
               let numFila = 1;
               Equipos.forEach(element => {
@@ -301,8 +301,11 @@ require_once "../sidebar/sidebar.php";
                   
                   if(element.numero_serie == numserie){
                     
-                    const img   = element.imagen ? `
-                    <a href="#" data-descripcion="${element.descripcion}" data-img="${element.imagen}" class="btn btn-info imagen"><i class="fa-regular fa-eye"></i></a>`: "no hay imagen";
+                    const equiposEnconstrados = true;
+                    const img   = element.imagen 
+                    ? 
+                    `<a href="#" data-descripcion="${element.descripcion}" data-img="${element.imagen}" class="btn btn-outline-info btn-sm imagen"><i class="fa-regular fa-eye"></i></a>`
+                    : `<button class="btn btn-outline-secondary btn-sm" disabled><i class="bi bi-eye-slash-fill"></i></button>`;
     
                     const estado =  element.estado == 0 ? "Inactivo"
                                   : element.estado == 1 ? "Activo"
@@ -321,19 +324,30 @@ require_once "../sidebar/sidebar.php";
                     <td> ${estado}</td>
                     <td>${element.nombres}</td>
                     <td>
-                      <a type="button" class="btn btn-info editar" data-id="${element.idequipo}" data-bs-toggle="modal" data-bs-target="#modalId">Editar</a>
-                      <a type="button" class="btn btn-danger eliminar" data-id="${element.idequipo}">Eliminar</a>
+                      <a type="button" class="btn btn-outline-success editar btn-sm" data-id="${element.idequipo}" data-bs-toggle="modal" data-bs-target="#modalId"><i class="bi bi-pencil-square"></i></a>
+                      <a type="button" class="btn btn-outline-danger eliminar btn-sm" data-id="${element.idequipo}"><i class="bi bi-trash-fill"></i></a>
                   </td>
                   `;
                   numFila ++;
                   tabla.innerHTML += newTabla;
                   }
                   
-                }else{
-                  alertError("No se encuentran registros","Has ingresado un numero de serie incorrecto","Verifica los datos");
                 }
               });
-              
+              if(!equiposEnconstrados){
+                
+                let cardError= ``;
+      
+                cardError = `
+                <div class="alert alert-danger" role="alert">
+                  <h4 class="alert-heading">No encontramos el equipo</h4>
+                  <p>N° de serie no registrado</p>
+                  <hr>
+                  <p class="mb-0">Asegurese de haber escrito el N° de serie correcto</p>
+                </div>
+                `;
+                divError.innerHTML =cardError;
+                }
             }
 
             function obtenerInfo(equiposARR){
@@ -565,9 +579,14 @@ require_once "../sidebar/sidebar.php";
 
             function buscarEquipo(numserie){
 
+                tabla.innerHTML = ``;
+                const equiposEncontrados = false;
+
                 Equipos.forEach(element => {
                     
                     if(element.numero_serie == numserie){
+
+                      equiposEncontrados = true;
 
                       const img   = element.imagen ? `
                       <a href="#" data-decripcion="${element.descripcion}" data-img="${element.imagen}" class="btn btn-info imagen"><i class="fa-regular fa-eye"></i></a>
@@ -596,10 +615,11 @@ require_once "../sidebar/sidebar.php";
                       `;
                       numFila ++;
                       tabla.innerHTML += newTabla;
-                    }else{
-                      alertError("No hay información","el número de serie ingresado no existe","Verifique los datos")
                     }
               });
+              if(!equiposEncontrados){
+                      alertError("No hay información","el número de serie ingresado no existe","Verifique los datos")
+                    }
             }
 
             function abrirImagen(urlimagen,texto){

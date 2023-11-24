@@ -542,7 +542,8 @@ BEGIN
     FROM cronogramas as cro
     INNER JOIN equipos as equ on equ.idequipo = cro.idequipo
     WHERE
-		cro.idequipo =_idequipo AND cro.inactive_at IS NULL;
+		cro.idequipo =_idequipo AND cro.inactive_at IS NULL
+	LIMIT 1;
 END $$
 DELIMITER ;
 
@@ -648,6 +649,31 @@ DELIMITER ;
 -- -------------------------------------------------------------------------------------
 -- ---------------- Procedimientos Alamacenados MANTENIMIENTO --------------------------
 -- -------------------------------------------------------------------------------------
+DELIMITER $$
+CREATE PROCEDURE spu_mantenimiento_listar_informe()
+BEGIN
+		SELECT
+			man.idmantenimiento,
+			man.idcronograma,
+			man.idusuario,
+			usu.nombres,
+            cat.categoria,
+			mar.marca,
+			equ.modelo_equipo as 'equipo',
+			cro.fecha_programada as 'fecha_del_mantenimiento',
+			equ.numero_serie,
+			cro.tipo_mantenimiento,
+			man.descripcion
+		FROM mantenimiento as man
+		INNER JOIN usuarios as usu on usu.idusuario = man.idusuario
+		INNER JOIN cronogramas as cro ON cro.idcronograma = man.idcronograma
+		INNER JOIN equipos as equ on equ.idequipo = cro.idequipo 
+		INNER JOIN marcas AS mar ON mar.idmarca = equ.idmarca
+		INNER JOIN categorias AS cat ON cat.idcategoria = equ.idcategoria
+    WHERE
+	man.inactive_at IS NULL;
+END $$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_mantenimiento_listar(

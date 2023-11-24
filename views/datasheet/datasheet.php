@@ -1,12 +1,5 @@
 <?php
 
-if(isset($_GET['obtener'])){
-
-    $idequipo = $_GET['obtener'];
-
-    echo "<script>const idObt =".json_encode($idequipo)." </script>";
-}
-
 require_once "../sidebar/sidebar.php";
 
 ?>  
@@ -32,28 +25,29 @@ require_once "../sidebar/sidebar.php";
                             <h1>Cronograma</h1>
                         </div>
                         <!-- tabla -->
-                        <!-- fin tabla -->
-
-
+                        
+                        <!-- MENSAJE ERROR -->
+                        <div id="CronogramaError"></div>
+                        
                         <table class="table table-sm table-striped"  id="tabla-cronograma">
                             <colgroup>
-                                <col width="18%"> <!-- Categoria -->
-                                <col width="10%"> <!-- Descripción -->
-                                <col width="10%"> <!-- Precio -->
-
-                            </colgroup>
-                            <thead>
-                                <tr>
+                            <col width="18%"> <!-- Tipo tipo_mantenimiento -->
+                            <col width="10%"> <!-- Estado -->
+                            <col width="10%"> <!-- Fecha programada -->
+                            
+                        </colgroup>
+                        <thead>
+                            <tr>
                                 <th>tipo de matenimiento</th>
                                 <th>estado</th>
                                 <th>fecha programada</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            
-                                <!-- DATOS CARGADOS DE FORMA ASINCRONA -->
-                            </tbody>
-                        </table>        
+                            </tr>
+                        </thead>
+                        <tbody>                            
+                            <!-- DATOS CARGADOS DE FORMA ASINCRONA -->
+                        </tbody>
+                    </table>        
+                    <!-- fin tabla -->
                     </div>
 
                     <!-- DATASHEET -->
@@ -81,6 +75,7 @@ require_once "../sidebar/sidebar.php";
 
                             <!-- RENDER DATASHEET -->
                             <div class="col-md-6 m-4" id="datasheet">
+                                <div id="datasheetError"></div>
                                 <table class = "table table-sm table-striped" id="tabla-datasheet">
                                     <colgroup width="10%">
                                     <colgroup width="20%">
@@ -115,7 +110,7 @@ require_once "../sidebar/sidebar.php";
   <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-success text-light">
                         <h5 class="modal-title" id="modalTitleId">Modal title</h5>
                             <button type="button" id="cerrar-modal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -124,7 +119,7 @@ require_once "../sidebar/sidebar.php";
                     <div class="container-fluid">
                         <div class="mb-2">
                             <label for="clave" class="form-label">Clave</label>
-                            <input type="text" class="form-control" id="clave">
+                            <input type="text" class="form-control" id="clave" autofocus>
                         </div>
                         <div class="mb-2">
                             <label for="valor" class="form-label">Valor</label>
@@ -133,7 +128,7 @@ require_once "../sidebar/sidebar.php";
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
         </div>
@@ -169,7 +164,7 @@ require_once "../sidebar/sidebar.php";
         const tabla = $("#tabla-cronograma tbody")
         
         //id del equipo(dato obtenido de la solicutud get)
-        const idEquipoObt = idObt
+        const idEquipoObt = new URLSearchParams(window.location.search).get("obtener");
         console.log(idEquipoObt);
 
         //obtjto o lugar que contiene los elementos asíncronos
@@ -185,9 +180,13 @@ require_once "../sidebar/sidebar.php";
 
         let varBandera = false; 
 
+        const CronogramaError   = $("#CronogramaError");
+
+        const datasheetError    = $("#datasheetError");
+
         function validarUsuario(){
 
-            if($("#rolObt").textContent !== "ADMIN"){
+            if($("#rolObt").textContent !== "ADMINISTRADOR"){
 
                 const botonesEditar = document.querySelectorAll(".boton-render");
                 
@@ -216,9 +215,11 @@ require_once "../sidebar/sidebar.php";
                     console.log(data);
 
                     datosDatasheet = data;
-                    if(datosDatasheet.length > 0){
 
+                    if(datosDatasheet.length > 0){
+                        
                         tablaDatashet.innerHTML = "";
+                        datasheetError.innerHTML = ``;
 
                         let numFila = 1;
                         data.forEach(element => {
@@ -239,12 +240,14 @@ require_once "../sidebar/sidebar.php";
                         });
                         validarUsuario();
                     }else{
-                        let h6Error = ``;
-
-                        h6Error = `
-                        <h6 class="bg-danger text-white">No encontramos datos</h6>
-                        `;
-                        $("#datasheet").innerHTML = h6Error;
+                        datasheetError.innerHTML = `
+                        <div class="alert alert-danger" role="alert">
+                            <h4 class="alert-heading">Datos insuficientes</h4>
+                            <p>No encontramos datos suficientes sobre el equipo</p>
+                            <hr>
+                            <p class="mb-0">Intente más tarde</p>
+                        </div>
+                        `;                        
                     }
                 })
                 .catch(e => {
@@ -267,6 +270,7 @@ require_once "../sidebar/sidebar.php";
                 .then(data => {
                     toast("El registro se eliminó con exito");
                     obtenerDatasheet(idEquipoObt);
+                    tablaDatashet.innerHTML = ``;
                 })
                 .catch(e => {
                     console.error(e);
@@ -340,23 +344,32 @@ require_once "../sidebar/sidebar.php";
             .then(respuesta => respuesta.json())
             .then(datos => {
 
+                console.log(datos);
                 tabla.innerHTML = '';
                if(datos.length >0){
-
-                   let nuevafila =``;
-                       nuevafila = `
-                     <tr>
-                       <td>${datos.tipo_mantenimiento}</td>
-                       <td>${datos.estado}</td>
-                       <td>${datos.fecha_programada}</td>
-                       </td>
-                     </tr>
-                     `;
-                     tabla.innerHTML += nuevafila;
+                
+                datos.forEach(element => {
+                    
+                    let nuevafila =``;
+                        nuevafila = `
+                      <tr>
+                        <td>${element.tipo_mantenimiento}</td>
+                        <td>${element.estado}</td>
+                        <td>${element.fecha_programada}</td>
+                        </td>
+                      </tr>
+                      `;
+                      tabla.innerHTML += nuevafila;
+                });
                }else{
-                tabla.innerHTML = 
+                CronogramaError.innerHTML = 
                 `
-                    <h6 class="bg-danger text-light">No hay resultados</h6>
+                <div class="alert alert-danger" role="alert">
+                  <h4 class="alert-heading">Datos insuficientes</h4>
+                  <p>No encontramos datos suficientes sobre el equipo</p>
+                  <hr>
+                  <p class="mb-0">Intente más tarde</p>
+                </div>
                 `;
                }
     

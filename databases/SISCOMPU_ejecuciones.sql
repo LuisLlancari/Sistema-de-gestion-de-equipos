@@ -275,9 +275,9 @@ VALUES
 -- MANTENIMIENTO
 INSERT INTO mantenimiento (idusuario, idcronograma, descripcion)
 VALUES
-    /*(1, 5, 'Reemplazo de piezas defectuosas'),
+    (1, 5, 'Reemplazo de piezas defectuosas'),
     (1, 6, 'Limpieza y ajuste de componentes'),
-    (1, 7, 'Verificación del sistema eléctrico'),*/
+    (1, 7, 'Verificación del sistema eléctrico'),
     (1, 8, 'Cambio de filtros y aceite'),
     (2, 9, 'Revisión general de la maquinaria'),
     (2, 10, 'Calibración de sensores y controles'),
@@ -300,3 +300,32 @@ INSERT INTO sectores (sector) VALUES
 ('Recursos Humanos');
 select * from sectores;
 INSERT INTO sectores_detalle(idsector,idequipo,idusuario)values(1,1,1),(2,2,1),(3,3,1);
+INSERT INTO sectores_detalle (idsector, idequipo, idusuario)
+VALUES
+    (1, 1, 1),
+    (2, 2, 1),
+    (3, 3, 1),
+    (4, 4, 1),
+    (5, 5, 1),
+    (6, 6, 1),
+    (7, 7, 1),
+    (8, 8, 1),
+    (9, 9, 1),
+    (9, 10, 1),
+    (8, 11, 1),
+    (7, 12, 1),
+    (6, 13, 1),
+    (5, 14, 1),
+    (4, 15, 1),
+	(1, 16, 1),
+    (2, 17, 1),
+    (3, 18, 1),
+    (4, 19, 1),
+    (5, 20, 1),
+    (6, 21, 1),
+    (7, 22, 1),
+    (8, 23, 1),
+    (9, 24, 1),
+    (9, 25, 1);
+    select *from sectores_detalle;
+    
