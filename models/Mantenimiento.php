@@ -97,6 +97,18 @@ class Mantenimiento extends Conexion{
           die($e->getMessage());
         }
       }
+    
+      public function listar_mantenimiento_informe(){
+        try{
+            $consulta = $this->conexion->prepare("CALL spu_mantenimiento_listar_informe()");
+            $consulta->execute();
+
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+      }
 }
 
 ?>

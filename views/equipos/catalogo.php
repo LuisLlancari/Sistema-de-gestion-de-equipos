@@ -306,7 +306,19 @@ require_once "../sidebar/sidebar.php";
             console.log(EqCategoriaF);
   
             if(EqCategoriaF.length == 0){
-              console.log("no hay resultados")
+              
+              console.log("no hay resultados");
+              let cardError= ``;
+          
+              cardError = `
+                <div class="alert alert-danger" role="alert">
+                  <h4 class="alert-heading">Tenemos problemas</h4>
+                    <p>Intentalo más tarde</p>
+                    <hr>
+                  <p class="mb-0">Ocurrió un error al cargar los datos</p>
+                </div>
+              `;
+              cardEquipo.innerHTML =cardError;
             }
             calcularCantidad(EqCategoriaF);
           }
@@ -329,7 +341,7 @@ require_once "../sidebar/sidebar.php";
               $("#categoriasCal").value = "";
 
               console.log(element);
-              url = element.imagen ? element.imagen : "noImage.jpg";
+              const url = element.imagen ? element.imagen : "noImage.jpg";
 
               let newCard = ``;
 
@@ -355,7 +367,7 @@ require_once "../sidebar/sidebar.php";
                     </div>
                     <div class="card-footer text-end">
                       <a href="../datasheet/datasheet.php?obtener=${element.idequipo}" type="button" class="btn btn-success">Ver más ..</a>
-                      <a href="../sectores/detalle_sector.php?sector=${element.idsector}&nombre=${element.sector}" type="button" class="btn btn-info">Ir ..</a>
+                      <a href="../sectores/detalle_sector.php?sector=${element.idsector}&nombre=${element.sector}" type="button" class="btn rounded-circle"><i class="bi bi-geo-alt-fill bi-2x"></i></a>
                       </div>
                   </div>
                 </div>

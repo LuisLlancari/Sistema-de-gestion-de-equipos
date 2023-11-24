@@ -1,12 +1,5 @@
 <?php
 
-if(isset($_GET['obtener'])){
-
-    $idequipo = $_GET['obtener'];
-
-    echo "<script>const idObt =".json_encode($idequipo)." </script>";
-}
-
 require_once "../sidebar/sidebar.php";
 
 ?>  
@@ -169,7 +162,7 @@ require_once "../sidebar/sidebar.php";
         const tabla = $("#tabla-cronograma tbody")
         
         //id del equipo(dato obtenido de la solicutud get)
-        const idEquipoObt = idObt
+        const idEquipoObt = new URLSearchParams(window.location.search).get("obtener");
         console.log(idEquipoObt);
 
         //obtjto o lugar que contiene los elementos asíncronos
@@ -187,7 +180,7 @@ require_once "../sidebar/sidebar.php";
 
         function validarUsuario(){
 
-            if($("#rolObt").textContent !== "ADMIN"){
+            if($("#rolObt").textContent !== "ADMINISTRADOR"){
 
                 const botonesEditar = document.querySelectorAll(".boton-render");
                 
@@ -340,19 +333,23 @@ require_once "../sidebar/sidebar.php";
             .then(respuesta => respuesta.json())
             .then(datos => {
 
+                console.log(datos);
                 tabla.innerHTML = '';
                if(datos.length >0){
-
-                   let nuevafila =``;
-                       nuevafila = `
-                     <tr>
-                       <td>${datos.tipo_mantenimiento}</td>
-                       <td>${datos.estado}</td>
-                       <td>${datos.fecha_programada}</td>
-                       </td>
-                     </tr>
-                     `;
-                     tabla.innerHTML += nuevafila;
+                
+                datos.forEach(element => {
+                    
+                    let nuevafila =``;
+                        nuevafila = `
+                      <tr>
+                        <td>${element.tipo_mantenimiento}</td>
+                        <td>${element.estado}</td>
+                        <td>${element.fecha_programada}</td>
+                        </td>
+                      </tr>
+                      `;
+                      tabla.innerHTML += nuevafila;
+                });
                }else{
                 tabla.innerHTML = 
                 `

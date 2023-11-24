@@ -84,14 +84,20 @@ $accesos = [
 
                         $icono = $iconos[$categoria];
                         $cadena = reemplazarCadena(strtolower($categoria));
+                        $li_list  = [
+                            "Equipos",
+                            "Gráficos",
+                            "Usuarios",
+                            "Sectores"
+                        ];
             
-                        if($categoria != "Equipos" && $categoria != "Gráficos" && $categoria != "Usuarios" && $categoria != "Sectores" && $categoria){
+                        if(!in_array($categoria,$li_list) && $categoria){
                             echo "
                                 <a href='../{$cadena}/{$cadena}.php' class='nav_link cat'></span>{$categoria}</a>
                             "; 
                         }
 
-                        if($categoria == "Equipos" || $categoria == "Gráficos" || $categoria == "Usuarios" || $categoria == "Sectores" || $categoria == "Cronograma"){
+                        if(in_array($categoria,$li_list)){
                             echo "
                                 <a type ='button' href='#' class='dropdown-btn'><i class='fas {$icono}'></i> $categoria<i class='fa fa-caret-down'></i></span></a>
                             ";
@@ -123,7 +129,7 @@ $accesos = [
             </div>
         </div>
         <div class="mt-4">
-            <a href="../../controllers/usuario.controller.php?operacion=destroy" class="nav_link"> <span class="nav_name">SignOut</span></a>
+            <a href="../../controllers/usuario.controller.php?operacion=destroy" class="nav_link"> <span class="nav_name">Cerrar sesión</span></a>
         </div> 
     </nav>
     <!--Container Main start-->
