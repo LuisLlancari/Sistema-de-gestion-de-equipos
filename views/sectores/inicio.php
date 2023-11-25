@@ -4,6 +4,9 @@ require_once "../../views/sidebar/sidebar.php";
 global $apellidos, $nombres, $idusuario;
 $apellidos = $_SESSION["apellidos"];
 $nombres = $_SESSION["nombres"];
+$idusuario = $_SESSION["idusuario"];
+echo '<div id="idusuario" data-idusuario="' . $idusuario . '" style="display:none;"></div>';
+// Esto me está ayudando a almacenar variables, incluido el div(que está oculto) para asi poderlo llamar en el JavaScript
 
 ?>  
 
@@ -37,7 +40,6 @@ $nombres = $_SESSION["nombres"];
             <i class="bi bi-trash3-fill" style="font-size: 1.5em;"></i>
           </button>
         </div>
-        <hr>
       </div>
     </div>
   </div>
@@ -222,18 +224,6 @@ $nombres = $_SESSION["nombres"];
 
   document.addEventListener("DOMContentLoaded", () => {
 
-    document.addEventListener("DOMContentLoaded", function() {
-
-    var usuarioInput = document.getElementById("usuario");
-
-        usuarioInput.value = "<?php echo $_SESSION['nombres'] . ' ' . $_SESSION['apellidos']; ?>";
-      
-    });
-
-
-    const tabla = document.querySelector("#tabla_eliminar tbody");
-    
-
     function $(id){
       return document.querySelector(id);
     }
@@ -278,41 +268,42 @@ $nombres = $_SESSION["nombres"];
 
 
     function sectorRegister() {
-      const nuevoSector = document.getElementById("sector_nuevo").value.trim();
-      console.log("Sector añadido:", nuevoSector); 
+    const nuevoSector = document.getElementById("sector_nuevo").value.trim();
+    console.log("Sector añadido:", nuevoSector); 
 
-      if (nuevoSector !== "") {
-          const parametros = new FormData();
-          parametros.append("operacion", "registrar");
-          parametros.append("sector", nuevoSector);
+    if (nuevoSector !== "") {
+        const parametros = new FormData();
+        parametros.append("operacion", "registrar");
+        parametros.append("sector", nuevoSector);
 
-          fetch(`../../controllers/sector.controller.php`, {
-              method: "POST",
-              body: parametros
-          })
-          .then(respuesta => respuesta.json())
-          .then(datos => {
-              console.log(datos);
-              if (datos.idsector > 0) {
-                  alert(`Sector registrado con ID: ${datos.idsector}`);
-                  document.getElementById("formulario1").reset();
-                } 
-                })
-                .catch(e =>  {
-                    console.error(e);
-                });               
-            }
+        fetch(`../../controllers/sector.controller.php`, {
+            method: "POST",
+            body: parametros
+        })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            console.log(datos);
+            if (datos.idsector > 0) {
+                alert(`Sector registrado con ID: ${datos.idsector}`);
+                document.getElementById("formulario1").reset();
+              } 
+              })
+              .catch(e =>  {
+                  console.error(e);
+              });               
+          }
     }
 
-   
     document.getElementById("boton_guardar").addEventListener("click", () => {
         if (confirm("¿Está seguro de guardar?")) {
             sectorRegister();
         }
     });
+    mostrarSectores();
 
 
-
+    const tabla = document.querySelector("#tabla_eliminar tbody");
+    
     function GetSector() {
       const parametros = new FormData();
       parametros.append("operacion", "obtenerNC");
@@ -333,19 +324,18 @@ $nombres = $_SESSION["nombres"];
                 <td>${registro.Nombre_Sector}</td>
                 <td>${registro.Cantidad_Guardados}</td>
                 <td>
-                  <button type="button" id="drop" data-idsector="${registro.idsector}" class="btn btn-outline-danger btn-sm eliminar"><i class="bi bi-trash3"></i></button>
+                  <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" data-idsector="${registro.idsector}" >
+                  </div>                
                 </td>
               </tr>`;
             tabla.innerHTML += nuevafila;
             numFila++;
           });
 
-          document.querySelectorAll('.eliminar').forEach(btnEliminar => {
-            btnEliminar.addEventListener('click', function () {
-              const idSector = this.dataset.idsector;
-              eliminarSector(idSector);
-            });
-          });
+          
+          asignarEventosInterruptores();
+
         })
         .catch(e => {
           console.error(e);
@@ -353,157 +343,141 @@ $nombres = $_SESSION["nombres"];
     }
 
 
-    function eliminarSector(idSector) {
-      const parametros = new FormData();
-      parametros.append("operacion", "eliminar");
-      parametros.append("idsector", idSector);
-
-      fetch(`../../controllers/sector.controller.php`, {
-        method: 'POST',
-        body: parametros
-      })
-        .then(respuesta => respuesta.json())
-        .then(datosRecibidos => {
-          console.log(datosRecibidos);
-          GetSector();
-        })
-        .catch(e => {
-          console.error(e);
-        });
-    }
-    
-
-      function getCategorias(){
-
-      const parametros = new FormData();
-      parametros.append("operacion", "listar");
-
-      fetch(`../../controllers/categoria.controller.php`, {
-          method: "POST",
-          body: parametros
-        })
-          .then(respuesta => respuesta.json())
-          .then(datos => {
-            datos.forEach(element => {
-              const tagOption = document.createElement("option")
-              tagOption.value = element.idcategoria
-              tagOption.innerText = element.categoria
-              $("#categoria").appendChild(tagOption);
-
-            });
-          })
-          .catch(e => {
-            console.error(e);
-          });
-    }
-    
-
-    function getMarcas(){
-
-      const parametros = new FormData();
-      parametros.append("operacion", "listar");
-
-      fetch(`../../controllers/marca.controller.php`, {
-          method: "POST",
-          body: parametros
-        })
-          .then(respuesta => respuesta.json())
-          .then(datos => {
-            datos.forEach(element => {
-              const tagOption = document.createElement("option")
-              tagOption.value = element.idmarca
-              tagOption.innerText = element.marca
-              $("#marca").appendChild(tagOption);
-
-            });
-          })
-          .catch(e => {
-            console.error(e);
-          });
-    }
 
 
-    function getSector(){
-
-      const parametros = new FormData();
-      parametros.append("operacion", "obtenerNC");
-
-      fetch(`../../controllers/sector.controller.php`, {
-          method: "POST",
-          body: parametros
-        })
-          .then(respuesta => respuesta.json())
-          .then(datos => {
-            datos.forEach(element => {
-              const tagOption = document.createElement("option")
-              tagOption.value = element.idsector
-              tagOption.innerText = element.Nombre_Sector
-              $("#sector").appendChild(tagOption);
-
-            });
-          })
-          .catch(e => {
-            console.error(e);
-          });
-    }
-
-    function mostrarModalEquipoAsector() {
-        const ModalEquipoAsector = new bootstrap.Modal(document.getElementById('ModalEquipoAsector'));
-        ModalEquipoAsector.show();
-    }
-
-    function añadirEquipo_Sector() {    
-      const parametros = new FormData();
-      parametros.append("operacion", "registrarEquipos_Sector");
-      parametros.append("idcategoria", $("#categoria").value);
-      parametros.append("idmarca", $("#marca").value);
-      parametros.append("modelo_equipo", $("#modelo").value);
-      parametros.append("numero_serie", $("#num_serie").value);
-      parametros.append("idsector", $("#sector").value);
-      parametros.append("idusuario", idusuario);
-      parametros.append("imagen", $("#imagen").files[0]);
-      parametros.append("descripcion", $("#descripcion").value);
-
-      fetch(`../../controllers/sector.controller.php`, {
-        method: "POST",
-        body: parametros
-      })
-        .then(respuesta => {
-          if (!respuesta.ok) {
-            throw new Error(`Error en la solicitud: ${respuesta.status}`);
-          }
-          return respuesta.json();
-        })
-        .then(datos => {
-          if (datos.idmantenimiento_sector > 0) {
-            alert(`Usuario registrado con ID: ${datos.idmantenimiento_sector}`)
-            $("#form-equiposAsector").reset();
-          }
-        })
-        .catch(e => {
-          console.error(e);
-        });
-    }
-
-  mostrarSectores();
-  getCategorias();
-  getMarcas();
-  getSector();
-
-
-  $("#boton_eliminar").addEventListener("click", () => {
+    document.getElementById("boton_eliminar").addEventListener("click", () => {
         GetSector();
         const modalEliminar = new bootstrap.Modal(document.getElementById('modalEliminarSector'));
       modalEliminar.show();
-  });
+    });
 
-
-  $("#equipoAsector").addEventListener("click", () => {
+    document.getElementById("equipoAsector").addEventListener("click", () => {
       mostrarModalEquipoAsector();
     });
 
+    document.addEventListener("DOMContentLoaded", function() {
+          var usuarioInput = document.getElementById("usuario");
 
-    document.getElementById("guardarEquipo_Sector").addEventListener("click", () => {
+          usuarioInput.value = "<?php echo $_SESSION['nombres'] . ' ' . $_SESSION['apellidos']; ?>";
+      });
+
+  function getCategorias(){
+
+    const parametros = new FormData();
+    parametros.append("operacion", "listar");
+
+    fetch(`../../controllers/categoria.controller.php`, {
+        method: "POST",
+        body: parametros
+      })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+          datos.forEach(element => {
+            const tagOption = document.createElement("option")
+            tagOption.value = element.idcategoria
+            tagOption.innerText = element.categoria
+            $("#categoria").appendChild(tagOption);
+
+          });
+        })
+        .catch(e => {
+          console.error(e);
+        });
+  }
+  getCategorias();
+
+  function getMarcas(){
+
+    const parametros = new FormData();
+    parametros.append("operacion", "listar");
+
+    fetch(`../../controllers/marca.controller.php`, {
+        method: "POST",
+        body: parametros
+      })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+          datos.forEach(element => {
+            const tagOption = document.createElement("option")
+            tagOption.value = element.idmarca
+            tagOption.innerText = element.marca
+            $("#marca").appendChild(tagOption);
+
+          });
+        })
+        .catch(e => {
+          console.error(e);
+        });
+  }
+  getMarcas();
+
+    function getSector(){
+
+    const parametros = new FormData();
+    parametros.append("operacion", "obtenerNC");
+
+    fetch(`../../controllers/sector.controller.php`, {
+        method: "POST",
+        body: parametros
+      })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+          datos.forEach(element => {
+            const tagOption = document.createElement("option")
+            tagOption.value = element.idsector
+            tagOption.innerText = element.Nombre_Sector
+            $("#sector").appendChild(tagOption);
+
+          });
+        })
+        .catch(e => {
+          console.error(e);
+        });
+    }
+    getSector();
+
+    const equipoAsector = document.getElementById("equipoAsector");
+    
+
+    function mostrarModalEquipoAsector() {
+      const ModalEquipoAsector = new bootstrap.Modal(document.getElementById('ModalEquipoAsector'));
+      ModalEquipoAsector.show();
+    }
+
+  const idusuario = document.getElementById('idusuario').dataset.idusuario;
+  function añadirEquipo_Sector() {
+    const parametros = new FormData();
+    parametros.append("operacion", "registrarEquipos_Sector");
+    parametros.append("idcategoria", $("#categoria").value);
+    parametros.append("idmarca", $("#marca").value);
+    parametros.append("modelo_equipo", $("#modelo").value);
+    parametros.append("numero_serie", $("#num_serie").value);
+    parametros.append("idsector", $("#sector").value);
+    parametros.append("idusuario", idusuario);
+    parametros.append("imagen", $("#imagen").files[0]);
+    parametros.append("descripcion", $("#descripcion").value);
+
+    fetch(`../../controllers/sector.controller.php`, {
+        method: "POST",
+        body: parametros
+    })
+    .then(respuesta => respuesta.json())
+    .then(datos => {
+        if (datos.idmantenimiento_sector > 0) {
+            toast("Operación realizada con éxito");
+            document.getElementById("form-equiposAsector").reset();
+            ModalEquipoAsector.hide();
+            mostrarSectores();
+        }
+    })
+    .catch(e => {
+        console.error(e);
+    });
+}
+
+
+
+document.getElementById("guardarEquipo_Sector").addEventListener("click", () => {
         if (confirm("¿Está seguro de guardar?")) {
           añadirEquipo_Sector();
         }
@@ -512,7 +486,12 @@ $nombres = $_SESSION["nombres"];
     
 
 
-  });
+});
+
+
+
+
+
 
 
 
@@ -522,3 +501,4 @@ $nombres = $_SESSION["nombres"];
 </body>
 
 </html>
+

@@ -2,6 +2,7 @@
 
 require_once 'Conexion.php';
 
+
 class Sector extends Conexion{
     
     private $conexion;
@@ -74,7 +75,7 @@ class Sector extends Conexion{
     }
 
 
-    //FUNCION PARA ELIMINAR SECTOR
+   /* //FUNCION PARA ELIMINAR SECTOR
     public function eliminar($datos = []){
         try {
         $consulta = $this->conexion->prepare("CALL spu_sector_eliminar(?)");
@@ -82,6 +83,22 @@ class Sector extends Conexion{
         return $consulta->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (Exception $e){
+            die($e->getMessage());
+        }
+    }*/
+
+
+//FUNCION PARA ACTIVAR O DESACTIVAR SECTOR
+    public function activarSector($datos = []) {
+        try {
+            $consulta = $this->conexion->prepare("CALL spu_activarSector(?, ?)");
+            $consulta->execute(
+                array(
+                $datos['idsector'],
+                $datos['activar'] // 1 para activar, 0 para desactivar
+            ));
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }

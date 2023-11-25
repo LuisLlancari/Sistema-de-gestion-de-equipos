@@ -1,6 +1,5 @@
 <?php
 session_start();
-date_default_timezone_set("America/Lima");
 require_once '../models/Sector.php';
 
 if (isset($_POST['operacion'])){
@@ -13,9 +12,12 @@ if (isset($_POST['operacion'])){
         break;
 
         case 'listar_detalles_sector':
-            $idsector = isset($_POST['idsector']) ? $_POST['idsector'] : null;
-            echo json_encode($sector->listar_detalles_sector(['idsector' => $idsector]));
-        break; 
+            $datosEnviar = [
+                'idsector' => $_POST['idsector']
+            ];
+
+            echo json_encode($sector->listar_detalles_sector($datosEnviar));
+        break;
 
         case 'registrar':
             $datosEnviar = [
@@ -25,15 +27,18 @@ if (isset($_POST['operacion'])){
             echo json_encode($sector->registrar($datosEnviar));
         break;
 
-        case 'eliminar';
+        case 'activarSector';
             $datosEnviar = [
-            "idsector"     => $_POST['idsector']
+            "idsector"     => $_POST['idsector'],
+            "activar"      => $_POST['activar']
             ];
-            echo json_encode($sector->eliminar($datosEnviar));
+            echo json_encode($sector->activarSector($datosEnviar));
         break;
 
         case 'registrarEquipos_Sector':
-            $idusuario = isset($_SESSION["idusuario"]) ? $_SESSION["idusuario"] : null;
+            $fotito = date('dmYhis');
+            $nombreArchivo = sha1($fotito) . ".jpg";
+
             $datosEnviar = [
                 'idcategoria'   => $_POST['idcategoria'],
                 'idmarca'       => $_POST['idmarca'],
@@ -46,7 +51,7 @@ if (isset($_POST['operacion'])){
             ];
 
             if (isset($_FILES['imagen'])) {
-              if (move_uploaded_file($_FILES['imagen']['tmp_name'], "../images" . $nombreArchivo)) {
+              if (move_uploaded_file($_FILES['imagen']['tmp_name'], "../images/" . $nombreArchivo)) {
                 $datosEnviar["imagen"] = $nombreArchivo;
               } 
             }

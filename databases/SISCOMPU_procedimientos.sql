@@ -230,13 +230,22 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE spu_sector_eliminar(IN _idsector INT)
-BEGIN 
-	UPDATE sectores
-    SET inactive_at = NOW()
-		WHERE idsector = _idsector;
+CREATE PROCEDURE spu_activarSector(IN _idsector INT, IN _activar INT)
+BEGIN
+    IF _activar = 1 THEN
+        -- Activar el sector
+        UPDATE sectores
+        SET inactive_at = NULL
+        WHERE idsector = _idsector;
+    ELSE
+        -- Desactivar el sector
+        UPDATE sectores
+        SET inactive_at = NOW()
+        WHERE idsector = _idsector;
+    END IF;
 END $$
 DELIMITER ;
+
 
 DELIMITER $$
 CREATE PROCEDURE spu_obtenerCNsectores()
@@ -248,8 +257,9 @@ BEGIN
     FROM
         sectores s
     LEFT JOIN
-        sectores_detalle sd ON s.idsector = sd.idsector AND sd.fecha_fin IS NULL
-    WHERE s.inactive_at IS NULL AND sd.inactive_at IS NULL
+        sectores_detalle sd ON s.idsector = sd.idsector AND sd.fecha_fin IS NULL AND sd.inactive_at IS NULL
+    WHERE 
+        s.inactive_at IS NULL
     GROUP BY
         s.idsector;
 END $$
