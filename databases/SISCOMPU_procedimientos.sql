@@ -557,7 +557,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*DELIMITER $$
+DELIMITER $$
 CREATE PROCEDURE spu_cronogramas_listar_id(IN _idequipo INT)
 BEGIN
 	SELECT
@@ -574,7 +574,7 @@ BEGIN
     WHERE
 		equ.idequipo = _idequipo AND cro.inactive_at IS NULL;
 END $$
-DELIMITER ;*/
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS spu_cronogramas_listar;
 DELIMITER $$
