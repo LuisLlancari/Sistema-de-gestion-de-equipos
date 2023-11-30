@@ -384,7 +384,7 @@ echo '<div id="idusuario" data-idusuario="' . $idusuario . '" style="display:non
           console.error(e);
         });
   }
-  getCategorias();
+  getCategorias(); 
 
   function getMarcas(){
 
