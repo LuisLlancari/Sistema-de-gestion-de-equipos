@@ -59,8 +59,8 @@ require_once "../sidebar/sidebar.php";
     <div class="modal fade" id="modal-registrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="titulo-modal">Registrar usuario</h1>
+        <div class="modal-header"  style="background-color: #666666;">
+          <h1 class="modal-title fs-5 text-light" id="titulo-modal">Registrar usuario</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -105,8 +105,8 @@ require_once "../sidebar/sidebar.php";
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="cerrar" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" id="agregar" >Guardar</button>
+          <button type="button" id="agregar" class="btn btn-outline-primary flex-fill"><i class="bi bi-check-square-fill"></i>    Guardar</button>
+          <button type="button" id="cerrar" data-bs-dismiss="modal" class="btn btn-outline-danger flex-fill" data-bs-dismiss="modal"><i class="bi bi-x-square-fill"></i>    Cerrar</button>
         </div>
       </div>
     </div>

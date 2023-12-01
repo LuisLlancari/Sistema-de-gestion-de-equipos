@@ -129,7 +129,7 @@ echo '<div id="idusuario" data-idusuario="' . $idusuario . '" style="display:non
                 <div class="col-md-6 mb-3">
                   <label for="sector" class="form-label">Sector</label>
                   <select id="sector" name="sector" class="form-select" required>
-                    <option value="">Almacén</option>
+                    <option value="">Seleccione:</option>
                   </select>
                 </div>
 

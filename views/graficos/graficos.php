@@ -182,9 +182,9 @@ require_once "../sidebar/sidebar.php";
       const grDonaSector = $("#sectoresEquipo");
 
       const coloresBarras = [
-        "rgba(32, 223, 29,0.5)",
+        "rgba(230, 27, 17, 0.5)",
         "rgba(17, 101, 230,0.5)",
-        "rgba(230, 27, 17, 0.5)"
+        "rgba(32, 223, 29,0.5)"
       ];
 
      //datos del gráfico de cronograma
@@ -193,7 +193,7 @@ require_once "../sidebar/sidebar.php";
         datasets: [
         {
             data: [],
-            backgroundColor: [ "#FF6384","#09e644","#84FF63","#8463FF","#6384FF"],
+            backgroundColor: [ "#FF6384","#84FF63","#8463FF","#6384FF"],
             borderColor: "black",
             borderWidth: 2
         }]
@@ -335,7 +335,7 @@ require_once "../sidebar/sidebar.php";
         datasets: [
         {
           data: [],
-          backgroundColor: [ "#FF6384","#09e644","#84FF63","#8463FF","#6384FF"],
+          backgroundColor: [ "#FF6384","#09e644","#8463FF","#6384FF"],
           borderColor: "black",
           borderWidth: 2
         }]

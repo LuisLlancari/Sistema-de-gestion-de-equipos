@@ -68,9 +68,9 @@ require_once "../sidebar/sidebar.php";
               <label for="estado" class="form-label">Estado:</label>
               <select name="" id="estado" class="form-select" required>
               <option value="">Seleccion:</option>
-              <option value="completado">completado</option>
+              <option value="completado">Completado</option>
               <option value="pausado">Pausado</option>
-              <option value="cancelado">cancelado</option>
+              <option value="cancelado">Cancelado</option>
              </select>     
             </div>
             

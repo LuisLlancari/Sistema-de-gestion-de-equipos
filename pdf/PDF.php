@@ -131,7 +131,7 @@ if(isset($_POST["operacion"])){
                 ];
                 $registros      = $mantenimientoPDF->listar_mantenimiento_grafico($datosEnviar);
                 $mantenimientos = $mantenimientoPDF->listar_mantenimiento_informe(); 
-                
+    
                 // get the HTML
                 ob_start();
                 /* include dirname(__FILE__).'/res/example07a.php'; */

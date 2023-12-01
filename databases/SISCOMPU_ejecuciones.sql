@@ -5,8 +5,8 @@
 USE SISCOMPU;
 
 -- LIMPIEZA
-DELETE FROM cronogramas;
-ALTER TABLE cronogramas AUTO_INCREMENT 1;
+DELETE FROM equipos;
+ALTER TABLE equipos AUTO_INCREMENT 1;
 
 -- Encriptando las claves : SENATI123
 UPDATE usuarios SET
@@ -21,12 +21,10 @@ select * from mantenimiento;
 select * from cronogramas;
 
 -- USUARIOS
-CALL spu_usuarios_registrar('Jose', 'Alcantara', 'ADMIN', 'SENATI123', 'jose@gmail.com', NULL);
-CALL spu_usuarios_registrar('Adriana', 'Durand', 'ADMINISTRADOR', 'SENATI123', 'adriana@gmail.com', NULL);
 CALL spu_usuarios_registrar('Jorge', 'Marcos', 'ADMINISTRADOR', 'SENATI123', 'jorge@gmail.com', NULL);
-CALL spu_usuarios_registrar('Angélica', 'Maurtua', 'ADMINISTRADOR', 'SENATI123', 'angelica@gmail.com', NULL);
+CALL spu_usuarios_registrar('Angélica', 'Maurtua', 'INVITADO', 'SENATI123', 'angelica@gmail.com', NULL);
 CALL spu_usuarios_registrar('Josefa', 'Arteaga', 'ADMINISTRADOR', 'SENATI123', 'josefa@gmail.com', NULL);
-CALL spu_usuarios_registrar('Andrea', 'Galvez', 'ADMINISTRADOR', 'SENATI123', 'andrea@gmail.com', NULL);
+CALL spu_usuarios_registrar('Andrea', 'Galvez', 'INVITADO', 'SENATI123', 'andrea@gmail.com', NULL);
 CALL spu_usuarios_registrar('Carlos', 'Quiroz', 'ADMINISTRADOR', 'SENATI123', 'carlos@gmail.com', NULL);
 
 -- EQUIPOS
