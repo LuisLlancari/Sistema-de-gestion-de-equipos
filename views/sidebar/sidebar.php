@@ -6,40 +6,37 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
 }
 $iconos = [
-
-    "Gráficos" => "fa-chart-bar",
-    "Cronograma" => "fa-calendar",
+    "Gráficos" => "fa-chart-pie",
+    "Revisiones" => "fa-screwdriver-wrench",
     "Equipos" => "fa-desktop",
-    "Usuarios" => "fa-user",
+    "Usuarios" => "fa-users-gear",
     "Sectores" => "fa-building"
-
 ];
 
 $accesos = [
     "ADMINISTRADOR" =>[
         "Sectores"      => ["Inicio"],
-        "Cronograma"    => ["Cronograma"],
         "Equipos"       => ["Catálogo","Panel"],
-        "Usuarios"       => ["Usuario"],
+        "Revisiones"    => ["Cronograma", "Mantenimiento"],
         "Gráficos"      => ["Estadísticas"],
+        "Usuarios"       => ["Usuario"]
     ],
     "ASISTENTE" =>[
         "Sectores"      => ["Inicio"],
-        "Cronograma"    => ["Cronograma"],
-        "Equipos"       => ["Catálogo"]
-        ]
-    ];
+        "Equipos"       => ["Catálogo"],
+        "Revisiones"    => ["Cronograma", "Mantenimiento"]
+    ]
+];
 
-    function reemplazarCadena($string){
-        
+    function reemplazarCadena($string)
+    {
         $tildes = ['á', 'é', 'í', 'ó', 'ú', 'Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'G'];
         $reemplazos = ['a', 'e', 'i', 'o', 'u', 'a', 'e', 'i', 'o', 'u', 'n', 'g'];
-
         return str_replace($tildes,$reemplazos,$string);
     }
 ?>
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 
 <head>
   <title>SISCOMPU</title>
@@ -63,75 +60,52 @@ $accesos = [
 <body id="body-pd">
   <main>
     <div class="sidenav">
-        <a href='#' class='nav_link cat'>SISCOMPU</a>
+    <a href='#' class='nav_link cat'>
+        <span style='font-size: larger;'><strong>SISCOMPU</strong></span>
+    </a>
         <header class="header"id="header">
             <div class="centered-span">
                 <span class="text-uppercase"><?=$_SESSION["apellidos"]?><span>, <span class="center-span"><?=$_SESSION["nombres"]?> - </span> <span id="rolObt"><?=$_SESSION["rol"]?></span> 
             </div>
             <div class="header_img centered-img"> 
-                
                 <?php
-                    echo "<img src='../../images/".$_SESSION["avatar"]."' alt=''>";
-                    
+                    echo "<img src='../../images/".$_SESSION["avatar"]."' alt=''>";  
                 ?> 
             </div>
         </header>
+
         <div class="l-navbar" id="sidebar">
             <nav class="nav">
                 <div>
                     <div class="nav_list" id="navlist"> 
                     <?php
-                    $categorias = $accesos[$_SESSION["rol"]];
-                    foreach ($categorias as $categoria => $subcategoria) {
+                        $categorias = $accesos[$_SESSION["rol"]];
+                        foreach ($categorias as $categoria => $subcategoria) {
+                            $icono = $iconos[$categoria];
+                            $cadena = reemplazarCadena(strtolower($categoria));
 
-                        $icono = $iconos[$categoria];
-                        $cadena = reemplazarCadena(strtolower($categoria));
-                        $li_list  = [
-                            "Equipos",
-                            "Gráficos",
-                            "Usuarios",
-                            "Sectores"
-                        ];
-            
-                        if(!in_array($categoria,$li_list) && $categoria){
-                            echo "
-                                <a href='../{$cadena}/{$cadena}.php' class='nav_link cat'></span>{$categoria}</a>
-                            "; 
-                        }
-
-                        if(in_array($categoria,$li_list)){
-                            echo "
-                                <a type ='button' href='#' class='dropdown-btn'><i class='fas {$icono}'></i> $categoria<i class='fa fa-caret-down'></i></span></a>
-                            ";
-                        }                             
-                
-    
-                        if($subcategoria){
-                            echo "
-                            <div class='dropdown-container'>
-                            ";
-                            foreach ($subcategoria as $item) {
-                                $cadenaSub = reemplazarCadena(strtolower($item));
-                                echo "
-                                <li>
-                                    <a href='../{$cadena}/{$cadenaSub}.php' class='nav_link'><span class='nav_name'>{$item}</span></a> 
-                                </li>
-                                ";
+                            if ($categoria == "Equipos" || $categoria == "Revisiones") {
+                                echo "<a type='button' href='#' class='dropdown-btn'><i class='fas {$icono}'></i> $categoria<i class='fa fa-caret-down'></i></span></a>";
+                                if ($subcategoria) {
+                                    echo "<div class='dropdown-container'>";
+                                    foreach ($subcategoria as $item) {
+                                        $cadenaSub = reemplazarCadena(strtolower($item));
+                                        echo "<li><a href='../{$cadena}/{$cadenaSub}.php' class='nav_link'><span class='nav_name'>$item</span></a></li>";
+                                    }
+                                    echo "</div>";
+                                }
+                            } else {
+                                echo "<a href='../{$cadena}/{$cadena}.php' class='nav_link cat'><i class='fas {$icono}'></i> $categoria</a>";
                             }
-                            echo "
-                            </div>
-                            ";
+
+                            echo "</li>";
                         }
-    
-                        echo "
-                        </li>
-                        ";
-                    }
-                ?>
+                    ?>
             </div>
         </div>
         <div class="mt-4">
-            <a href="../../controllers/usuario.controller.php?operacion=destroy" class="nav_link"> <span class="nav_name">Cerrar sesión</span></a>
+            <a href="../../controllers/usuario.controller.php?operacion=destroy" class="nav_link"> <span class="nav_name"> 
+                <strong> <i class="bi bi-box-arrow-left"></i> Cerrar sesión </strong></span></a>
         </div> 
     </nav>
     <!--Container Main start-->

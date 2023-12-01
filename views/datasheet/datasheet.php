@@ -6,7 +6,7 @@ require_once "../sidebar/sidebar.php";
     <div class="height-100 bg-light">
         <div class="m-4">
             <div class="alert alert-primary" role="alert">
-              <h4 class="alert-heading">Hoja de información</h4>
+              <h4 class="alert-heading">Información adicional</h4>
               <hr>
               <p class="mb-0" id="descripcion">--</p>
             </div>
@@ -38,9 +38,9 @@ require_once "../sidebar/sidebar.php";
                         </colgroup>
                         <thead>
                             <tr>
-                                <th>tipo de matenimiento</th>
-                                <th>estado</th>
-                                <th>fecha programada</th>
+                                <th>Tipo de matenimiento</th>
+                                <th>Estado</th>
+                                <th>Fecha programada</th>
                             </tr>
                         </thead>
                         <tbody>                            
@@ -61,7 +61,7 @@ require_once "../sidebar/sidebar.php";
                                 </div>
                                 <div class="col-md-10">
                                     <div class="text-center">
-                                        <h1>Datasheet</h1>
+                                        <h1>Especificaciones del equipo</h1>
                                     </div>
                                 </div>
                                 
@@ -84,7 +84,7 @@ require_once "../sidebar/sidebar.php";
                                     </colgroup>
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <th><i class="bi bi-list-task"></i></th>
                                             <th>Claves</th>
                                             <th>Valores</th>
                                             <th id="operaciones">Operaciónes</th>
@@ -242,10 +242,8 @@ require_once "../sidebar/sidebar.php";
                     }else{
                         datasheetError.innerHTML = `
                         <div class="alert alert-danger" role="alert">
-                            <h4 class="alert-heading">Datos insuficientes</h4>
-                            <p>No encontramos datos suficientes sobre el equipo</p>
-                            <hr>
-                            <p class="mb-0">Intente más tarde</p>
+                            <h4 class="alert-heading">Especificaciones no registradas</h4>
+                            <p>Revise el equipo y agregue data técnica</p>
                         </div>
                         `;                        
                     }
@@ -365,10 +363,8 @@ require_once "../sidebar/sidebar.php";
                 CronogramaError.innerHTML = 
                 `
                 <div class="alert alert-danger" role="alert">
-                  <h4 class="alert-heading">Datos insuficientes</h4>
-                  <p>No encontramos datos suficientes sobre el equipo</p>
-                  <hr>
-                  <p class="mb-0">Intente más tarde</p>
+                  <h4 class="alert-heading">Revisión no programada</h4>
+                  <p>Asigne mantenimiento para este equipo según sea su condición</p>
                 </div>
                 `;
                }

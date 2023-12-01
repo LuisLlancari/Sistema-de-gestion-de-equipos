@@ -96,7 +96,8 @@ class Sector extends Conexion{
                 array(
                 $datos['idsector'],
                 $datos['activar'] // 1 para activar, 0 para desactivar
-            ));
+            )
+        );
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             die($e->getMessage());
@@ -119,7 +120,8 @@ class Sector extends Conexion{
               $datos['idsector']  
               )
             );
-        return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        $result = $consulta->fetch(PDO::FETCH_ASSOC);
+        return $result;
 
         } catch (Exception $e){
             die($e->getMessage());

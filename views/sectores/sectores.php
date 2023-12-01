@@ -10,7 +10,6 @@ echo '<div id="idusuario" data-idusuario="' . $idusuario . '" style="display:non
 
 ?>  
 
-<!-- TODO EL HEAD Y PARTE DEL BOY NO DEBERIA ESTAR YA QUE EXIST EN EL SIDEBAR -->
 <!doctype html>
 <html lang="en">
 
@@ -35,9 +34,9 @@ echo '<div id="idusuario" data-idusuario="' . $idusuario . '" style="display:non
           <button class="btn btn-warning rounded-circle" id="equipoAsector" title="Asignar equipos a un Sector" style="margin-right: 5px;">
             <i class="bi bi-file-earmark-plus" style="font-size: 1.5em;"></i>
           </button>
-          <!-- ELIMINAR -->
-          <button class="btn btn-danger rounded-circle" id="boton_eliminar" type="button" data-bs-toggle="modal" title="Eliminar Sector">
-            <i class="bi bi-trash3-fill" style="font-size: 1.5em;"></i>
+          <!-- INHABILITAR SECTOR (un sector no puede ser eliminado)-->
+          <button class="btn btn-danger rounded-circle" id="boton_eliminar" type="button" data-bs-toggle="modal" title="Inhabilitar Sector">
+            <i class="bi bi-house-slash-fill" style="font-size: 1.5em;"></i>
           </button>
         </div>
       </div>
@@ -168,19 +167,18 @@ echo '<div id="idusuario" data-idusuario="' . $idusuario . '" style="display:non
 
 
 
-<!--MODAL: ELIMINAR SECTOR-->
+<!--MODAL: INHABILITAR SECTOR (un sector no puede ser eliminado)-->
 <div class="modal fade" id="modalEliminarSector" tabindex="-1" aria-labelledby="modalDetallesSectorLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-danger">
-        <h5 class="modal-title text-light">Eliminar Sector</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
     <!-- Contenido del modal -->
     <div class="modal-body text-center">
         <div class="alert alert-danger" role="alert">
-          <h4 class="alert-heading"><strong>¡CUIDADO!</strong></h4>
-          <p>Al borrar un sector, eliminará también los equipos asociados.</p>
+          <h4 class="alert-heading"><strong>Inhabilitar Sector <i class="bi bi-house-slash-fill" style="font-size: 1.5em;"></i> </strong></h4>
+          <p>Inhabilita los sectores que no cuentan con equipos registrados, evitando el acceso o la gestión en dichas áreas.</p>
         </div>
     <table class="table table-sm table-striped table-hover" id="tabla_eliminar">
       <colgroup>
@@ -192,7 +190,7 @@ echo '<div id="idusuario" data-idusuario="' . $idusuario . '" style="display:non
       <tr>
         <th>#</th>
         <th>Sector</th>
-        <th>Cantidad de Registros</th>
+        <th>Cant.</th>
       </tr>
     </thead>
       <tbody id="detalleSectorBody">
@@ -445,6 +443,7 @@ echo '<div id="idusuario" data-idusuario="' . $idusuario . '" style="display:non
     }
 
   const idusuario = document.getElementById('idusuario').dataset.idusuario;
+
   function añadirEquipo_Sector() {
     const parametros = new FormData();
     parametros.append("operacion", "registrarEquipos_Sector");
@@ -464,18 +463,15 @@ echo '<div id="idusuario" data-idusuario="' . $idusuario . '" style="display:non
     .then(respuesta => respuesta.json())
     .then(datos => {
         if (datos.idmantenimiento_sector > 0) {
-            toast("Operación realizada con éxito");
+            alert(`Equipo registrado con ID: ${datos.idmantenimiento_sector}`);
             document.getElementById("form-equiposAsector").reset();
-            ModalEquipoAsector.hide();
-            mostrarSectores();
+
         }
     })
     .catch(e => {
         console.error(e);
     });
 }
-
-
 
 document.getElementById("guardarEquipo_Sector").addEventListener("click", () => {
         if (confirm("¿Está seguro de guardar?")) {
@@ -487,14 +483,6 @@ document.getElementById("guardarEquipo_Sector").addEventListener("click", () => 
 
 
 });
-
-
-
-
-
-
-
-
 
 </script>
 
