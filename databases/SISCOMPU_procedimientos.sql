@@ -257,7 +257,8 @@ BEGIN
     FROM
         sectores s
     LEFT JOIN
-        sectores_detalle sd ON s.idsector = sd.idsector AND sd.fecha_fin IS NULL AND sd.inactive_at IS NULL
+			sectores_detalle sd ON s.idsector = sd.idsector 
+        AND sd.fecha_fin IS NULL AND sd.inactive_at IS NULL
     WHERE 
         s.inactive_at IS NULL
     GROUP BY

@@ -25,7 +25,7 @@ require_once "../sidebar/sidebar.php";
               <div class="card mb-3" style="max-width: 540px;">
                 <div class="row g-0">
                   <div class="col-md-4">
-                    <img src="../../images/sensible.png" class="img-fluid rounded-start m-2" alt="Card title">
+                    <img src="../../images/panel/sensible.png" class="img-fluid rounded-start m-2" alt="Categorías">
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
@@ -41,7 +41,7 @@ require_once "../sidebar/sidebar.php";
               <div class="card mb-3" style="max-width: 540px;">
                 <div class="row g-0">
                   <div class="col-md-4">
-                    <img src="../../images/marca-de-verificacion.png" class="img-fluid rounded-start m-2" alt="Card title">
+                    <img src="../../images/panel/marca-de-verificacion.png" class="img-fluid rounded-start m-2" alt="Marcas">
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
@@ -57,7 +57,7 @@ require_once "../sidebar/sidebar.php";
               <div class="card mb-3" style="max-width: 540px;">
                 <div class="row g-0">
                   <div class="col-md-4">
-                    <img src="../../images/computadora.png" class="img-fluid rounded-start m-2" alt="Card title">
+                    <img src="../../images/panel/computadora.png" class="img-fluid rounded-start m-2" alt="Modelos">
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">

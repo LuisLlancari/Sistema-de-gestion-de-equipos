@@ -31,7 +31,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
   <section class="text-center">
 
     <!-- IMAGEN SUPERIOR  -->
-    <div class="p-5 bg-image" style="background-image: url('./test/reparacionBANNER.jpeg');
+    <div class="p-5 bg-image" style="background-image: url('./images/logo/reparacionBANNER.jpeg');
         height: 500px;
         background-position: center;
         background-size: cover;">
@@ -130,7 +130,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
           if (datos.acceso === true) {
             toast("Acceso correcto");
             setTimeout(() => { //Una pequeña pausa para que se muestre el SweetAlert
-              window.location.href = './views/sectores/inicio.php';
+              window.location.href = './views/sectores/sectores.php';
             }, 1000);
           } else {
             // SweetAlert

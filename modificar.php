@@ -20,7 +20,7 @@
   <div class="card mx-auto" style="max-width: 850px;">
     <div class="row g-0">
       <div class="col-md-4">
-        <img src="./test/modalCONTRASEÑA.jpeg" style="width: 300%; height: 100%;" class="img-fluid" alt="...">
+        <img src="./images/logo/modalCONTRASEÑA.jpeg" style="width: 300%; height: 100%;" class="img-fluid" alt="...">
       </div>
       <div class="col-md-8">
         <div class="card-body">
