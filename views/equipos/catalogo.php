@@ -21,7 +21,7 @@ require_once "../sidebar/sidebar.php";
           <form id="form-busqueda">
             <div class="input-group">
               <input type="text" id="busqueda" class="form-control" placeholder="Buscar por número de serie" required>
-              <button type="submit" class="btn btn-success">Buscar</button>
+              <button type="submit" class="btn btn-secondary">Buscar</button>
             </div>
           </form>
         </div>
@@ -176,25 +176,25 @@ require_once "../sidebar/sidebar.php";
               <div class="col-md-3 m-4">
                 <div class="card">
                   <div class="card-header">
-                    <strong>Marca : </strong>${element.marca}
+                    <strong>Categoría : </strong>${element.categoria}
                   </div>
                   <div class="card-body">
                     <div>
                       <img src="../../images/${url}" style="height: 10rem; width: 12rem;" alt="${element.modelo_equipo}">
                     </div>
                     <div>
-                      <strong>Categoría : </strong>${element.categoria}
-                      <br>
-                      <strong>Descripción : </strong>${element.descripcion}
+                    <strong>Nº serie : </strong>${element.numero_serie}
+                    <br>
+                      <strong>Marca : </strong>${element.marca}
                       <br>
                       <strong>Modelo : </strong>${element.modelo_equipo}
                       <br>
-                      <strong>Nº serie : </strong>${element.numero_serie}
-                    </div>
+                      <strong>Descripción : </strong>${element.descripcion}
+                      </div>
                   </div>
                   <div class="card-footer text-end">
-                    <a href="../datasheet/datasheet.php?obtener=${element.idequipo}" type="button" class="btn btn-success">Ver más ..</a>
-                    <a href="../sectores/detalle_sector.php?sector=${element.idsector}&nombre=${element.sector}" type="button" class="btn rounded-circle"><i class="bi bi-geo-alt-fill bi-2x"></i></a>
+                    <a href="../datasheet/datasheet.php?obtener=${element.idequipo}" type="button" class="btn btn-outline-dark" title="Especificaciones técnicas">Ver más ..</a>
+                    <a href="../sectores/detalle_sector.php?sector=${element.idsector}&nombre=${element.sector}" type="button" class="btn rounded-circle" title="Ubicar equipo"><i class="fa-solid fa-location-dot" style="font-size: 1.5em;"></i></a>
                   </div>
                 </div>
               </div>

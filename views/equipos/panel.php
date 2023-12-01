@@ -89,7 +89,7 @@ require_once "../sidebar/sidebar.php";
                   <label for="busqueda" name="busqueda" class="form-label">Buscar:</label>
                     <div class="input-group">
                       <input type="text" id="numserie" class="form-control" placeholder="Buscar por número de serie" required>
-                      <button type="submit" id="buscar" class="btn btn-success buscar">Buscar</button>
+                      <button type="submit" id="buscar" class="btn btn-secondary buscar">Buscar</button>
                     </div>
                 </form>
               </div>
