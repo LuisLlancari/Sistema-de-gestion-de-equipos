@@ -5,8 +5,8 @@
 USE SISCOMPU;
 
 -- LIMPIEZA
-DELETE FROM usuarios;
-ALTER TABLE usuarios AUTO_INCREMENT 1;
+DELETE FROM cronogramas;
+ALTER TABLE cronogramas AUTO_INCREMENT 1;
 
 -- Encriptando las claves : SENATI123
 UPDATE usuarios SET
