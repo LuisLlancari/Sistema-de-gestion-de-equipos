@@ -63,7 +63,7 @@ echo '<div id="idusuario" data-idusuario="' . $idusuario . '" style="display:non
       <div class="row justify-content-center">
           <div class="col-md-8">
               <div class="card text-center border-yellow">
-                  <img src="../../test/sector.jpg" class="card-img-top" alt="..." style="width: 100%; height: 250px;">
+                  <img src="../../images/logo/sector.jpg" class="card-img-top" alt="..." style="width: 100%; height: 250px;">
                   <form action="" id="formulario1">
                       <div class="card-body">
                         <input type="text" class="form-control" id="sector_nuevo" required>
@@ -247,7 +247,7 @@ echo '<div id="idusuario" data-idusuario="' . $idusuario . '" style="display:non
               const nuevoItem =` 
                 <div class="col-md-4 mb-4">
                   <a href="../../views/sectores/detalle_sector.php?sector=${element.idsector}&nombre=${element.Nombre_Sector}" data-sector="${element.idsector}" class="card text-center border-yellow" style="width: 100%; cursor: pointer; text-decoration: none; color: black;">
-                    <img src="../../test/sector.jpg" class="card-img-top" alt="${element.Nombre_Sector}" style="width: 100%; height: 200px;">
+                    <img src="../../images/logo/sector.jpg" class="card-img-top" alt="${element.Nombre_Sector}" style="width: 100%; height: 200px;">
                     <div class="card-body">
                       <h3 class="card-title">${element.Nombre_Sector}</h3>
                       <p class="card-text">Cantidad: ${element.Cantidad_Guardados}</p>

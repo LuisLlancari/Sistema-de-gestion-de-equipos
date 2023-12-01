@@ -230,8 +230,8 @@ require_once "../sidebar/sidebar.php";
                                 <td>${element.clave}</td>
                                 <td>${element.valor}</td>
                                 <td>
-                                    <button class="btn btn-info boton-render editar" data-id="${element.iddatasheet}" data-bs-toggle="modal" data-bs-target="#modalId">Editar</button>
-                                    <button class="btn btn-danger boton-render eliminar" data-id="${element.iddatasheet}">Eliminar</button>
+                                    <button class="btn btn-outline-success btn-sm boton-render editar" data-id="${element.iddatasheet}" data-bs-toggle="modal" data-bs-target="#modalId"><i class="bi bi-pencil-square"></i></button>
+                                    <button class="btn btn-outline-danger btn-sm boton-render eliminar" data-id="${element.iddatasheet}"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             `;
                             numFila++;

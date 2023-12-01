@@ -69,7 +69,7 @@ require_once "../sidebar/sidebar.php";
       <div class="row justify-content-center">
           <div class="col-md-8">
               <div class="card text-center border-yellow">
-                  <img src="../../test/sector.jpg" class="card-img-top" alt="..." style="width: 100%; height: 250px;">
+                  <img src="../../images/logo/sector.jpg" class="card-img-top" alt="..." style="width: 100%; height: 250px;">
                   <form action="" id="formulario1">
                       <div class="card-body">
                       <select name="" id="sectores" class="form-select" required>
