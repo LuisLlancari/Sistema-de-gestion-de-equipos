@@ -19,6 +19,7 @@ select * from datasheet;
 select * from sectores_detalle;
 select * from mantenimiento;
 select * from cronogramas;
+select * from datasheet;
 
 -- USUARIOS
 CALL spu_usuarios_registrar('Jorge', 'Marcos', 'ADMINISTRADOR', 'SENATI123', 'jorge@gmail.com', NULL);
